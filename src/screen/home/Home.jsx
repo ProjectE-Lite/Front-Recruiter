@@ -27,22 +27,22 @@ const Home = () => {
       '9': [{name: 'ตี๋น้อย',
             time: '00:00 - 12:00',
             position: 'ล้างจาน',
-            credit: '50'
+            credit: '4/5'
             },
             {name: 'รัชโยธิน',
             time: '00:00 - 12:00',
-            position: 'ล้างจาน',
-            credit: '40'
+            position: 'พนักงานครัว',
+            credit: '1/2'
             }]},
       {'10': [{name: 'ตี๋น้อย',
             time: '00:00 - 12:00',
             position: 'ล้างจาน',
-            credit: '30'
+            credit: '5/10'
             }]},
       {'11': [{name: 'ตี๋น้อย',
             time: '00:00 - 12:00',
             position: 'ล้างจาน',
-            credit: '40'
+            credit: '3/5'
             }]},
       ]
     let a;
@@ -86,7 +86,7 @@ const Home = () => {
                   resizeMode='contain'
                 />
                 <Text style={{margin:10, flexGrow:2}}>ชื่อ : {item.name}{'\n'}เวลา : {item.time}{'\n'}ตำแหน่ง : {item.position}</Text>
-                <Text>{item.credit} เครดิต/ชั่วโมง</Text>
+                <Text>{item.credit} </Text>
               </View>
             </TouchableOpacity>
           )}
