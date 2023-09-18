@@ -4,6 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import CustomDrawer from '../components/CustomDrawer';
 import Bottom from './Bottom';
 import Profile from '../screen/profile/Profile';
+import Employ from '../screen/money/Employ';
 
 const Drawer = createDrawerNavigator();
 
@@ -41,6 +42,15 @@ const Headertab = () =>{
           ),
         })}
       />
+        <Drawer.Screen
+        name = "Employee"
+        component={Employ}
+        options={{
+            drawerIcon: () => (<Image source={require('../assets/image/EmployIcon.png')} 
+            style={{ width: 30, height: 20}}
+            resizeMode='contain'></Image>)
+        }}
+        />
         <Drawer.Screen
         name = "Profile"
         component={Profile}

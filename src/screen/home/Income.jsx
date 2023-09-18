@@ -51,9 +51,9 @@ const Income = ({ navigation }) => {
           </View>
         </View>
       </View>
-      <TouchableOpacity onPress={() => {navigation.navigate('โอนเงิน')}} style={{marginHorizontal:13}}>
+      <TouchableOpacity onPress={() => {navigation.navigate('topup')}} style={{marginHorizontal:13}}>
         <View style = {styles.butt}>
-          <Text style = {styles.textbutton}>Transfer</Text>
+          <Text style = {styles.textbutton}>Top up</Text>
         </View>
       </TouchableOpacity>
       <Text style={{marginTop:10, marginLeft:10, marginBottom:10, color:'black',fontSize: 20}}>รายการล่าสุด</Text>

@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, Image} from 'react-native';
 import { COLORS } from '../constants/colorIcon'; 
 import Notification from '../screen/home/Notification';
-import Income from '../screen/home/Income';
 import HomeJob from './HomeJob';
+import Transstack from './Topupstack';
 
 const Tab = createBottomTabNavigator();
 
@@ -55,7 +55,7 @@ const Bottom = () => {
             }}
             ></Tab.Screen>
             <Tab.Screen name="รายได้" 
-            component={Income}
+            component={Transstack}
             options={{
               tabBarIcon:({focused}) => {
                 return(
