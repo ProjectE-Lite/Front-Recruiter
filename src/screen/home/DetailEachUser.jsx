@@ -3,14 +3,14 @@ import React from 'react'
 
 const DeatailEachUser = ({ navigation }) => {
     const ListData = (
-                { nickname: 'Arm',
-                  sex: 'F',
-                  age: '21',
-                  date: '19 ตุลาคม 2545',
-                  tel: '0891234567',
-                  mylocation: ' ',
-                }
-              )
+            { nickname: 'Arm',
+                sex: 'F',
+                age: '21',
+                date: '19 ตุลาคม 2545',
+                tel: '0891234567',
+                mylocation: ' ',
+            }
+            )
     const dataDeatail = ([
         {name: 'ตี๋น้อย 168 รัชโยธิน',
         position: 'ล้างจาน',
@@ -30,10 +30,16 @@ const DeatailEachUser = ({ navigation }) => {
         state: '',
         point: 5,
         },
+        {name: 'ธิน',
+        position: 'ล้างจาน',
+        credit: '40',
+        state: '',
+        point: 3,
+        },
     ]);
 
     return (
-        <SafeAreaView style={{flex:1}}>
+        <SafeAreaView style={{flex:1, backgroundColor: 'white'}}>
         <FlatList
             data={dataDeatail}
             showsVerticalScrollIndicator={false}
@@ -99,7 +105,7 @@ const DeatailEachUser = ({ navigation }) => {
                 <View style={{alignItems:'center',flexDirection: 'row', backgroundColor: '#B1DAFF', margin: 5, borderRadius: 30}}>
                     <Image 
                         source={require('../../assets/image/TeeNoi.png')} 
-                        style={{ width: 60, height: 80, marginLeft: 10}}
+                        style={{ width: 60, height: 80, marginLeft: 20}}
                         resizeMode='contain'
                     />
                     <Text style={{flexGrow:2, fontSize:16, color: 'black', marginLeft: 15, flexGrow: 2}}>ชื่อ : {item.name}{'\n'}
@@ -122,7 +128,7 @@ const DeatailEachUser = ({ navigation }) => {
                 </View>
             )}
     />
-        </SafeAreaView>
+    </SafeAreaView>
     )
 
 }   
@@ -165,6 +171,7 @@ const styles = StyleSheet.create({
         height: 25, 
         backgroundColor: '#e0e0e0',
         marginTop: 10,
+        marginRight: 15,
         alignSelf: 'flex-start',
         borderRadius: 10,
         justifyContent: 'center',
