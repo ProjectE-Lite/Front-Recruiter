@@ -61,6 +61,11 @@ const DeatailEachUser = ({ navigation }) => {
                             <Text style={{color: '#FFFFFF' , fontSize: 20}}>รับ</Text>
                         </View>
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {navigation.goBack()}}>
+                        <View style={styles.rectangle4}>
+                            <Text style={{color: '#FFFFFF' , fontSize: 20}}>ย้อนกลับ</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={{justifyContent: 'center' , alignItems:'center'}}>
                     <Image source={require('../../assets/image/ProfileIcon.png')} style = {styles.image}/>
@@ -136,7 +141,7 @@ const DeatailEachUser = ({ navigation }) => {
 const styles = StyleSheet.create({
     rectangle1: {
       margin: 5,
-      width: 94,
+      width: 84,
       height: 44,
       borderRadius: 20 ,
       backgroundColor: '#FD0000',
@@ -145,7 +150,7 @@ const styles = StyleSheet.create({
     },
     rectangle2: {
         margin: 5,
-        width: 94,
+        width: 84,
         height: 44,
         borderRadius: 20 ,
         backgroundColor: '#071952',
@@ -154,10 +159,19 @@ const styles = StyleSheet.create({
     },
     rectangle3: {
         margin: 5,
-        width: 94,
+        width: 84,
         height: 44,
         borderRadius: 20 ,
         backgroundColor: '#FFA722',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    rectangle4: {
+        margin: 5,
+        width: 84,
+        height: 44,
+        borderRadius: 20 ,
+        backgroundColor: '#5B0888',
         justifyContent: 'center',
         alignItems: 'center',
     },
