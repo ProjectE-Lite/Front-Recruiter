@@ -1,7 +1,9 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 
 export default function ChoseEmploy({ route }) {
+  const navigation = useNavigation();
   const handleImage1Press = () => {
     alert('นัดหมาย');
   };
@@ -42,7 +44,7 @@ export default function ChoseEmploy({ route }) {
       }
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน')}}>
         <View style={styles.box}>
         <Image
             source={require('../../assets/image/ProfileIcon.png')}
