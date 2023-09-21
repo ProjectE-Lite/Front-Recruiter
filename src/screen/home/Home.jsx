@@ -27,22 +27,26 @@ const Home = () => {
       '9': [{name: 'ตี๋น้อย',
             time: '00:00 - 12:00',
             position: 'ล้างจาน',
-            credit: '4/5'
+            credit: '4/5',
+            usr_id: [1,2,3,4]
             },
             {name: 'รัชโยธิน',
             time: '00:00 - 12:00',
             position: 'พนักงานครัว',
-            credit: '1/2'
+            credit: '1/2',
+            usr_id: [5,6]
             }]},
       {'10': [{name: 'ตี๋น้อย',
             time: '00:00 - 12:00',
             position: 'ล้างจาน',
-            credit: '5/10'
+            credit: '5/10',
+            usr_id: [7,8,9,10,11]
             }]},
       {'11': [{name: 'ตี๋น้อย',
             time: '00:00 - 12:00',
             position: 'ล้างจาน',
-            credit: '3/5'
+            credit: '3/5',
+            usr_id: [12,13,14]
             }]},
       ]
     let a;
@@ -78,7 +82,7 @@ const Home = () => {
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.name}
           renderItem={({ item }) => (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('เลือกพนักงาน', {item})}>
               <View style={{alignItems:'center',flexDirection: 'row', margin:10, borderBottomWidth:1}}>
                 <Image 
                   source={require('../../assets/image/TeeNoi.png')} 
