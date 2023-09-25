@@ -1,76 +1,61 @@
 
 import { useNavigation } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Image, Text, StyleSheet, SafeAreaView, TouchableOpacity} from 'react-native';
 import { ScrollView , FlatList} from 'react-native';
+import axios from 'axios';
 
 const Home = () => {
+  const recruiter_id = 1
   const navigation = useNavigation();
   const [selectedData, setSelectedData] = useState([]);
-  const next12Days = [
-    [ '9', 'Sat' ],
-    [ '10', 'Sun' ],
-    [ '11', 'Mon' ],
-    [ '12', 'Tue' ],
-    [ '13', 'Wed' ],
-    [ '14', 'Thu' ],
-    [ '15', 'Fri' ],
-    [ '16', 'Sat' ],
-    [ '17', 'Sun' ],
-    [ '18', 'Mon' ],
-    [ '19', 'Tue' ],
-    [ '20', 'Wed' ]
-  ]
+  const [dateData, setDateData] = useState([]);
 
-  function newData(chose){
-    const date =  [{
-      '9': [{name: 'ตี๋น้อย',
-            time: '00:00 - 12:00',
-            position: 'ล้างจาน',
-            credit: '4/5',
-            usr_id: [1,2,3,4]
-            },
-            {name: 'รัชโยธิน',
-            time: '00:00 - 12:00',
-            position: 'พนักงานครัว',
-            credit: '1/2',
-            usr_id: [5,6]
-            }]},
-      {'10': [{name: 'ตี๋น้อย',
-            time: '00:00 - 12:00',
-            position: 'ล้างจาน',
-            credit: '5/10',
-            usr_id: [7,8,9,10,11]
-            }]},
-      {'11': [{name: 'ตี๋น้อย',
-            time: '00:00 - 12:00',
-            position: 'ล้างจาน',
-            credit: '3/5',
-            usr_id: [12,13,14]
-            }]},
-      ]
-    let a;
-    for (const element of date) {
-      for (const key in element) {
-        if (key == chose) {
-          a = (element[key]);
-        }
-      }
-    }
-    setSelectedData(a);
+  useEffect(() => {
+    axios.get('http://localhost:8000/12datenext')
+      .then((res) => {
+        console.log("Data", res.data.next12Days);
+        setDateData(res.data.next12Days);
+      })
+      .catch(e => {
+        console.error('Error', e);
+      });
+  }, []);
+
+  function newData(chose) {
+    axios.get(`http://localhost:8000/recruiters/${recruiter_id}/works`)
+      .then((res) => {
+        console.log("DataListworkId", res.data);
+        Promise.all(res.data.work_list.map(work_id => 
+          axios.get(`http://localhost:8000/works/${work_id}`)
+        ))
+        .then(responses => {
+          const workData = responses.map(response => response.data);
+          const selectedDayData = workData.filter(item => item.work_date === chose); 
+          setSelectedData(selectedDayData); 
+          console.log("Work Data", workData);
+        })
+        .catch(error => {
+          console.error('Error fetching work data:', error);
+        });
+      })
+      .catch(e => {
+        console.error('Error', e);
+      });
   }
+
   return (
     <SafeAreaView style={{backgroundColor: 'white'}}>
       <View style={{margin:10, padding:5}}>
         <Text style={{color:'#000000', fontSize:17}}>Day</Text>
       </View>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        {next12Days.map(day => (
+        {dateData.map(day => (
           <TouchableOpacity key={day} onPress={() => {newData(day[0])}}>
             <View style={{flexDirection: 'row', marginHorizontal: 5,}}>
               <View style={styles.cicleView}>
-                <Text style={styles.textincircle}>{day[0]}</Text>
-                <Text style={styles.textincircle}>{day[1]}</Text>
+                <Text style={styles.textincircle}>{day[1].slice(0, 3)}</Text>
+                <Text style={styles.textincircle}>{day[0].slice(8,10)}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -78,19 +63,24 @@ const Home = () => {
       </ScrollView>
         <FlatList
           data={selectedData}
-          contentContainerStyle={{ paddingBottom: 60 }}
+          contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={() => (
+            <View style={{ alignItems: 'center', marginTop: 20 }}>
+              <Text>No jobs available for this day</Text>
+            </View>
+          )}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate('เลือกพนักงาน', {item})}>
+            <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดงาน',{ item })}}>
               <View style={{alignItems:'center',flexDirection: 'row', margin:10, borderBottomWidth:1}}>
                 <Image 
                   source={require('../../assets/image/TeeNoi.png')} 
                   style={{ width: 60, height: 80,}}
                   resizeMode='contain'
                 />
-                <Text style={{margin:10, flexGrow:2}}>ชื่อ : {item.name}{'\n'}เวลา : {item.time}{'\n'}ตำแหน่ง : {item.position}</Text>
-                <Text>{item.credit} </Text>
+                <Text style={{margin:10, flexGrow:2}}>ชื่อ : {item.work.name}{'\n'}เวลา : {item.work.start_time} - {item.work.end_time}{'\n'}ตำแหน่ง : {item.work.type_of_work}</Text>
+                <Text>{item.work.hourly_income} เครดิต/ชั่วโมง</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -98,6 +88,7 @@ const Home = () => {
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   cicleView : {
