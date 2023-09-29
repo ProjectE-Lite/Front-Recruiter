@@ -56,10 +56,11 @@ const AppendJob = ({ navigation }) => {
         date={time}
         mode='time'
         minuteInterval={30}
+        locale='en_GB'
         onConfirm={(date) => {
           setOpentime(false);
           setTime(date);
-          setSttime(date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }));
+          setSttime(date.toLocaleTimeString('en-GB',{ hour12: false, hour: '2-digit', minute: '2-digit' }));
         }}
         onCancel={() => {
           setOpentime(false);
@@ -78,11 +79,12 @@ const AppendJob = ({ navigation }) => {
         open={opensctime}
         date={timesc}
         mode='time'
+        locale={'en_GB'}
         minuteInterval={30}
         onConfirm={(date) => {
           setOpensctime(false);
           setTimesc(date);
-          setSctime(date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }));
+          setSctime(date.toLocaleTimeString('en-GB', {hour12: false, hour: '2-digit', minute: '2-digit' }));
         }}
         onCancel={() => {
           setOpensctime(false);

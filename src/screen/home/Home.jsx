@@ -29,7 +29,7 @@ const Home = () => {
         ))
         .then(responses => {
           const workData = responses.map(response => response.data);
-          const selectedDayData = workData.filter(item => item.work.work_date === chose);
+          const selectedDayData = workData.filter(item => item.work_date === chose);
           setSelectedData(selectedDayData); 
         })
         .catch(error => {
@@ -47,7 +47,7 @@ const Home = () => {
         data={selectedData}
         contentContainerStyle={{ paddingBottom: 100, justifyContent: 'flex-start'}}
         showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item.work._id}
+        keyExtractor={(item) => item._id}
         ListEmptyComponent={() => (
           <View style={{ alignItems: 'center', marginTop: 20 }}>
             <Text>No jobs available for this day</Text>
@@ -80,8 +80,8 @@ const Home = () => {
                 style={{ width: 60, height: 80,}}
                 resizeMode='contain'
               />
-              <Text style={{margin:10, flexGrow:2}}>ชื่อ : {item.work.name}{'\n'}เวลา : {item.work.start_time} - {item.work.end_time}{'\n'}ตำแหน่ง : {item.work.type_of_work}</Text>
-              <Text>{item.work.list_of_candidate.length} / {item.work.number_requirement}</Text>
+              <Text style={{margin:10, flexGrow:2}}>ชื่อ : {item.name}{'\n'}เวลา : {item.start_time} - {item.end_time}{'\n'}ตำแหน่ง : {item.type_of_work}</Text>
+              <Text>{item.list_of_candidate.length} / {item.number_requirement}</Text>
             </View>
           </TouchableOpacity>
         )}

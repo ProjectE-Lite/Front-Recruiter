@@ -5,6 +5,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 const data = [
   { label: 'M', value: '1' },
   { label: 'F', value: '2' },
+  { label: 'ไม่ระบุเพศ', value: '3'},
 ];
 
 const DropDownsex = () => {
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
   dropdown: {
     margin: 10,
     height: 40,
-    width: 75,
+    width: 120,
     backgroundColor: 'white',
     borderRadius: 12,
     padding: 12,
