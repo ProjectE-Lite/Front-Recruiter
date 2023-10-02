@@ -1,16 +1,10 @@
 import {  View, Text, SafeAreaView, Image, TouchableOpacity, StyleSheet, FlatList} from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native';
 
-const DeatailEachUser = ({ navigation }) => {
-    const ListData = (
-            { nickname: 'Arm',
-                sex: 'F',
-                age: '21',
-                date: '19 ตุลาคม 2545',
-                tel: '0891234567',
-                mylocation: ' ',
-            }
-            )
+const DeatailEachUser = ({ route }) => {
+    const {image, first_name, last_name, nick_name, gender, age,birth_date, tel} = route.params.item
+    const navigation = useNavigation()
     const dataDeatail = ([
         {name: 'ตี๋น้อย 168 รัชโยธิน',
         position: 'ล้างจาน',
@@ -68,30 +62,32 @@ const DeatailEachUser = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{justifyContent: 'center' , alignItems:'center'}}>
-                    <Image source={require('../../assets/image/ProfileIcon.png')} style = {styles.image}/>
+                    <Image 
+                    source={{uri: image}} 
+                    style = {styles.setimage}/>
                 </View>
                 <View style = {{margin: 10, alignItems: 'center'}}>
-                    <Text style = {{fontSize: 20, color : '#000000'}}>Firstname Lastname</Text>
+                    <Text style = {{fontSize: 20, color : '#000000'}}>{first_name} {last_name}</Text>
                 </View>
                 <View style={{flexDirection:'row', marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>ชื่อเล่น :  </Text>
-                    <Text style={{color:'#000000', fontSize: 20}}>{ListData.nickname}</Text>
+                    <Text style={{color:'#000000', fontSize: 20}}>{nick_name}</Text>
                 </View>
                 <View style={{flexDirection:'row', marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>เพศ :  </Text>
-                    <Text style={{color:'#000000', fontSize: 20}}>{ListData.sex}</Text>
+                    <Text style={{color:'#000000', fontSize: 20}}>{gender}</Text>
                 </View>
                 <View style={{flexDirection:'row', marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>อายุ :  </Text>
-                    <Text style={{color:'#000000', fontSize: 20}}>{ListData.age}</Text>
+                    <Text style={{color:'#000000', fontSize: 20}}>{age}</Text>
                 </View>
                 <View style={{flexDirection:'row', marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>วันเกิด :  </Text>
-                    <Text style={{color:'#000000', fontSize: 20}}>{ListData.date}</Text>
+                    <Text style={{color:'#000000', fontSize: 20}}>{birth_date}</Text>
                 </View>
                 <View style={{flexDirection:'row', marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>เบอร์โทรศัพท์ :  </Text>
-                    <Text style={{color:'#000000', fontSize: 20}}>{ListData.tel}</Text>
+                    <Text style={{color:'#000000', fontSize: 20}}>{tel}</Text>
                 </View>
                 <View style={{marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>ที่อยู่ปัจจุบัน</Text>
@@ -175,10 +171,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    image: {
-        width: 145, 
-        height: 145,
-        resizeMode: 'contain', 
+    setimage: {
+        width: 175, 
+        height: 175,
+        borderRadius: 100
     },
     butt: {
         width: 55, 

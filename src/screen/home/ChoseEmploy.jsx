@@ -1,15 +1,13 @@
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import DatePicker from 'react-native-date-picker'
 
-export default function ChoseEmploy({ route }) {
-  const { usr_id } = route.params.item;
-  const navigation = useNavigation();
-  const [dates, setDates] = useState(Array(usr_id.length).fill(new Date()));
-  const [opens, setOpens] = useState(Array(usr_id.length).fill(false));
-  const MAX_NAME_LENGTH = 15;
-
+const ChoseEmploy = ({ route }) => { 
+  const [candidateData, setCandidateData] = useState([]);
+  const navigation = useNavigation()
+  const MAX_NAME_LENGTH = 15
+  const {list_of_candidate, name, type_of_work} = route.params.item
   const handleImage2Press = () => {
     alert('ไม่รับ');
   };
@@ -18,60 +16,45 @@ export default function ChoseEmploy({ route }) {
     alert('รับ');
   };
 
-  const listName =  {
-    1: {name : "WIttawat Phongphrit", doblink: 'เวลานัดหมาย'},
-    2: {name : "Emmi What", doblink: 'เวลานัดหมาย'},
-    3: {name : "Watson Scot", doblink: 'เวลานัดหมาย'},
-    4: {name : "Dawin Nude", doblink: 'เวลานัดหมาย'},
-    5: {name : "Iphone 15", doblink: 'เวลานัดหมาย'},
-    6: {name : "Lemma Thory", doblink: 'เวลานัดหมาย'},
-    7: {name : "Facke Datae", doblink: 'เวลานัดหมาย'},
-    8: {name : "Communit Luizs", doblink: 'เวลานัดหมาย'},
-    9: {name : "CrisTal Cear", doblink: 'เวลานัดหมาย'},
-    10: {name : "Ohm Coco", doblink: 'เวลานัดหมาย'},
-    11: {name : "NafinDo Coq Musta te", doblink: 'เวลานัดหมาย'},
-    12: {name : "lona Dao", doblink: 'เวลานัดหมาย'},
-    13: {name : "Uhn Mo Jo", doblink: 'เวลานัดหมาย'},
-    14: {name : "LodriGruz Mustagao", doblink: 'เวลานัดหมาย'},
-    15: {name : "Super Unoin", doblink: 'เวลานัดหมาย'},
-    }
-  const [doblabels, setDoblabels] = useState(usr_id.map(id => listName[id].doblink));
-  const selectname = usr_id.map(element => listName[element]);
-  const renderItem = ({ item, index }) => (
-    <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน')}}>
+  useEffect(() => {
+    const fetchDataForCandidate = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:8000/users/${id}`);
+        const candidateExists = candidateData.some(candidate => candidate._id === response.data._id);
+        if (!candidateExists) {
+          setCandidateData(prevData => [...prevData, response.data]);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+  
+    list_of_candidate.forEach(id => {
+      fetchDataForCandidate(id);
+    });
+  }, []);
+  
+
+    const renderItem = ({ item, index }) => (
+    <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน', {item})}}>
         <View style={styles.box}>
         <Image
-            source={require('../../assets/image/ProfileIcon.png')}
+            source={{uri : item.image}}
             style={styles.boxImage}
         />
         <View style={{flexDirection: 'column', flexGrow: 2, marginLeft: 5}}>
-          <Text style={{ marginBottom: 5,fontSize: 15, flexShrink: 1}} numberOfLines={1}>
-            {item.name.length > MAX_NAME_LENGTH? item.name.substring(0, MAX_NAME_LENGTH) + '...' : item.name}
-          </Text>
-          <Text>{doblabels[index]}</Text>
+        <Text style={{ marginBottom: 5, fontSize: 15, flexShrink: 1}}>
+          {`${item.first_name} ${item.last_name}`.length > MAX_NAME_LENGTH ?
+            `${item.first_name} ${item.last_name}`.substring(0, MAX_NAME_LENGTH) + '...' :
+            `${item.first_name} ${item.last_name}`}
+        </Text>
         </View>
-        <TouchableOpacity onPress={() => setOpens(prev => prev.map((val, i) => i === index ? true : val))} >
+        <TouchableOpacity onPress={() =>{}} >
             <Image
             source={require('../../assets/image/Ayellow.png')}
             style={styles.imageButton}
             />
         </TouchableOpacity>
-        <DatePicker
-          modal
-          open={opens[index]}
-          date={dates[index]}
-          mode='date'
-          maximumDate={new Date('2023-12-31')}
-          minimumDate={new Date('1873-12-31')}
-          onConfirm={(date) => {
-            setOpens(prev => prev.map((val, i) => i === index ? false : val));
-            setDates(prev => prev.map((val, i) => i === index ? date : val));
-            setDoblabels(prev => prev.map((val, i) => i === index ? `${date.toDateString()}` : val));
-          }}
-          onCancel={() => {
-            setOpens(prev => prev.map((val, i) => i === index ? false : val));
-          }}
-        />
         <TouchableOpacity onPress={handleImage2Press}>
             <Image
             source={require('../../assets/image/Redx.png')}
@@ -90,11 +73,11 @@ export default function ChoseEmploy({ route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 18 }}>ตี๋น้อย 111 พหลโยธิน - <Text style={{ color: 'red' }}>พนักงานเสิร์ฟ</Text></Text>
+      <Text style={{ fontSize: 18 }}>{name} - <Text style={{ color: 'red' }}>{type_of_work}</Text></Text>
       <FlatList
-        data={selectname}
+        data={candidateData}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item._id}
       />
     </View>
   );
@@ -105,6 +88,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     paddingTop: 15,
+    backgroundColor: 'white'
   },
   box: {
     flexDirection: 'row',
@@ -118,7 +102,7 @@ const styles = StyleSheet.create({
   boxImage: {
     width: 70,
     height: 70,
-    borderRadius: 5,
+    borderRadius: 35,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -132,3 +116,5 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
 });
+
+export default ChoseEmploy
