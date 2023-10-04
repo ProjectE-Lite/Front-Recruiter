@@ -1,13 +1,36 @@
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import Employ from '../money/Employ'
+import { useNavigation } from '@react-navigation/native'
 
-const ChoseEmploy = ({ route }) => { 
-  const [candidateData, setCandidateData] = useState([]);
+const ChoseEmploy = ({route}) => {
+  const myId = route.params.item.data[0]._id
+  const {name, type_of_work} = route.params.item.data[0]
   const navigation = useNavigation()
+  const [userData, setUserData] = useState([]);
+  const [key, setKey] = useState("")
   const MAX_NAME_LENGTH = 15
-  const {list_of_candidate, name, type_of_work} = route.params.item
+  
+  useEffect(() => {
+    axios(`http://localhost:8000/works/${myId}/status`)
+    .then(res => {
+      const dictStatus = res.data
+      setKey(Object.keys(dictStatus)[0])
+      const allUserIDs = Object.values(dictStatus).flat()
+      Promise.all(allUserIDs.map(userID =>
+        axios.get(`http://localhost:8000/users/${userID}`)
+      ))
+      .then(userResponses => {
+        const userData = userResponses.map(response => response.data);
+        setUserData(userData)
+      })
+      .catch(error => {
+        console.error('Error fetching user data:', error);
+      });
+    })
+  }, [])
+
   const handleImage2Press = () => {
     alert('ไม่รับ');
   };
@@ -16,26 +39,7 @@ const ChoseEmploy = ({ route }) => {
     alert('รับ');
   };
 
-  useEffect(() => {
-    const fetchDataForCandidate = async (id) => {
-      try {
-        const response = await axios.get(`http://localhost:8000/users/${id}`);
-        const candidateExists = candidateData.some(candidate => candidate._id === response.data._id);
-        if (!candidateExists) {
-          setCandidateData(prevData => [...prevData, response.data]);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-  
-    list_of_candidate.forEach(id => {
-      fetchDataForCandidate(id);
-    });
-  }, []);
-  
-
-    const renderItem = ({ item, index }) => (
+  const renderItem = ({ item, index }) => (
     <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน', {item})}}>
         <View style={styles.box}>
         <Image
@@ -71,16 +75,24 @@ const ChoseEmploy = ({ route }) => {
     </TouchableOpacity>
   );
 
+
   return (
-    <View style={styles.container}>
-      <Text style={{ fontSize: 18 }}>{name} - <Text style={{ color: 'red' }}>{type_of_work}</Text></Text>
-      <FlatList
-        data={candidateData}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-      />
+    <>
+    {key == "still_choosing" ? (
+      <View style={styles.container}>
+        <Text style={{ fontSize: 18 }}>{name} - <Text style={{ color: 'red' }}>{type_of_work}</Text></Text>
+        <FlatList
+          data={userData}
+          renderItem={renderItem}
+          keyExtractor={(item) => item._id}
+        />
     </View>
-  );
+      ) 
+    : (
+      <Employ navigation={navigation} userData={userData}></Employ>
+      )}
+    </>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -116,5 +128,6 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
 });
+
 
 export default ChoseEmploy

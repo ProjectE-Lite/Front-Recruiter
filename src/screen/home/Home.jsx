@@ -7,54 +7,76 @@ import axios from 'axios';
 const Home = () => {
   const recruiter_id = '6517fa561434530638bc81de'
   const navigation = useNavigation();
-  const [selectedData, setSelectedData] = useState([]);
+  const [workData, setWorkData] = useState([]);
 
   useEffect(() => {
-  axios.get(`http://localhost:8000/recruiters/${recruiter_id}/works`)
-    .then((res) => {
-      Promise.all(res.data.work_list.map(_id => 
-        axios.get(`http://localhost:8000/works/${_id}`)
-      ))
-      .then(responses => {
-        const workData = responses.map(response => response.data);
-        setSelectedData(workData);
+    axios.get(`http://localhost:8000/recruiters/${recruiter_id}/works`)
+      .then((res) => {
+        const dateDict = res.data; 
+        const allUserIDs = Object.values(dateDict).flat()
+        Promise.all(allUserIDs.map(userID =>
+          axios.get(`http://localhost:8000/works/${userID}`)
+        ))
+        .then(userResponses => {
+          const workData = userResponses.map(response => response.data);
+          setWorkData(workData)
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        });
       })
-      .catch(error => {
-        console.error('Error fetching work data:', error);
+      .catch(e => {
+        console.error('Error', e);
       });
-    })
-    .catch(e => {
-      console.error('Error', e);
-    });
-  }, [])
+  }, []);
+
+  const groupedData = {};
+
+  workData.forEach(item => {
+    const workDate = item.work_date;
+
+    if (!groupedData[workDate]) {
+      groupedData[workDate] = [];
+    }
+    groupedData[workDate].push(item);
+  });
+
+  const flatListData = Object.entries(groupedData).map(([date, data]) => ({
+    date,
+    data,
+  }));
 
   return (
     <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
       <FlatList
-        data={selectedData}
+        data={flatListData}
         contentContainerStyle={{ paddingBottom: 100, justifyContent: 'flex-start'}}
         showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item.date}
         ListEmptyComponent={() => (
           <View style={{ alignItems: 'center', marginTop: 20 }}>
             <Text>No jobs create a New Job</Text>
           </View>
         )}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => {navigation.navigate('เลือกพนักงาน',{ item })}}>
+          <>
             <View style={{backgroundColor: '#EAD7BB', borderRadius: 4}}>
-              <Text style={{marginLeft: 20, marginTop: 10, fontSize: 17, color: '#65451F', fontWeight: '700', textAlign: 'center', marginRight: 10}}>{item.work_date}</Text>
+              <Text style={{marginLeft: 20, marginTop: 10, fontSize: 17, color: '#65451F', fontWeight: '700', marginRight: 10}}>{item.date}</Text>
             </View>
-            <View style={{alignItems:'center',flexDirection: 'row', margin:5}}>
-              <Image 
-                source={{uri : item.image}} 
-                style={{ width: 60, height: 80,}}
-                resizeMode='contain'
-              />
-              <Text style={{margin:10, flexGrow:2}}>ชื่อ : {item.name}{'\n'}เวลา : {item.start_time} - {item.end_time}{'\n'}ตำแหน่ง : {item.type_of_work}</Text>
-              <Text>{item.list_of_candidate.length} / {item.number_requirement}</Text>
-            </View>
-          </TouchableOpacity>
+            {item.data.map(subItem => (
+              <>
+                <TouchableOpacity onPress={() => navigation.navigate('เลือกพนักงาน', {item})} style={{ alignItems: 'center', flexDirection: 'row', margin: 5, marginHorizontal: 10}} key={subItem._id}>
+                  <Image
+                    source={{ uri: subItem.image }}
+                    style={{ width: 60, height: 80 }}
+                    resizeMode='contain'
+                  />
+                  <Text style={{ margin: 10, flexGrow: 2 }}>ตำแหน่ง: {subItem.type_of_work}{'\n'}เวลาทำงาน: {subItem.start_time} - {subItem.end_time}</Text>
+                  <Text style={{ marginRight: 10}}>{subItem.list_of_candidate.length} / {subItem.number_requirement}</Text>
+                </TouchableOpacity>
+              </>
+            ))}
+          </>
         )}
       />
     </SafeAreaView>
