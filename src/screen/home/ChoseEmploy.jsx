@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Employ from '../money/Employ'
 import { useNavigation } from '@react-navigation/native'
+import { YOURAPI } from '../../constants/editendpoint'
 
 const ChoseEmploy = ({route}) => {
   const myId = route.params.item.data[0]._id
@@ -13,13 +14,13 @@ const ChoseEmploy = ({route}) => {
   const MAX_NAME_LENGTH = 15
   
   useEffect(() => {
-    axios(`http://localhost:8000/works/${myId}/status`)
+    axios(`http://${YOURAPI}/works/${myId}/status`)
     .then(res => {
       const dictStatus = res.data
       setKey(Object.keys(dictStatus)[0])
       const allUserIDs = Object.values(dictStatus).flat()
       Promise.all(allUserIDs.map(userID =>
-        axios.get(`http://localhost:8000/users/${userID}`)
+        axios.get(`http://${YOURAPI}/users/${userID}`)
       ))
       .then(userResponses => {
         const userData = userResponses.map(response => response.data);

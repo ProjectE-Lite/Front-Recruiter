@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import { View, Image, Text, SafeAreaView, TouchableOpacity} from 'react-native';
 import { FlatList} from 'react-native';
 import axios from 'axios';
+import { YOURAPI } from '../../constants/editendpoint';
 
 const Home = () => {
   const recruiter_id = '6517fa561434530638bc81de'
@@ -10,12 +11,12 @@ const Home = () => {
   const [workData, setWorkData] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/recruiters/${recruiter_id}/works`)
+    axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/works`)
       .then((res) => {
         const dateDict = res.data; 
         const allUserIDs = Object.values(dateDict).flat()
         Promise.all(allUserIDs.map(userID =>
-          axios.get(`http://localhost:8000/works/${userID}`)
+          axios.get(`http://${YOURAPI}/works/${userID}`)
         ))
         .then(userResponses => {
           const workData = userResponses.map(response => response.data);
