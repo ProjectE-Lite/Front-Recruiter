@@ -65,7 +65,7 @@ const Bottom = () => {
                     source={focused ? require('../assets/image/FooterIcon/DollarOutline.png') : require('../assets/image/FooterIcon/Dollar.png')}
                     style={{ marginTop: 15, width: 30, height: 20}}
                     resizeMode='contain'/>
-                    <Text style={{color:'#000000'}}>รายได้</Text>
+                    <Text style={{color:'#000000'}}>การเงิน</Text>
                   </View>
                 )
               }
