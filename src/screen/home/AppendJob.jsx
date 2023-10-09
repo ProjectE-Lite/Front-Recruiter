@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native'
 import React, {useState} from 'react'
 import DatePicker from 'react-native-date-picker'
 import DropDownsex from '../../components/DropdownSex';
@@ -17,109 +17,197 @@ const AppendJob = ({ navigation }) => {
   const [timesc, setTimesc] = useState(new Date());
   const [opensctime, setOpensctime] = useState(false);
 
+  const [Data, setData] = useState({
+    name: 'ชื่องาน',
+    type_of_work: 'ประเภทงาน',
+    number_requirement: 0,
+    work_description: {
+      detail: "detail",
+      qualification: "qulifi"
+    },
+    gender_requirement: "เพศ",
+    minimum_age: 0,
+    hourly_income: 0,
+    list_of_candidate: [],
+    list_of_worker: [],
+    end_registeration: 'วันสิ้นสุดรับสมัคร',
+    work_date: 'วันที่ทำงาน',
+    start_time: 'เวลาเริ่มทำงาน',
+    end_time: 'เวลาเลิกงาน',
+    user_status: {}
+  });
+  const handleInputChange = (name, value) => {
+    if (name === 'minimum_age'){
+      value = parseInt(value);
+    }
+    if (name === 'number_requirement'){
+      value = parseInt(value);
+    }
+    if (name === 'hourly_income'){
+      value = parseInt(value);
+    }
+    setData({
+      ...Data,
+      [name]: value
+    });
+  };
+
+  const handleGenderChange = (value) => {
+    setData({
+      ...Data,
+      gender_requirement: value
+    });
+  };
+
+  const handleDateChange = (date) => {
+    setData({
+      ...Data,
+      work_date : date.slice(0,10),
+    });
+  };
+  console.log(Data)
   return (
-    <View style={styles.container}>
-      <View style={{ marginVertical: 15, alignItems: 'center', flexDirection: 'row' }}>
-        <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>วันเริ่มทำงาน​ : </Text>
-        <Image source={require('../../assets/image/Calender.png')} style={styles.boxIcon} />
-        <TouchableOpacity onPress={() => setOpen(true)}>
-          <Text style={{ fontSize: 15 }}>{doblabel}</Text>
-        </TouchableOpacity>
-      </View>
-      <DatePicker
-        modal
-        open={open}
-        date={date}
-        mode='date'
-        maximumDate={new Date('2023-12-31')}
-        minimumDate={new Date('1873-12-31')}
-        onConfirm={(date) => {
-          setOpen(false);
-          setDate(date);
-          setDoblabel(date.toDateString());
-        }}
-        onCancel={() => {
-          setOpen(false);
-        }}
-      />
-      <View style={{ marginVertical: 15, alignItems: 'center', flexDirection: 'row' }}>
-        <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>เวลาเริ่มทำงาน​ : </Text>
-        <Image source={require('../../assets/image/ClockIcon.png')} style={styles.boxIcon} />
-        <TouchableOpacity onPress={() => setOpentime(true)}>
-          <Text style={{ fontSize: 15 }}>{sttime}</Text>
-        </TouchableOpacity>
-      </View>
-
-      <DatePicker
-        modal
-        open={opentime}
-        date={time}
-        mode='time'
-        minuteInterval={30}
-        locale='en_GB'
-        onConfirm={(date) => {
-          setOpentime(false);
-          setTime(date);
-          setSttime(date.toLocaleTimeString('en-GB',{ hour12: false, hour: '2-digit', minute: '2-digit' }));
-        }}
-        onCancel={() => {
-          setOpentime(false);
-        }}
-      />
-      <View style={{ marginVertical: 15, alignItems: 'center', flexDirection: 'row' }}>
-        <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>เวลาเลิกงาน​ : </Text>
-        <Image source={require('../../assets/image/ClockIcon.png')} style={styles.boxIcon} />
-        <TouchableOpacity onPress={() => setOpensctime(true)}>
-          <Text style={{ fontSize: 15 }}>{sctime}</Text>
-        </TouchableOpacity>
-      </View>
-
-      <DatePicker
-        modal
-        open={opensctime}
-        date={timesc}
-        mode='time'
-        locale={'en_GB'}
-        minuteInterval={30}
-        onConfirm={(date) => {
-          setOpensctime(false);
-          setTimesc(date);
-          setSctime(date.toLocaleTimeString('en-GB', {hour12: false, hour: '2-digit', minute: '2-digit' }));
-        }}
-        onCancel={() => {
-          setOpensctime(false);
-        }}
-      />
-      <View style={{flexDirection:'row', alignItems: 'center', marginTop: 20}}>
-        <View style={{width: '50%'}}>
-          <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>Sex</Text>
-          <DropDownsex></DropDownsex>
+    <View style={{ backgroundColor: 'white', flex: 1, paddingBottom: 90}}>
+      <ScrollView style={styles.container}>
+        <View style={{ marginVertical: 15, alignItems: 'center', flexDirection: 'row' }}>
+          <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>วันเริ่มทำงาน​ : </Text>
+          <Image source={require('../../assets/image/Calender.png')} style={styles.boxIcon} />
+          <TouchableOpacity onPress={() => setOpen(true)}>
+            <Text style={{ fontSize: 15 }}>{doblabel}</Text>
+          </TouchableOpacity>
         </View>
-        <View style={{width: '50%'}}>
-          <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>Age</Text>
-          <TextInput placeholder='อายุ' style={styles.dropdown} keyboardType='number-pad'></TextInput>
+        <DatePicker
+          modal
+          open={open}
+          date={date}
+          mode='date'
+          maximumDate={new Date('2023-12-31')}
+          minimumDate={new Date('1873-12-31')}
+          onConfirm={(date) => {
+            setOpen(false);
+            setDate(date);
+            const mydate = date.toDateString()
+            setDoblabel(mydate);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const test = `${year}-${month}-${day}`
+            handleDateChange(test);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
+        <View style={{ marginVertical: 15, alignItems: 'center', flexDirection: 'row' }}>
+          <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>เวลาเริ่มทำงาน​ : </Text>
+          <Image source={require('../../assets/image/ClockIcon.png')} style={styles.boxIcon} />
+          <TouchableOpacity onPress={() => setOpentime(true)}>
+            <Text style={{ fontSize: 15 }}>{sttime}</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-      <View style={{flexDirection: 'row', marginVertical: 15, alignItems: 'center', borderWidth: 1, borderColor: 'white', borderRadius: 30, padding: 8, shadowColor: '#000', shadowOffset: {
-        width: 0,
-        height: 1,
-      }, shadowOpacity: 0.2, shadowRadius: 1.41, elevation: 2,}}>
-        <Image source={require('../../assets/image/bagfillIcon.png')} style={styles.boxIcon}></Image>
-        <TextInput placeholder='ตำแหน่งงาน' autoCorrect={false} style={{fontSize: 19}}></TextInput>
-      </View>
-      <View style= {{flexDirection: 'row', marginVertical: 15, alignItems: 'center'}}>
-        <Image source={require('../../assets/image/filladd.png')} style={styles.boxIcon}></Image>
-        <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>จำนวนคน : </Text>
-        <TextInput placeholder='ตัวเลข' style={styles.dropdown} keyboardType='number-pad'></TextInput>
-      </View>
-      <View style={{alignItems:'center', marginTop: 40}}>
-        <TouchableOpacity onPress={() => {navigation.navigate('เพิ่มรายละเอียด')}}>
-          <View style={styles.dropdown2}>
-            <Text style={{color: 'white'}}>Next</Text>
+
+        <DatePicker
+          modal
+          open={opentime}
+          date={time}
+          mode='time'
+          minuteInterval={30}
+          locale='en_GB'
+          onConfirm={(date) => {
+            setOpentime(false);
+            setTime(date);
+            const mydate1 = date.toLocaleTimeString('en-GB',{ hour12: false, hour: '2-digit', minute: '2-digit' })
+            setSttime(mydate1);
+            handleInputChange('start_time', mydate1)
+          }}
+          onCancel={() => {
+            setOpentime(false);
+          }}
+        />
+        <View style={{ marginVertical: 15, alignItems: 'center', flexDirection: 'row' }}>
+          <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>เวลาเลิกงาน​ : </Text>
+          <Image source={require('../../assets/image/ClockIcon.png')} style={styles.boxIcon} />
+          <TouchableOpacity onPress={() => setOpensctime(true)}>
+            <Text style={{ fontSize: 15 }}>{sctime}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <DatePicker
+          modal
+          open={opensctime}
+          date={timesc}
+          mode='time'
+          locale={'en_GB'}
+          minuteInterval={30}
+          onConfirm={(date) => {
+            setOpensctime(false);
+            setTimesc(date);
+            const mydate2 = date.toLocaleTimeString('en-GB', {hour12: false, hour: '2-digit', minute: '2-digit' })
+            setSctime(mydate2);
+            handleInputChange('end_time', mydate2)
+          }}
+          onCancel={() => {
+            setOpensctime(false);
+          }}
+        />
+        <View style={{flexDirection:'row', alignItems: 'center', marginTop: 20}}>
+          <View style={{width: '50%'}}>
+            <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>Sex</Text>
+            <DropDownsex
+              onValueChange={handleGenderChange}
+              value={Data.gender_requirement}></DropDownsex>
           </View>
-        </TouchableOpacity>
-      </View>
+          <View style={{width: '50%'}}>
+            <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>Age</Text>
+            <TextInput 
+            placeholder='อายุ' 
+            style={styles.dropdown} 
+            keyboardType='number-pad' 
+            onChangeText={text => handleInputChange('minimum_age', text)}
+            ></TextInput>
+          </View>
+        </View>
+        <View style={{flexDirection: 'row', marginVertical: 15, alignItems: 'center', borderWidth: 1, borderColor: 'white', borderRadius: 30, padding: 8, shadowColor: '#000', shadowOffset: {
+          width: 0,
+          height: 1,
+        }, shadowOpacity: 0.2, shadowRadius: 1.41, elevation: 2,}}>
+          <Image source={require('../../assets/image/bagfillIcon.png')} style={styles.boxIcon}></Image>
+          <TextInput 
+          placeholder='ตำแหน่งงาน' 
+          autoCorrect={false} 
+          style={{fontSize: 19}}
+          onChangeText={text => handleInputChange('type_of_work', text)}
+          ></TextInput>
+        </View>
+        <View style= {{flexDirection: 'row', marginVertical: 15, alignItems: 'center'}}>
+          <Image source={require('../../assets/image/filladd.png')} style={styles.boxIcon}></Image>
+          <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>จำนวนคน : </Text>
+          <TextInput 
+          placeholder='ตัวเลข' 
+          style={styles.dropdown} 
+          keyboardType='number-pad'
+          onChangeText={text => handleInputChange('number_requirement', text)}
+          ></TextInput>
+        </View>
+        <View style= {{flexDirection: 'row', marginVertical: 15, alignItems: 'center'}}>
+          <Image source={require('../../assets/image/FooterIcon/Dollar.png')} style={styles.boxIcon}></Image>
+          <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>เครดิต/ชั่วโมง : </Text>
+          <TextInput 
+          placeholder='ตัวเลข' 
+          style={styles.dropdown} 
+          keyboardType='number-pad'
+          onChangeText={text => handleInputChange('hourly_income', text)}
+          ></TextInput>
+        </View>
+        <View style={{alignItems:'center', marginTop: 40}}>
+          <TouchableOpacity onPress={() => {navigation.navigate('เพิ่มรายละเอียด', Data)}}>
+            <View style={styles.dropdown2}>
+              <Text style={{color: 'white'}}>Next</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
 
+      </ScrollView>
     </View>
   );
 };
@@ -129,10 +217,7 @@ export default AppendJob
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingVertical : 20,
     paddingHorizontal: 15,
-    backgroundColor: 'white'
     },
     boxIcon: {
       width: 40,
