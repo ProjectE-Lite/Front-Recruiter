@@ -1,19 +1,24 @@
 import { StyleSheet, Text, View, SafeAreaView} from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {FlatList} from 'react-native';
-
-const dataDeatail = ([
-  {name: 'ตี๋น้อยรัชโยธิน',
-  text: 'มีงานใหม่จ้าาาาา',
-  date: '6 ม.ค. 66'
-  },
-  {name: 'ตี๋น้อยรัชโยธิน',
-  text: 'ผมโดนภรรยาปลุกขึ้นมากลางดึกแล้วบอกว่ามีโจรเข้าบ้านแต่เธอถูกโจรฆ่าตายไปตั้งแต่ 2 ปีที่แล้ว',
-  date: '7 ม.ค. 66'
-  },
-]);
+import axios from 'axios';
 
 export default function Notification() {
+  const recruiter_id = '6517fa561434530638bc81de'
+  const [dataDeatail, setDataDeatail] = useState([])
+  useEffect(() => {
+    axios.get(`http://localhost:8000/recruiters/${recruiter_id}/noti`)
+    .then(res => {
+      const myData = res.data
+      Promise.all(myData.map(notiId =>
+        axios.get(`http://localhost:8000/recruiters/noti/${notiId}`)
+      ))
+      .then(res => {
+        const notiData = res.map(res => res.data)
+        setDataDeatail(notiData)
+      })
+    })
+  }, [])
   return (
     <SafeAreaView style={{backgroundColor: 'white', flex:1}}>
       <FlatList
@@ -31,5 +36,3 @@ export default function Notification() {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({})
