@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import { View, Text, SafeAreaView, StyleSheet, Button, TextInput, Image, TouchableOpacity } from 'react-native';
 import axios from "axios";
 import { YOURAPI } from '../../constants/editendpoint';
+
 
 
 
@@ -33,6 +34,7 @@ const Numbank = ({navigation}) => {
                 <View style = {style.input1}>
                     <Text style={{fontSize:24}}>xxx-x-x4935-x</Text>
                 </View>
+
             </View>
             
             <View style={style.view2}>
@@ -60,6 +62,23 @@ const Numbank = ({navigation}) => {
         </SafeAreaView>
   )
 
+            </View>
+            <View style={style.view2}>
+                <View style={style.button}>
+                    <TouchableOpacity style={style.button} onPress={acceptCredit}>
+                        <Text style={style.text_button}>ยืนยัน</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={style.view2}>
+                <View style={style.button}>
+                    <TouchableOpacity style={style.button_red} onPress={() => {navigation.goBack()}}>
+                        <Text style={style.text_button}>ย้อนกลับ</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>       
+        </SafeAreaView>
+    )
 }
 
 const style = StyleSheet.create({
