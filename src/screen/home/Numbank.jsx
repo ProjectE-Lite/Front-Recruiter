@@ -1,38 +1,55 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import { View, Text, SafeAreaView, StyleSheet, Button, TextInput, Image, TouchableOpacity } from 'react-native';
+import axios from "axios";
+import { YOURAPI } from '../../constants/editendpoint';
 
 const Numbank = ({navigation}) => {
+    const [credit,setcredit] = useState(0);
+    const recruiter_id = '6517fa561434530638bc81de';
+    const handlecreditChange = (value) => {
+        value=parseInt(value);
+        setcredit(value);
+    };
 
-  return (
-    <SafeAreaView style={style.body}>
-        <View style={style.view2}>
-            <Text style={style.text}>เลขที่บัญชี</Text>
-            <TextInput style={style.input1} placeholder='ใส่เลขที่บัญชี'></TextInput>
-        </View>
-        
-        <View style={style.view2}>
-            <Text style={style.text}>จำนวนเงิน</Text>
-            <TextInput style={style.input2} placeholder='ใส่จำนวนเงิน'></TextInput>
-        </View>
-        
-        <View style={style.view2}>
-            <View style={style.button}>
-                <TouchableOpacity style={style.button}>
-                    <Text style={style.text_button}>ยืนยัน</Text>
-                </TouchableOpacity>
+    const acceptCredit = () =>{
+        axios.patch(`http://${YOURAPI}/recruiters/${recruiter_id}/topup/${credit}`, credit)
+        .then(response => {
+        console.log('credit sent successfully:', response.data);
+        navigation.navigate('money');
+        })
+        .catch(error => {
+        console.error('Error sending data:', error);
+        });
+    };
+    return (
+        <SafeAreaView style={style.body}>
+            <View style={style.view2}>
+                <Text style={style.text}>เลขที่บัญชี</Text>
+                <View style = {style.input1}>
+                    <Text style={{fontSize:24}}>xxx-x-x4935-x</Text>
+                </View>
             </View>
-        </View>
-        <View style={style.view2}>
-            <View style={style.button}>
-                <TouchableOpacity style={style.button_red} onPress={() => {navigation.goBack()}}>
-                    <Text style={style.text_button}>ย้อนกลับ</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-        
-    </SafeAreaView>
-  )
+            <View style={style.view2}>
+                <Text style={style.text}>จำนวนเงิน</Text>
+                <TextInput style={style.input2} placeholder='ใส่จำนวนเงิน' onChangeText={handlecreditChange} value={credit}></TextInput>
 
+            </View>
+            <View style={style.view2}>
+                <View style={style.button}>
+                    <TouchableOpacity style={style.button} onPress={acceptCredit}>
+                        <Text style={style.text_button}>ยืนยัน</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={style.view2}>
+                <View style={style.button}>
+                    <TouchableOpacity style={style.button_red} onPress={() => {navigation.goBack()}}>
+                        <Text style={style.text_button}>ย้อนกลับ</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>       
+        </SafeAreaView>
+    )
 }
 
 const style = StyleSheet.create({
