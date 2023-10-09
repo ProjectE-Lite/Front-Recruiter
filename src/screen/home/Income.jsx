@@ -1,8 +1,29 @@
-import React from 'react';
+import React,{useState, useEffect}  from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity} from 'react-native';
 import { FlatList} from 'react-native';
+import axios from "axios";
+import { YOURAPI } from '../../constants/editendpoint';
 
 const Income = ({ navigation }) => {
+  const recruiter_id = '6517fa561434530638bc81de';
+  const [recdata,setrecdata] = useState([])
+  useEffect(() => {
+    axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}`)
+    .then(response => {
+      const recdata =  response.data.credit;
+      setrecdata(recdata)
+      console.log('GET request successfully:', response.data.credit);
+      
+      })
+      .catch(error => {
+      console.error('Error making GET request:', error);
+      });
+
+  },[])
+
+
+
+
   const dataDeatail = ([
     {date: '6 ม.ค. 66',
      time: '16.00',
@@ -47,7 +68,7 @@ const Income = ({ navigation }) => {
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <View style={styles.circle}>
             <Text style={styles.text}>ยอดเงินคงเหลือ</Text>
-            <Text style={styles.textnum}>200.00</Text>
+            <Text style={styles.textnum}>{recdata}</Text>
           </View>
         </View>
       </View>
