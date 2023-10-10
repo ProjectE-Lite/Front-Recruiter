@@ -18,7 +18,6 @@ const AppendJob = ({ navigation }) => {
   const [opensctime, setOpensctime] = useState(false);
 
   const [Data, setData] = useState({
-    name: 'ชื่องาน',
     type_of_work: 'ประเภทงาน',
     number_requirement: 0,
     work_description: {
@@ -63,6 +62,7 @@ const AppendJob = ({ navigation }) => {
     setData({
       ...Data,
       work_date : date.slice(0,10),
+      end_registeration : date.slice(0,10),
     });
   };
   console.log(Data)
