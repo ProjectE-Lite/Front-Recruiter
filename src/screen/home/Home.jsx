@@ -1,9 +1,10 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, {useState, useEffect} from 'react';
 import { View, Image, Text, SafeAreaView, TouchableOpacity} from 'react-native';
-import { FlatList} from 'react-native';
+import {SectionList} from 'react-native';
 import axios from 'axios';
 import { YOURAPI } from '../../constants/editendpoint';
+
 
 const Home = () => {
   const recruiter_id = '6517fa561434530638bc81de'
@@ -52,41 +53,31 @@ const Home = () => {
     data,
   }));
 
+
   return (
     <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
-      <FlatList
-        data={flatListData}
-        contentContainerStyle={{ paddingBottom: 100, justifyContent: 'flex-start'}}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item.date}
-        ListEmptyComponent={() => (
-          <View style={{ alignItems: 'center', marginTop: 20 }}>
-            <Text>No jobs create a New Job</Text>
-          </View>
-        )}
-        renderItem={({ item }) => (
-          <>
-            <View style={{backgroundColor: '#EAD7BB', borderRadius: 4}}>
-              <Text style={{marginLeft: 20, marginTop: 10, fontSize: 17, color: '#65451F', fontWeight: '700', marginRight: 10}}>{item.date}</Text>
-            </View>
-            {item.data.map(subItem => (
-              <>
-                <TouchableOpacity onPress={() => navigation.navigate('เลือกพนักงาน', {item})} style={{ alignItems: 'center', flexDirection: 'row', margin: 5, marginHorizontal: 10}} key={subItem._id}>
-                  <Image
-                    source={{ uri: subItem.image }}
-                    style={{ width: 60, height: 80 }}
-                    resizeMode='contain'
-                  />
-                  <Text style={{ margin: 10, flexGrow: 2 }}>ตำแหน่ง: {subItem.type_of_work}{'\n'}เวลาทำงาน: {subItem.start_time} - {subItem.end_time}</Text>
-                  <Text style={{ marginRight: 10}}>{subItem.list_of_candidate.length} / {subItem.total_worker}</Text>
-                </TouchableOpacity>
-              </>
-            ))}
-          </>
-        )}
-      />
+      <SectionList
+      sections={flatListData}
+      keyExtractor={(item, index) => item+index}
+      renderItem={({item}) => (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('เลือกพนักงาน', {item})} style={{ alignItems: 'center', flexDirection: 'row', margin: 5, marginHorizontal: 10}} >
+          <Image
+            source={{ uri: item.image }}
+            style={{ width: 60, height: 80 }}
+            resizeMode='contain'
+            />
+          <Text style={{ margin: 10, flexGrow: 2 }}>ตำแหน่ง: {item.type_of_work}{'\n'}เวลาทำงาน: {item.start_time} - {item.end_time}</Text>
+          <Text style={{ marginRight: 10}}>{item.list_of_candidate.length} / {item.total_worker}</Text>
+        </TouchableOpacity>
+      )}
+      renderSectionHeader={({section: {date}}) => (
+        <View style={{backgroundColor: '#EAD7BB', borderRadius: 4}}>
+          <Text style={{marginLeft: 20, marginTop: 10, fontSize: 17, color: '#65451F', fontWeight: '700', marginRight: 10}}>{date}</Text>
+        </View>
+      )}>
+      </SectionList>
     </SafeAreaView>
-  );
-};
 
+)}
 export default Home;

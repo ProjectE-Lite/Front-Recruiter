@@ -6,15 +6,15 @@ import { useNavigation } from '@react-navigation/native'
 import { YOURAPI } from '../../constants/editendpoint'
 
 const ChoseEmploy = ({route}) => {
-  const myId = route.params.item.data[0]._id
-  const {name, type_of_work} = route.params.item.data[0]
+  const work_ID = route.params.item._id
+  const {name, type_of_work} = route.params.item
   const navigation = useNavigation()
   const [userData, setUserData] = useState([]);
   const [key, setKey] = useState("")
   const MAX_NAME_LENGTH = 15
   
   useEffect(() => {
-    axios(`http://${YOURAPI}/works/${myId}/status`)
+    axios(`http://${YOURAPI}/works/${work_ID}/status`)
     .then(res => {
       const dictStatus = res.data
       setKey(Object.keys(dictStatus)[0])

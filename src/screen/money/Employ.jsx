@@ -10,7 +10,6 @@ const userlist = ([
 ]);
 
 const Employ = ({ navigation, userData }) => {
-    console.log(userData[0])
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <SafeAreaView style={style.body}>
