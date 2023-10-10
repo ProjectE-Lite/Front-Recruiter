@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, {useState, useEffect} from 'react';
 import { View, Image, Text, SafeAreaView, TouchableOpacity} from 'react-native';
 import { FlatList} from 'react-native';
@@ -10,26 +10,31 @@ const Home = () => {
   const navigation = useNavigation();
   const [workData, setWorkData] = useState([]);
 
-  useEffect(() => {
-    axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/works`)
-      .then((res) => {
-        const dateDict = res.data; 
-        const allUserIDs = Object.values(dateDict).flat()
-        Promise.all(allUserIDs.map(userID =>
-          axios.get(`http://${YOURAPI}/works/${userID}`)
-        ))
-        .then(userResponses => {
-          const workData = userResponses.map(response => response.data);
-          setWorkData(workData)
-        })
-        .catch(error => {
-          console.error('Error fetching user data:', error);
-        });
-      })
-      .catch(e => {
-        console.error('Error', e);
-      });
-  }, []);
+  useFocusEffect(
+    React.useCallback(() =>{
+      const fetchData = async () => {
+        axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/works`)
+          .then((res) => {
+            const dateDict = res.data; 
+            const allUserIDs = Object.values(dateDict).flat()
+            Promise.all(allUserIDs.map(userID =>
+              axios.get(`http://${YOURAPI}/works/${userID}`)
+            ))
+            .then(userResponses => {
+              const workData = userResponses.map(response => response.data);
+              setWorkData(workData)
+            })
+            .catch(error => {
+              console.error('Error fetching user data:', error);
+            });
+          })
+          .catch(e => {
+            console.error('Error', e);
+          });
+        }
+        fetchData()
+    }, [])
+  )
 
   const groupedData = {};
 
@@ -73,7 +78,7 @@ const Home = () => {
                     resizeMode='contain'
                   />
                   <Text style={{ margin: 10, flexGrow: 2 }}>ตำแหน่ง: {subItem.type_of_work}{'\n'}เวลาทำงาน: {subItem.start_time} - {subItem.end_time}</Text>
-                  <Text style={{ marginRight: 10}}>{subItem.list_of_candidate.length} / {subItem.number_requirement}</Text>
+                  <Text style={{ marginRight: 10}}>{subItem.list_of_candidate.length} / {subItem.total_worker}</Text>
                 </TouchableOpacity>
               </>
             ))}

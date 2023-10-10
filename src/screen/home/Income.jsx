@@ -3,26 +3,25 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity} from 'react-nat
 import { FlatList} from 'react-native';
 import axios from "axios";
 import { YOURAPI } from '../../constants/editendpoint';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Income = ({ navigation }) => {
   const recruiter_id = '6517fa561434530638bc81de';
-  const [recdata,setrecdata] = useState([])
-  useEffect(() => {
-    axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}`)
-    .then(response => {
-      const recdata =  response.data.credit;
-      setrecdata(recdata)
-      console.log('GET request successfully:', response.data.credit);
-      
-      })
-      .catch(error => {
-      console.error('Error making GET request:', error);
-      });
+  const [data, setData] = useState([]);
 
-  },[])
-
-
-
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}`);
+          setData(response.data);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
+      fetchData();
+    }, [])
+  );
 
   const dataDeatail = ([
     {date: '6 ม.ค. 66',
@@ -68,7 +67,7 @@ const Income = ({ navigation }) => {
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <View style={styles.circle}>
             <Text style={styles.text}>ยอดเงินคงเหลือ</Text>
-            <Text style={styles.textnum}>{recdata}</Text>
+            <Text style={styles.textnum}>{data.credit}</Text>
           </View>
         </View>
       </View>
