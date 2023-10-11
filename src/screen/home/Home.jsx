@@ -37,6 +37,7 @@ const Home = () => {
     }, [])
   )
 
+
   const groupedData = {};
 
   workData.forEach(item => {
@@ -68,8 +69,15 @@ const Home = () => {
             style={{ width: 60, height: 80 }}
             resizeMode='contain'
             />
-          <Text style={{ margin: 10, flexGrow: 2 }}>ตำแหน่ง: {item.type_of_work}{'\n'}เวลาทำงาน: {item.start_time} - {item.end_time}</Text>
-          <Text style={{ marginRight: 10}}>{item.list_of_candidate.length} / {item.total_worker}</Text>
+          <Text style={{ margin: 10, flexGrow: 2 }}>ตำแหน่ง: {item.type_of_work}{'\n'}เวลาทำงาน: {item.start_time} - {item.end_time}{'\n'}จำนวนรับสมัคร: {item.total_worker}</Text>
+          <View style={{backgroundColor: 'green', width: 45, borderRadius: 10, padding:1, alignItems: 'center'}}>
+            <Text style={{color: 'white'}}>รับ</Text>
+            <Text style={{color: 'white'}}>{item.list_of_worker.length}</Text>
+          </View>
+          <View style={{backgroundColor: '#FFA722', width: 52, marginLeft: 10, marginRight: 5, borderRadius: 10, padding: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text>ยังไม่รับ</Text>
+            <Text style={{ marginRight: 10}}>{item.list_of_candidate.length}</Text>
+          </View>
         </TouchableOpacity>
       )}
       renderSectionHeader={({section: {date}}) => (
