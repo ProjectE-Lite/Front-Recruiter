@@ -18,6 +18,7 @@ const Employ = ({ navigation, userData, work_ID }) => {
         });
     }, []);
 
+    console.log(userData)
     const work_image = work_data.image
 
     return (
@@ -34,7 +35,7 @@ const Employ = ({ navigation, userData, work_ID }) => {
                     renderItem={({ item }) => (
                         <View style={style.list}>
                             <View style={style.profile}>
-                                <Image source={{uri : work_image}} resizeMode='contain' style={{ width: 80, height: 80,}}/>
+                                <Image source={{uri : item.image}} resizeMode='contain' style={{ width: 80, height: 80,}}/>
                                 <TouchableOpacity style={style.button1} onPress={() => {navigation.navigate('InfoEm', { userData: userData, item })}}>
                                     <Text style={style.text_button1}>ข้อมูล</Text>
                                 </TouchableOpacity>
