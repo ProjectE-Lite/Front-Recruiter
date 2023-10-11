@@ -1,42 +1,50 @@
 import {  View, Text, SafeAreaView, Image, TouchableOpacity, StyleSheet, FlatList} from 'react-native'
-import React from 'react'
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 
 const DeatailEachUser = ({ route }) => {
     const ShowBut = route.params.showBut
     const {image, first_name, last_name, nick_name, gender, age,birth_date, tel} = route.params.item
+    const work_id = route.params.myId
+    const [point , setPoint] = useState('5')
+    const user_id = route.params.item._id
     const navigation = useNavigation()
-    const dataDeatail = ([
-        {name: 'ตี๋น้อย 168 รัชโยธิน',
-        position: 'ล้างจาน',
-        credit: '50',
-        state: '',
-        point: 1,
-        },
-        {name: 'รัชโยธิน',
-        position: 'ล้างจาน',
-        credit: '40',
-        state: '',
-        point: 4,
-        },
-        {name: 'ตี๋โยธิน',
-        position: 'ล้างจาน',
-        credit: '30',
-        state: '',
-        point: 5,
-        },
-        {name: 'ธิน',
-        position: 'ล้างจาน',
-        credit: '40',
-        state: '',
-        point: 3,
-        },
-    ]);
+    const [Review , setReview] = useState([])
+
+    useEffect(() => {
+        axios.get(`http://10.0.2.2:8000/users/${user_id}/review_points/${point}`)
+        .then(res => {
+            const allReviewID = res.data
+            console.log(allReviewID)
+            Promise.all(allReviewID.map(review_id=>
+                axios.get(`http://10.0.2.2:8000/review/${review_id}`)
+              ))
+              .then(userResponses => {
+                const userData = userResponses.map(response => response.data);
+                setReview(userData)
+              })
+              .catch(error => {
+                console.error('Error fetching user data:', error);
+              });
+        })
+    }, [point])
+
+        const handlePatchData = () => {
+            axios.patch(`http://10.0.2.2:8000/users/${user_id}/accept/${work_id}`)
+            .then(response => {
+                navigation.goBack()
+                console.log('PATCH request สำเร็จ', response.data);
+              })
+              .catch(error => {
+                console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
+              });
+          };
 
     return (
-        <SafeAreaView style={{flex:1, backgroundColor: 'white'}}>
+        <SafeAreaView style={{flex:1, backgroundColor: 'white', marginBottom: 100}}>
         <FlatList
-            data={dataDeatail}
+            data={Review}
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={
             <>
@@ -64,6 +72,7 @@ const DeatailEachUser = ({ route }) => {
                         </TouchableOpacity>
                     </View>
                 ) : (
+
                     <TouchableOpacity onPress={() => {navigation.goBack()}}>
                         <View style={styles.rectangle4}>
                             <Text style={{color: '#FFFFFF' , fontSize: 20}}>ย้อนกลับ</Text>
@@ -108,6 +117,48 @@ const DeatailEachUser = ({ route }) => {
                 <View style = {{margin: 10, marginHorizontal:25}}>
                     <Text style = {{fontSize: 20, color : '#000000'}}>ประวัติการทำงาน</Text>
                 </View>
+                <View style={{flexDirection:'row', alignItems: 'center' , margin:15 , }}>
+                <TouchableOpacity onPress={() => {setPoint('1')}}>
+                        <View style={styles.rectangle5}>
+                            <Text style={{color: 'black' , fontSize: 20}}>1 <Image 
+                            source={require('../../assets/image/Star.png')}
+                            style={{ width: 20, height: 20,}}
+                    /></Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {setPoint('2')}}>
+                        <View style={styles.rectangle5}>
+                            <Text style={{color: 'black' , fontSize: 20}}>2 <Image 
+                            source={require('../../assets/image/Star.png')}
+                            style={{ width: 20, height: 20,}}
+                    /></Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {setPoint('3')}}>
+                        <View style={styles.rectangle5}>
+                            <Text style={{color: 'black' , fontSize: 20}}>3 <Image 
+                            source={require('../../assets/image/Star.png')}
+                            style={{ width: 20, height: 20,}}
+                    /></Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {setPoint('4')}}>
+                        <View style={styles.rectangle5}>
+                            <Text style={{color: 'black' , fontSize: 20}}>4 <Image 
+                            source={require('../../assets/image/Star.png')}
+                            style={{ width: 20, height: 20,}}
+                    /></Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {setPoint('5')}}>
+                        <View style={styles.rectangle5}>
+                            <Text style={{color: 'black' , fontSize: 20}}>5 <Image 
+                            source={require('../../assets/image/Star.png')}
+                            style={{ width: 20, height: 20,}}
+                    /></Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </>
           }
             contentContainerStyle={{ paddingBottom: 60 }}
@@ -115,27 +166,24 @@ const DeatailEachUser = ({ route }) => {
             renderItem={({ item }) => (
                 <View style={{alignItems:'center',flexDirection: 'row', backgroundColor: '#B1DAFF', margin: 5, borderRadius: 30}}>
                     <Image 
-                        source={require('../../assets/image/TeeNoi.png')} 
+                        source={{uri : item.recruiter_image}} 
                         style={{ width: 60, height: 80, marginLeft: 20}}
                         resizeMode='contain'
                     />
-                    <Text style={{flexGrow:2, fontSize:16, color: 'black', marginLeft: 15, flexGrow: 2}}>ชื่อ : {item.name}{'\n'}
-                        <View style={{ alignItems:'center',flexDirection: 'row'}}>
-                            <Image source={item.point >= 1 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20, margin: 5}}></Image>
-                            <Image source={item.point >= 2 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20, margin: 5}}></Image>
-                            <Image source={item.point >= 3 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20, margin: 5}}></Image>
-                            <Image source={item.point >= 4 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20, margin: 5}}></Image>
-                            <Image source={item.point >= 5 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20, margin: 5}}></Image>
-                        </View>
-                    </Text>
-                    <View style={{flexDirection:'column', alignItems:'center'}}>
-                        <Text style = {{fontSize:14 , color:'#FD0000'}}>{item.position}{'\n'}
-                        <TouchableOpacity onPress={() => {navigation.navigate('Home', {item})}}>
+                    <Text style={{flexGrow:2, fontSize:16, color: 'black', marginLeft:10, flexGrow: 2}}>ชื่อ : {item.recruiter_name}{'\n'}
+                        <View style={{ alignItems:'center',flexDirection: 'row',}}>
+                            <Image source={item.score >= 1 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20, margin: 5}}></Image>
+                            <Image source={item.score >= 2 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20, margin: 5}}></Image>
+                            <Image source={item.score >= 3 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20, margin: 5}}></Image>
+                            <Image source={item.score >= 4 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20, margin: 5}}></Image>
+                            <Image source={item.score >= 5 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20, margin: 5}}></Image>
+                            <TouchableOpacity onPress={() => {navigation.navigate('หน้ารีวิว', {item})}}>
                             <View style = {styles.butt}>
                                 <Text style = {styles.textbutton}>รีวิว</Text>
                             </View>
-                        </TouchableOpacity></Text>
-                    </View>
+                        </TouchableOpacity>
+                        </View>
+                    </Text>
                 </View>
             )}
     />
@@ -181,6 +229,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    rectangle5: {
+        margin: 5,
+        width: 60,
+        height: 44,
+        borderRadius: 20 ,
+        backgroundColor: '#F8F8FF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+    },
     setimage: {
         width: 175, 
         height: 175,
@@ -191,16 +249,16 @@ const styles = StyleSheet.create({
         height: 25, 
         backgroundColor: '#e0e0e0',
         marginTop: 10,
-        marginRight: 15,
+        marginleft: 50,
         alignSelf: 'flex-start',
         borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
       },
     textbutton: {
         color: 'black',
         fontSize: 15,
         textAlign: 'center',
+        marginleft: 70
+
     }
   });
 

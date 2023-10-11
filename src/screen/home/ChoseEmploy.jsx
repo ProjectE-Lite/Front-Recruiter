@@ -53,8 +53,16 @@ const ChoseEmploy = ({route}) => {
     alert('ไม่รับ');
   };
 
-  const handleImage3Press = () => {
-    alert('รับ');
+  const handleImage3Press = (usr) => {
+    console.log(usr)
+    axios.patch(`http://10.0.2.2:8000/users/${usr}/accept/${myId}`)
+            .then(response => {
+              alert('รับ');
+                console.log('PATCH request สำเร็จ', response.data);
+              })
+              .catch(error => {
+                console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
+              });
   };
 
   const renderItem = ({ item, index }) => (
@@ -83,7 +91,7 @@ const ChoseEmploy = ({route}) => {
             style={styles.imageButton}
             />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleImage3Press}>
+        <TouchableOpacity onPress={() => handleImage3Press (item._id)}>
             <Image
             source={require('../../assets/image/Correct.png')}
             style={styles.imageButton}
