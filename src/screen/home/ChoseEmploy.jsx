@@ -3,22 +3,25 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Employ from '../money/Employ'
 import { useNavigation } from '@react-navigation/native'
+import { YOURAPI } from '../../constants/editendpoint'
 
 const ChoseEmploy = ({route}) => {
-  const myId = route.params.item.data[0]._id
-  const {name, type_of_work} = route.params.item.data[0]
+  const work_ID = route.params.item._id
+  const {name, type_of_work} = route.params.item
   const navigation = useNavigation()
   const [userData, setUserData] = useState([]);
+  const [List_Worker, setList_Worker] = useState([])
   const [key, setKey] = useState("")
+  const [state, setState] = useState(0)
   const MAX_NAME_LENGTH = 15
   useEffect(() => {
-    axios.get(`http://10.0.2.2:8000/works/${myId}/status`)
+    axios(`http://${YOURAPI}/works/${work_ID}/status`)
     .then(res => {
       const dictStatus = res.data
       setKey(Object.keys(dictStatus)[0])
       const allUserIDs = Object.values(dictStatus).flat()
       Promise.all(allUserIDs.map(userID =>
-        axios.get(`http://10.0.2.2:8000/users/${userID}`)
+        axios.get(`http://${YOURAPI}/users/${userID}`)
       ))
       .then(userResponses => {
         const userData = userResponses.map(response => response.data);
@@ -28,7 +31,23 @@ const ChoseEmploy = ({route}) => {
         console.error('Error fetching user data:', error);
       });
     })
-  }, [])
+  }, [state])
+
+  useEffect(() => {
+    axios.get(`http://${YOURAPI}/works/${work_ID}`)
+    .then(res => {
+      const listusrId = res.data.list_of_worker
+      Promise.all(listusrId.map(usrID => 
+        axios.get(`http://${YOURAPI}/users/${usrID}`)
+        )
+      )
+      .then(usrRes =>{
+        const usr = usrRes.map(res => res.data)
+        setList_Worker(usr)
+      })
+      }
+    )
+  }, [state])
 
   const handleImage2Press = () => {
     alert('ไม่รับ');
@@ -47,7 +66,7 @@ const ChoseEmploy = ({route}) => {
   };
 
   const renderItem = ({ item, index }) => (
-    <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน', {item, myId})}}>
+    <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน', {item, showBut: "1"})}}>
         <View style={styles.box}>
         <Image
             source={{uri : item.image}}
@@ -82,21 +101,79 @@ const ChoseEmploy = ({route}) => {
     </TouchableOpacity>
   );
 
+  const RenderUsrWork = ({item, index}) => (
+    <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน', {item, showBut: "0"})}}>
+        <View style={styles.box}>
+          <Image
+              source={{uri : item.image}}
+              style={styles.boxImage}
+          />
+          <View style={{flexDirection: 'column', flexGrow: 2, marginLeft: 5, alignItems: 'center'}}>
+            <Text style={{ marginBottom: 5, fontSize: 15, flexShrink: 1}}>
+              {`${item.first_name} ${item.last_name}`.length > 30 ?
+                `${item.first_name} ${item.last_name}`.substring(0, 30) + '...' :
+                `${item.first_name} ${item.last_name}`}
+            </Text>
+          </View>
+        </View>
+    </TouchableOpacity>
+  )
 
   return (
     <>
     {key == "still_choosing" ? (
       <View style={styles.container}>
         <Text style={{ fontSize: 18 }}>{name} - <Text style={{ color: 'red' }}>{type_of_work}</Text></Text>
-        <FlatList
-          data={userData}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id}
-        />
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity onPress={() => {setState(0)}}>
+            <View style={{marginHorizontal: 5, backgroundColor: '#F99417', height: 40, width: 175, borderRadius: 10, marginTop: 5, alignItems: 'center', justifyContent: 'center'}}>
+              <Text>ผู้สมัคร</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setState(1)}}>
+            <View style={{backgroundColor: 'green', height: 40, width: 175, borderRadius: 10, marginTop: 5, alignItems: 'center', justifyContent: 'center'}}>
+              <Text>รับเข้าทำงาน</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        {state == 0 ? (
+          <>
+            <View style={{backgroundColor: '#F99417', justifyContent: 'center', alignItems: 'center', borderRadius: 20, height: 40, marginTop: 10}}>
+              <Text style={{color: 'white'}}>ผู้สมัคร</Text>
+            </View>
+            <FlatList
+            data={userData}
+            renderItem={renderItem}
+            ListEmptyComponent={() => (
+              <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
+                <Text>ไม่มีผู้สมัคร</Text>
+              </View>
+            )}
+            keyExtractor={(item) => item._id}
+            />
+         </>
+        ) : (
+          <>
+            <View style={{backgroundColor: 'green', justifyContent: 'center', alignItems: 'center', borderRadius: 20, height: 40, marginTop: 10}}>
+              <Text style={{color: 'white'}}>รับเข้าทำงาน</Text>
+            </View>
+            <FlatList
+            data={List_Worker}
+            style={{}}
+            renderItem={RenderUsrWork}
+            ListEmptyComponent={() => (
+              <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
+                <Text>ยังไม่ได้รับคนเข้าทำงาน</Text>
+              </View>
+            )}
+            keyExtractor={(item) => item._id}
+            />
+          </>
+        )}
     </View>
       ) 
     : (
-      <Employ navigation={navigation} userData={userData}></Employ>
+      <Employ navigation={navigation} userData={userData} work_ID= {work_ID}></Employ>
       )}
     </>
   )

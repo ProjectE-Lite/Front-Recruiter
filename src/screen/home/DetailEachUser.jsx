@@ -4,6 +4,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
 const DeatailEachUser = ({ route }) => {
+    const ShowBut = route.params.showBut
     const {image, first_name, last_name, nick_name, gender, age,birth_date, tel} = route.params.item
     const work_id = route.params.myId
     const [point , setPoint] = useState('5')
@@ -47,28 +48,38 @@ const DeatailEachUser = ({ route }) => {
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={
             <>
-                <View style={{flexDirection:'row-reverse', justifyContent: 'center' , margin:15}}>
-                    <TouchableOpacity>
-                        <View style={styles.rectangle3}>
-                            <Text style={{color: '#FFFFFF' , fontSize: 20}}>นัดหมาย</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <View style={styles.rectangle1}>
-                            <Text style={{color: '#FFFFFF' , fontSize: 20}}>ไม่รับ</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress= {() => {handlePatchData()}}>
-                        <View style={styles.rectangle2}>
-                            <Text style={{color: '#FFFFFF' , fontSize: 20}}>รับ</Text>
-                        </View>
-                    </TouchableOpacity>
+                {ShowBut === "1" ? (
+                    <View style={{flexDirection:'row-reverse', justifyContent: 'center' , margin:15}}>
+                        <TouchableOpacity>
+                            <View style={styles.rectangle3}>
+                                <Text style={{color: '#FFFFFF' , fontSize: 20}}>นัดหมาย</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <View style={styles.rectangle1}>
+                                <Text style={{color: '#FFFFFF' , fontSize: 20}}>ไม่รับ</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <View style={styles.rectangle2}>
+                                <Text style={{color: '#FFFFFF' , fontSize: 20}}>รับ</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {navigation.goBack()}}>
+                            <View style={styles.rectangle4}>
+                                <Text style={{color: '#FFFFFF' , fontSize: 20}}>ย้อนกลับ</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                ) : (
+
                     <TouchableOpacity onPress={() => {navigation.goBack()}}>
                         <View style={styles.rectangle4}>
                             <Text style={{color: '#FFFFFF' , fontSize: 20}}>ย้อนกลับ</Text>
                         </View>
                     </TouchableOpacity>
-                </View>
+                )}
+                
                 <View style={{justifyContent: 'center' , alignItems:'center'}}>
                     <Image 
                     source={{uri: image}} 

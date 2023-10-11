@@ -9,8 +9,7 @@ const userlist = ([
     {profile_list: '4'},
 ]);
 
-const Employ = ({ navigation, userData }) => {
-    console.log(userData[0])
+const Employ = ({ navigation, userData, work_ID }) => {
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <SafeAreaView style={style.body}>

@@ -3,12 +3,12 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
 const data = [
-  { label: 'M', value: '1' },
-  { label: 'F', value: '2' },
+  { label: 'ผู้ชาย', value: '1' },
+  { label: 'ผู้หญิง', value: '2' },
   { label: 'ไม่ระบุเพศ', value: '3'},
 ];
 
-const DropDownsex = () => {
+const DropDownsex = ({onValueChange}) => {
   const [value, setValue] = useState(null);
 
   const renderItem = item => {
@@ -34,6 +34,7 @@ const DropDownsex = () => {
       value={value}
       onChange={item => {
         setValue(item.value);
+        onValueChange(item.label);
       }}
       renderItem={renderItem}
     />
