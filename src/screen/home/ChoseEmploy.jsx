@@ -11,15 +11,14 @@ const ChoseEmploy = ({route}) => {
   const [userData, setUserData] = useState([]);
   const [key, setKey] = useState("")
   const MAX_NAME_LENGTH = 15
-  
   useEffect(() => {
-    axios(`http://localhost:8000/works/${myId}/status`)
+    axios.get(`http://10.0.2.2:8000/works/${myId}/status`)
     .then(res => {
       const dictStatus = res.data
       setKey(Object.keys(dictStatus)[0])
       const allUserIDs = Object.values(dictStatus).flat()
       Promise.all(allUserIDs.map(userID =>
-        axios.get(`http://localhost:8000/users/${userID}`)
+        axios.get(`http://10.0.2.2:8000/users/${userID}`)
       ))
       .then(userResponses => {
         const userData = userResponses.map(response => response.data);
@@ -35,12 +34,20 @@ const ChoseEmploy = ({route}) => {
     alert('ไม่รับ');
   };
 
-  const handleImage3Press = () => {
-    alert('รับ');
+  const handleImage3Press = (usr) => {
+    console.log(usr)
+    axios.patch(`http://10.0.2.2:8000/users/${usr}/accept/${myId}`)
+            .then(response => {
+              alert('รับ');
+                console.log('PATCH request สำเร็จ', response.data);
+              })
+              .catch(error => {
+                console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
+              });
   };
 
   const renderItem = ({ item, index }) => (
-    <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน', {item})}}>
+    <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน', {item, myId})}}>
         <View style={styles.box}>
         <Image
             source={{uri : item.image}}
@@ -65,7 +72,7 @@ const ChoseEmploy = ({route}) => {
             style={styles.imageButton}
             />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleImage3Press}>
+        <TouchableOpacity onPress={() => handleImage3Press (item._id)}>
             <Image
             source={require('../../assets/image/Correct.png')}
             style={styles.imageButton}
