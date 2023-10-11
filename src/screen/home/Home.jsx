@@ -8,14 +8,13 @@ const Home = () => {
   const recruiter_id = '6517fa561434530638bc81de'
   const navigation = useNavigation();
   const [workData, setWorkData] = useState([]);
-
   useEffect(() => {
-    axios.get(`http://localhost:8000/recruiters/${recruiter_id}/works`)
+    axios.get(`http://10.0.2.2:8000/recruiters/${recruiter_id}/works`)
       .then((res) => {
         const dateDict = res.data; 
         const allUserIDs = Object.values(dateDict).flat()
         Promise.all(allUserIDs.map(userID =>
-          axios.get(`http://localhost:8000/works/${userID}`)
+          axios.get(`http://10.0.2.2:8000/works/${userID}`)
         ))
         .then(userResponses => {
           const workData = userResponses.map(response => response.data);
