@@ -55,7 +55,7 @@ const ChoseEmploy = ({route}) => {
 
   const handleImage3Press = (usr) => {
     console.log(usr)
-    axios.patch(`http://10.0.2.2:8000/users/${usr}/accept/${myId}`)
+    axios.patch(`http://${YOURAPI}/users/${usr}/accept/${work_ID}`)
             .then(response => {
               alert('รับ');
                 console.log('PATCH request สำเร็จ', response.data);
@@ -143,7 +143,9 @@ const ChoseEmploy = ({route}) => {
             </View>
             <FlatList
             data={userData}
+            showsVerticalScrollIndicator= {false}
             renderItem={renderItem}
+            style={{marginBottom: 80}}
             ListEmptyComponent={() => (
               <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
                 <Text>ไม่มีผู้สมัคร</Text>
@@ -159,7 +161,8 @@ const ChoseEmploy = ({route}) => {
             </View>
             <FlatList
             data={List_Worker}
-            style={{}}
+            style={{marginBottom: 80}}
+            showsVerticalScrollIndicator= {false}
             renderItem={RenderUsrWork}
             ListEmptyComponent={() => (
               <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}>

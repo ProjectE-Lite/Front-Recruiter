@@ -2,6 +2,7 @@ import {  View, Text, SafeAreaView, Image, TouchableOpacity, StyleSheet, FlatLis
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { YOURAPI } from '../../constants/editendpoint';
 
 const DeatailEachUser = ({ route }) => {
     const ShowBut = route.params.showBut
@@ -13,12 +14,12 @@ const DeatailEachUser = ({ route }) => {
     const [Review , setReview] = useState([])
 
     useEffect(() => {
-        axios.get(`http://10.0.2.2:8000/users/${user_id}/review_points/${point}`)
+        axios.get(`http://${YOURAPI}/users/${user_id}/review_points/${point}`)
         .then(res => {
             const allReviewID = res.data
             console.log(allReviewID)
             Promise.all(allReviewID.map(review_id=>
-                axios.get(`http://10.0.2.2:8000/review/${review_id}`)
+                axios.get(`http://${YOURAPI}/review/${review_id}`)
               ))
               .then(userResponses => {
                 const userData = userResponses.map(response => response.data);
@@ -31,7 +32,7 @@ const DeatailEachUser = ({ route }) => {
     }, [point])
 
         const handlePatchData = () => {
-            axios.patch(`http://10.0.2.2:8000/users/${user_id}/accept/${work_id}`)
+            axios.patch(`http://${YOURAPI}/users/${user_id}/accept/${work_id}`)
             .then(response => {
                 navigation.goBack()
                 console.log('PATCH request สำเร็จ', response.data);
@@ -42,9 +43,10 @@ const DeatailEachUser = ({ route }) => {
           };
 
     return (
-        <SafeAreaView style={{flex:1, backgroundColor: 'white', marginBottom: 100}}>
+        <SafeAreaView style={{flex:1, backgroundColor: 'white'}}>
         <FlatList
             data={Review}
+            style={{marginBottom: 45}}
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={
             <>
