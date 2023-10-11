@@ -90,7 +90,7 @@ const ChoseEmploy = ({route}) => {
     </View>
       ) 
     : (
-      <Employ navigation={navigation} userData={userData}></Employ>
+      <Employ navigation={navigation} userData={userData} work_ID= {work_ID}></Employ>
       )}
     </>
   )

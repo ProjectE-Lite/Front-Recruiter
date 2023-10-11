@@ -58,6 +58,7 @@ const Home = () => {
     <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
       <SectionList
       sections={flatListData}
+      style={{marginBottom: 40}}
       keyExtractor={(item, index) => item+index}
       renderItem={({item}) => (
         <TouchableOpacity
