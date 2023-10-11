@@ -1,33 +1,41 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, SafeAreaView, StyleSheet, Button, TextInput, Image, TouchableOpacity, FlatList } from 'react-native';
-
-const userlist = ([
-    {profile_list: '1'},
-    {profile_list: '2'},
-    {profile_list: '3'},
-    {profile_list: '4'},
-]);
+import axios from 'axios';
+import { YOURAPI } from '../../constants/editendpoint';
 
 const Employ = ({ navigation, userData, work_ID }) => {
-    console.log(userData)
-    console.log(work_ID);
+    const [work_data, setWork_data] = useState([]);
+
+    useEffect(() => {
+        axios.get(`http://${YOURAPI}/works/${work_ID}`)
+        .then(res => {
+            const myData = res.data;
+            setWork_data(myData)
+        })
+        .catch(error => {
+            console.error('Error fetching notifications:', error);
+        });
+    }, []);
+
+    const work_image = work_data.image
+
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <SafeAreaView style={style.body}>
                 <View style={style.view1}>
-                    <Text style={style.text1_1}>ตี๋น้อย 111 พหล - </Text>
-                    <Text style={style.text1_2}>พนักงานเสิร์ฟ</Text>
+                    <Text style={style.text1_1}>{work_data.name} - </Text>
+                    <Text style={style.text1_2}>{work_data.type_of_work}</Text>
                 </View>
 
                 <FlatList
-                    keyExtractor={(item, index) => index.toString()}
-                    data={userlist}
+                    keyExtractor={(item) => item._id.toString()}
+                    data={userData}
                     renderItem={({ item }) => (
                         <View style={style.list}>
                             <View style={style.profile}>
-                                <Image source={require('../../assets/image/ProfileIcon.png')} resizeMode='contain' style={{ width: 80, height: 80,}}/>
-                                <TouchableOpacity style={style.button1} onPress={() => {navigation.navigate('InfoEm')}}>
+                                <Image source={{uri : work_image}} resizeMode='contain' style={{ width: 80, height: 80,}}/>
+                                <TouchableOpacity style={style.button1} onPress={() => {navigation.navigate('InfoEm', { userData: userData, item })}}>
                                     <Text style={style.text_button1}>ข้อมูล</Text>
                                 </TouchableOpacity>
                             </View>
