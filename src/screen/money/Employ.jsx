@@ -18,9 +18,6 @@ const Employ = ({ navigation, userData, work_ID }) => {
         });
     }, []);
 
-    console.log(userData)
-    const work_image = work_data.image
-
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <SafeAreaView style={style.body}>
