@@ -52,7 +52,7 @@ const  renderItem=({ item }) => {
     </View>
     )
 }
-  elif (item.from === item.from.startsWith('6'))
+  else
   return(
     <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#bdbdbd', alignItems:'center'}} >
       <Text style={{flexGrow:2, fontSize:20, marginLeft: 5, marginTop: 15}}>{item.date.slice(0,10) }{'\n'}{item.date.slice(11,-10)}{'\n'}</Text>
