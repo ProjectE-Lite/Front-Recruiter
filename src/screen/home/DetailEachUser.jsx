@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
         height: 25, 
         backgroundColor: '#e0e0e0',
         marginTop: 10,
-        marginleft: 50,
+        marginLeft: 50,
         alignSelf: 'flex-start',
         borderRadius: 10,
       },
