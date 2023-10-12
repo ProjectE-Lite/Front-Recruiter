@@ -1,16 +1,11 @@
 import {  View, Text, SafeAreaView, Image, TouchableOpacity, StyleSheet, FlatList} from 'react-native'
 import React from 'react'
 
-const InfoEmploy = ({ navigation }) => {
-    const ListData = (
-            { nickname: 'Arm',
-                sex: 'F',
-                age: '21',
-                date: '19 ตุลาคม 2545',
-                tel: '0891234567',
-                mylocation: ' ',
-            }
-            )
+const InfoEmploy = ({ navigation , route }) => {
+    const userData = route.params.item
+
+    const work_history = userData.feedback
+
     const dataDeatail = ([
         {name: 'ตี๋น้อย 168 รัชโยธิน',
         position: 'ล้างจาน',
@@ -38,6 +33,9 @@ const InfoEmploy = ({ navigation }) => {
         },
     ]);
 
+    console.log(route.params.item)
+    console.log(work_history)
+
     return (
         <SafeAreaView style={{flex:1, backgroundColor: 'white'}}>
         <FlatList
@@ -53,30 +51,30 @@ const InfoEmploy = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{justifyContent: 'center' , alignItems:'center'}}>
-                    <Image source={require('../../assets/image/ProfileIcon.png')} style = {styles.image}/>
+                    <Image source={{uri: userData.image}} style = {styles.image}/>
                 </View>
                 <View style = {{margin: 10, alignItems: 'center'}}>
-                    <Text style = {{fontSize: 20, color : '#000000'}}>Firstname Lastname</Text>
+                    <Text style = {{fontSize: 20, color : '#000000'}}>{userData.first_name} {userData.last_name}</Text>
                 </View>
                 <View style={{flexDirection:'row', marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>ชื่อเล่น :  </Text>
-                    <Text style={{color:'#000000', fontSize: 20}}>{ListData.nickname}</Text>
+                    <Text style={{color:'#000000', fontSize: 20}}>{userData.nick_name}</Text>
                 </View>
                 <View style={{flexDirection:'row', marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>เพศ :  </Text>
-                    <Text style={{color:'#000000', fontSize: 20}}>{ListData.sex}</Text>
+                    <Text style={{color:'#000000', fontSize: 20}}>{userData.gender}</Text>
                 </View>
                 <View style={{flexDirection:'row', marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>อายุ :  </Text>
-                    <Text style={{color:'#000000', fontSize: 20}}>{ListData.age}</Text>
+                    <Text style={{color:'#000000', fontSize: 20}}>{userData.age}</Text>
                 </View>
                 <View style={{flexDirection:'row', marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>วันเกิด :  </Text>
-                    <Text style={{color:'#000000', fontSize: 20}}>{ListData.date}</Text>
+                    <Text style={{color:'#000000', fontSize: 20}}>{userData.birth_date}</Text>
                 </View>
                 <View style={{flexDirection:'row', marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>เบอร์โทรศัพท์ :  </Text>
-                    <Text style={{color:'#000000', fontSize: 20}}>{ListData.tel}</Text>
+                    <Text style={{color:'#000000', fontSize: 20}}>{userData.tel}</Text>
                 </View>
                 <View style={{marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>ที่อยู่ปัจจุบัน</Text>

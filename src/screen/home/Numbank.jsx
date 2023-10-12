@@ -18,12 +18,12 @@ const Numbank = ({navigation}) => {
     const acceptCredit = () =>{
     axios.patch(`http://${YOURAPI}/recruiters/${recruiter_id}/topup/${credit}`, credit)
     .then(response => {
-    console.log('credit sent successfully:', response.data);
-    navigation.navigate('money');
+        console.log('credit sent successfully:', response.data);
+        navigation.navigate('money');
 
     })
     .catch(error => {
-    console.error('Error sending data:', error);
+        console.error('Error sending data:', error);
     });
     };
 
@@ -34,20 +34,15 @@ const Numbank = ({navigation}) => {
                 <View style = {style.input1}>
                     <Text style={{fontSize:24}}>xxx-x-x4935-x</Text>
                 </View>
-
             </View>
-            
             <View style={style.view2}>
                 <Text style={style.text}>จำนวนเงิน</Text>
-                <TextInput style={style.input2} placeholder='ใส่จำนวนเงิน' onChangeText={handlecreditChange} value={credit}></TextInput>
-
+                <TextInput style={style.input2} placeholder='ใส่จำนวนเงิน' onChangeText={handlecreditChange}></TextInput>
             </View>
-            
             <View style={style.view2}>
                 <View style={style.button}>
                     <TouchableOpacity style={style.button} onPress={acceptCredit}>
                         <Text style={style.text_button}>ยืนยัน</Text>
-
                     </TouchableOpacity>
                 </View>
             </View>
@@ -58,10 +53,8 @@ const Numbank = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            
         </SafeAreaView>
   )
-
 }
 
 const style = StyleSheet.create({

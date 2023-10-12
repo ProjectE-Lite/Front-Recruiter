@@ -10,6 +10,7 @@ import Employ from '../screen/money/Employ';
 import InfoEmploy from '../screen/money/InfoEmploy';
 import Inspect from '../screen/money/Inspect';
 import Pay from '../screen/money/Pay';
+import Review from '../screen/home/Review';
 
 const HJ = createStackNavigator();
 
@@ -25,6 +26,7 @@ const HomeJob = () => {
       <HJ.Screen name="InfoEm" component={InfoEmploy}></HJ.Screen>
       <HJ.Screen name="ตรวจสอบ" component={Inspect}></HJ.Screen>
       <HJ.Screen name="pay" component={Pay}></HJ.Screen>
+      <HJ.Screen name="หน้ารีวิว" component={Review}></HJ.Screen>
     </HJ.Navigator>
   );
 }
