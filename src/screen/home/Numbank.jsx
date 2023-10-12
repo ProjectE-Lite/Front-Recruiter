@@ -62,23 +62,6 @@ const Numbank = ({navigation}) => {
         </SafeAreaView>
   )
 
-            </View>
-            <View style={style.view2}>
-                <View style={style.button}>
-                    <TouchableOpacity style={style.button} onPress={acceptCredit}>
-                        <Text style={style.text_button}>ยืนยัน</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View style={style.view2}>
-                <View style={style.button}>
-                    <TouchableOpacity style={style.button_red} onPress={() => {navigation.goBack()}}>
-                        <Text style={style.text_button}>ย้อนกลับ</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>       
-        </SafeAreaView>
-    )
 }
 
 const style = StyleSheet.create({

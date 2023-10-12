@@ -6,20 +6,31 @@ import { YOURAPI } from '../../constants/editendpoint';
 
 const Income = ({ navigation }) => {
   const recruiter_id = '6517fa561434530638bc81de';
-  const [recdata,setrecdata] = useState([])
+  const [recdata,setrecdata] = useState([]);
+  const [notiDatamoney,setnotiData] = useState([]);
+
   useEffect(() => {
     axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}`)
     .then(response => {
-      const recdata =  response.data.credit;
-      setrecdata(recdata)
-      console.log('GET request successfully:', response.data.credit);
+      const recdata =  response.data;
       
+      setrecdata(recdata);
+      Promise.all(recdata.list_of_money_exchange.map(exchange_id =>
+        axios.get(`http://${YOURAPI}/money_exchange/${exchange_id}`)
+      ))
+      .then(res => {
+        const notiData = res.map(res => res.data)
+        
+        setnotiData(notiData)
+        
       })
+      
+  })
       .catch(error => {
-      console.error('Error making GET request:', error);
-      });
+        console.error('Error making GET request:', error);
+          });
 
-  },[])
+      },[])
 
 
 
@@ -62,13 +73,30 @@ const Income = ({ navigation }) => {
     credit: '+50.00'
     }
 ]);
+const  renderItem=({ item }) => {
+  if (item.from === "Bank"){
+    return(
+    <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#bdbdbd', alignItems:'center'}} >
+      <Text style={{flexGrow:2, fontSize:20, marginLeft: 5, marginTop: 15}}>{item.date.slice(0,10) }{'\n'}{item.date.slice(11,-10)}{'\n'}</Text>
+      <Text style = {{fontSize:25,color:'blue', marginRight: 5}} >+{item.credit}</Text>
+    </View>
+    )
+}
+  elif (item.from === item.from.startsWith('6'))
+  return(
+    <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#bdbdbd', alignItems:'center'}} >
+      <Text style={{flexGrow:2, fontSize:20, marginLeft: 5, marginTop: 15}}>{item.date.slice(0,10) }{'\n'}{item.date.slice(11,-10)}{'\n'}</Text>
+      <Text style = {{fontSize:25,color:'blue', marginRight: 5}} >-{item.credit}</Text>
+    </View>
+    )
+}
   return (
     <SafeAreaView style={{backgroundColor: 'white', flex:1}}>
       <View style={{padding:10}}>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <View style={styles.circle}>
             <Text style={styles.text}>ยอดเงินคงเหลือ</Text>
-            <Text style={styles.textnum}>{recdata}</Text>
+            <Text style={styles.textnum}>{recdata.credit}</Text>
           </View>
         </View>
       </View>
@@ -79,18 +107,15 @@ const Income = ({ navigation }) => {
       </TouchableOpacity>
       <Text style={{marginTop:10, marginLeft:10, marginBottom:10, color:'black',fontSize: 20}}>รายการล่าสุด</Text>
       <FlatList
-        data={dataDeatail}
+        data={notiDatamoney}
         contentContainerStyle={{ paddingBottom: 60}}
         keyExtractor={(item,index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#bdbdbd', alignItems:'center'}}>
-            <Text style={{flexGrow:2, fontSize:20, marginLeft: 5, marginTop: 15}}>{item.date}{'\n'}{item.time}{'\n'}</Text>
-            <Text style = {{fontSize:25,color:'blue', marginRight: 5}}>{item.credit}</Text>
-          </View>
-        )}
+        renderItem={renderItem}
       />
+
     </SafeAreaView>
   );
+  
 };
 
 const styles = StyleSheet.create({
