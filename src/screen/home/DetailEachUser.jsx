@@ -7,7 +7,7 @@ import { YOURAPI } from '../../constants/editendpoint';
 const DeatailEachUser = ({ route }) => {
     const ShowBut = route.params.showBut
     const {image, first_name, last_name, nick_name, gender, age,birth_date, tel} = route.params.item
-    const work_id = route.params.myId
+    const work_id = route.params.work_ID
     const [point , setPoint] = useState('5')
     const user_id = route.params.item._id
     const navigation = useNavigation()
@@ -17,7 +17,6 @@ const DeatailEachUser = ({ route }) => {
         axios.get(`http://${YOURAPI}/users/${user_id}/review_points/${point}`)
         .then(res => {
             const allReviewID = res.data
-            console.log(allReviewID)
             Promise.all(allReviewID.map(review_id=>
                 axios.get(`http://${YOURAPI}/review/${review_id}`)
               ))
@@ -29,25 +28,36 @@ const DeatailEachUser = ({ route }) => {
                 console.error('Error fetching user data:', error);
               });
         })
+        .catch(error => {
+            if (error.response && error.response.status === 400) {
+                setReview([]); 
+            } else {
+                console.error('Error making GET request:', error);
+            }
+        });
     }, [point])
 
-        const handlePatchData = () => {
-            axios.patch(`http://${YOURAPI}/users/${user_id}/accept/${work_id}`)
-            .then(response => {
-                navigation.goBack()
-                console.log('PATCH request สำเร็จ', response.data);
-              })
-              .catch(error => {
-                console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
-              });
-          };
-
+    const handlePatchData = () => {
+        axios.patch(`http://${YOURAPI}/users/${user_id}/accept/${work_id}`)
+        .then(response => {
+            navigation.goBack()
+            console.log('PATCH request สำเร็จ', response.data);
+            })
+            .catch(error => {
+            console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
+            });
+        };
     return (
         <SafeAreaView style={{flex:1, backgroundColor: 'white'}}>
         <FlatList
             data={Review}
             style={{marginBottom: 45}}
             showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                    <Text>ดาวนี้ {point} ไม่มีรีวิว</Text>
+                </View>
+            }
             ListHeaderComponent={
             <>
                 {ShowBut === "1" ? (
@@ -62,7 +72,7 @@ const DeatailEachUser = ({ route }) => {
                                 <Text style={{color: '#FFFFFF' , fontSize: 20}}>ไม่รับ</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => handlePatchData()}>
                             <View style={styles.rectangle2}>
                                 <Text style={{color: '#FFFFFF' , fontSize: 20}}>รับ</Text>
                             </View>

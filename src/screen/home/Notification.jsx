@@ -17,8 +17,6 @@ export default function Notification() {
       .then(res => {
         const notiData = res.map(res => res.data)
         setDataDeatail(notiData)
-      
-        
       })
     })
   }, [])

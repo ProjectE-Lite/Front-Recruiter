@@ -54,19 +54,20 @@ const ChoseEmploy = ({route}) => {
   };
 
   const handleImage3Press = (usr) => {
-    console.log(usr)
     axios.patch(`http://${YOURAPI}/users/${usr}/accept/${work_ID}`)
-            .then(response => {
-              alert('รับ');
-                console.log('PATCH request สำเร็จ', response.data);
-              })
-              .catch(error => {
-                console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
-              });
+    .then(response => {
+      alert('รับ');
+        console.log('PATCH request สำเร็จ', response.data);
+      })
+    .catch(error => {
+      console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
+    });
   };
 
   const renderItem = ({ item, index }) => (
-    <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน', {item, showBut: "1"})}}>
+    <TouchableOpacity onPress={() => {
+      navigation.navigate('รายละเอียดพนักงาน', {item, showBut: "1", work_ID: work_ID})
+      }}>
         <View style={styles.box}>
         <Image
             source={{uri : item.image}}
