@@ -2,6 +2,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView 
 import React, {useState} from 'react'
 import DatePicker from 'react-native-date-picker'
 import DropDownsex from '../../components/DropdownSex';
+import DropdownWork from '../../components/DropdownWork';
 
 
 const AppendJob = ({ navigation }) => {
@@ -58,6 +59,13 @@ const AppendJob = ({ navigation }) => {
     });
   };
 
+  const handleTypeWork = (value) => {
+    setData({
+      ...Data,
+      "type_of_work": value
+    });
+  };
+
   const handleDateChange = (date) => {
     setData({
       ...Data,
@@ -65,7 +73,7 @@ const AppendJob = ({ navigation }) => {
       end_registeration : date.slice(0,10),
     });
   };
-  console.log(Data)
+
   return (
     <View style={{ backgroundColor: 'white', flex: 1, paddingBottom: 90}}>
       <ScrollView style={styles.container}>
@@ -167,18 +175,10 @@ const AppendJob = ({ navigation }) => {
             ></TextInput>
           </View>
         </View>
-        <View style={{flexDirection: 'row', marginVertical: 15, alignItems: 'center', borderWidth: 1, borderColor: 'white', borderRadius: 30, padding: 8, shadowColor: '#000', shadowOffset: {
-          width: 0,
-          height: 1,
-        }, shadowOpacity: 0.2, shadowRadius: 1.41, elevation: 2,}}>
-          <Image source={require('../../assets/image/bagfillIcon.png')} style={styles.boxIcon}></Image>
-          <TextInput 
-          placeholder='ตำแหน่งงาน' 
-          autoCorrect={false} 
-          style={{fontSize: 19}}
-          onChangeText={text => handleInputChange('type_of_work', text)}
-          ></TextInput>
-        </View>
+        <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>ประเภทงาน</Text>
+        <DropdownWork
+            onValueChange={handleTypeWork}
+            value={Data.gender_requirement}></DropdownWork>
         <View style= {{flexDirection: 'row', marginVertical: 15, alignItems: 'center'}}>
           <Image source={require('../../assets/image/filladd.png')} style={styles.boxIcon}></Image>
           <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>จำนวนคน : </Text>
