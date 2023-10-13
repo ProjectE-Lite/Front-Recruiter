@@ -82,7 +82,7 @@ const ChoseEmploy = ({route}) => {
               `${item.first_name} ${item.last_name}`}
           </Text>
           {usrStatus[item._id] && usrStatus[item._id].interview_appointment !== null ?(
-            <Text>{`Interview Appointment:${'\n'}${usrStatus[item._id].interview_appointment}`}</Text>
+            <Text>{`Interview Appointment:${'\n'}วันที่ :${usrStatus[item._id].interview_appointment.slice(0,10)}${'\n'}เวลา : ${usrStatus[item._id].interview_appointment.slice(10,21)}`}</Text>
           ) : (
             <>
             <Text>ยังไม่มีเวลานัดหมาย</Text>
