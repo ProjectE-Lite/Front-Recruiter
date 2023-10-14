@@ -46,18 +46,28 @@ const Income = ({ navigation }) => {
 const  renderItem=({ item }) => {
   if (item.from === "Bank"){
     return(
-    <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#bdbdbd', alignItems:'center'}} >
-      <Text style={{flexGrow:2, fontSize:20, marginLeft: 5, marginTop: 15}}>{item.date.slice(0,10) }{'\n'}{item.date.slice(11,-10)}{'\n'}</Text>
-      <Text style = {{fontSize:25,color:'blue', marginRight: 5}} >+{item.credit?.toLocaleString() || ""}</Text>
+    <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#D7E5CA', alignItems:'center', borderRadius: 20, justifyContent: 'center', padding: 5, marginHorizontal: 10}}>
+      <View style={{flexGrow: 2, padding: 10}}>
+          <Text>{item.date.slice(0,10)}</Text>
+          <Text>{item.date.slice(11,-10)}</Text>
+      </View>
+      <View style={{marginRight: 20}}>
+          <Text style={{}}>+{item.credit?.toLocaleString() || ""}</Text>
+      </View>
     </View>
     )
 }
   else
   return(
-    <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#bdbdbd', alignItems:'center'}} >
-      <Text style={{flexGrow:2, fontSize:20, marginLeft: 5, marginTop: 15}}>{item.date.slice(0,10) }{'\n'}{item.date.slice(11,-10)}{'\n'}</Text>
-      <Text style = {{fontSize:25,color:'blue', marginRight: 5}} >-{item.credit}</Text>
+    <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#D7E5CA', alignItems:'center', borderRadius: 20, justifyContent: 'center', padding: 5, marginHorizontal: 10}}>
+    <View style={{flexGrow: 2, padding: 10}}>
+        <Text>{item.date.slice(0,10)}</Text>
+        <Text>{item.date.slice(11,-10)}</Text>
     </View>
+    <View style={{marginRight: 20}}>
+        <Text style={{color: 'red'}}>-{item.credit?.toLocaleString() || ""}</Text>
+    </View>
+  </View>
     )
 }
   return (
@@ -95,7 +105,7 @@ const styles = StyleSheet.create({
     borderRadius: 100, 
     backgroundColor: '#fafafa', 
     borderWidth: 4,
-    borderColor: '#1a237e',
+    borderColor: '#618264',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -112,7 +122,7 @@ const styles = StyleSheet.create({
   butt: {
     width: 90, 
     height: 45, 
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#79AC78',
     alignSelf: 'flex-start',
     margin:10,
     borderRadius: 10,
@@ -120,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textbutton: {
-    color: 'black',
+    color: 'white',
     fontSize: 18,
     textAlign: 'center',
   }
