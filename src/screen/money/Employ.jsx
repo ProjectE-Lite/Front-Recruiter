@@ -45,7 +45,7 @@ const Employ = ({ navigation, userData, work_ID }) => {
                             </View>
                             <View style={style.check}>
                                 <Image source={require('../../assets/image/search-alt.png')} resizeMode='contain' style={{ width: 65, height: 65, marginTop: 7}}/>
-                                    <TouchableOpacity style={style.button2} onPress={() => {navigation.navigate('ตรวจสอบ')}}>
+                                    <TouchableOpacity style={style.button2} onPress={() => {navigation.navigate('ตรวจสอบ', { userData: userData, item , work_ID: work_ID} )}}>
                                         <Text style={style.text_button2}>ตรวจงาน</Text>
                                     </TouchableOpacity>
                             </View>
