@@ -6,12 +6,12 @@ import { YOURAPI } from '../../constants/editendpoint';
 
 const Employ = ({ navigation, userData, work_ID }) => {
     const [work_data, setWork_data] = useState([]);
-
     useEffect(() => {
         axios.get(`http://${YOURAPI}/works/${work_ID}`)
         .then(res => {
             const myData = res.data;
             setWork_data(myData)
+            console.log(myData)
         })
         .catch(error => {
             console.error('Error fetching notifications:', error);
@@ -42,7 +42,7 @@ const Employ = ({ navigation, userData, work_ID }) => {
                             </View>
                             <View style={style.check}>
                                 <Image source={require('../../assets/image/search-alt.png')} resizeMode='contain' style={{ width: 65, height: 65, marginTop: 7}}/>
-                                    <TouchableOpacity style={style.button2} onPress={() => {navigation.navigate('ตรวจสอบ')}}>
+                                    <TouchableOpacity style={style.button2} onPress={() => {navigation.navigate('ตรวจสอบ', { userData: userData, item , work_data})}}>
                                         <Text style={style.text_button2}>ตรวจงาน</Text>
                                     </TouchableOpacity>
                             </View>
