@@ -51,17 +51,17 @@ const ChoseEmploy = ({route}) => {
     )
   }, [state])
 
-  const delete_job = () =>{
-    // axios.delete(`http://${YOURAPI}/works/${work_ID}`)
-    // .then( response =>{
-    navigation.navigate('pageHome')
+  // const () => {} = () =>{
+  //   axios.delete(`http://${YOURAPI}/works/${work_ID}`)
+  //   .then( response =>{
+  //   navigation.navigate('pageHome')
   //   console.log('DELETE request successful');
   // })
   // .catch(error => {
   //   console.error('Error making DELETE request:', error);
   // });
-  
-  };
+  // };
+
   const handleImage2Press = () => {
     alert('ไม่รับ');
   };
@@ -137,8 +137,8 @@ const ChoseEmploy = ({route}) => {
 
   return (
     <>
-       <View style={{marginLeft:350}}>
-        <TouchableOpacity   onPress={delete_job}>
+       <View style={{alignSelf: 'flex-end'}}>
+        <TouchableOpacity   onPress={() => {}}>
           <View >
           <Text style={{fontSize:18,color:'red'}}>ลบงาน</Text>
           </View>
