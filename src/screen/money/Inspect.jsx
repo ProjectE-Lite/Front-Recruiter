@@ -19,7 +19,9 @@ const ListData = ({
 })
 const _point = 1;
 
-const Inspect =({navigation})=>{
+const Inspect =({route , navigation})=>{
+  console.log(route.params)
+  const Item = route.params
   const [defaultRating,setdefaultRating] = useState(0)
   const [maxRating,setmaxRating]=useState([1,2,3,4,5])
  
@@ -86,7 +88,7 @@ const Inspect =({navigation})=>{
            style={{
             flexDirection:'row',
         }}>
-          <TouchableOpacity onPress={() => {navigation.navigate('pay')}}>  
+          <TouchableOpacity onPress={() => {navigation.navigate('pay', Item)}}>  
                 <View style={{marginLeft:0,alignItems:'center',justifyContent:'center',width:180,height:55,borderRadius:10,backgroundColor:'#1ED91A',marginTop:10}}>
             <Text style={{color:'#000000', fontSize: 20}}>มาทำงานตามเวลา</Text>
           </View>
