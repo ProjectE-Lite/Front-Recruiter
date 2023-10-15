@@ -12,12 +12,12 @@ const DeatailEachUser = ({ route }) => {
     const user_id = route.params.item._id
     const navigation = useNavigation()
     const [Review , setReview] = useState([])
-
+    const [Workwith , setWorkwith] = useState('')
+    const recruiter_id = '6517fa561434530638bc81de'
     useEffect(() => {
         axios.get(`http://${YOURAPI}/users/${user_id}/review_points/${point}`)
         .then(res => {
             const allReviewID = res.data
-            console.log(allReviewID)
             Promise.all(allReviewID.map(review_id=>
                 axios.get(`http://${YOURAPI}/review/${review_id}`)
               ))
@@ -30,7 +30,13 @@ const DeatailEachUser = ({ route }) => {
               });
         })
     }, [point])
-
+        axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/have_worked_with/${user_id}`)
+        .then(ress => {
+            setWorkwith(ress.data)
+            console.log(ress.data)
+        })
+        
+        
         const handlePatchData = () => {
             axios.patch(`http://${YOURAPI}/users/${user_id}/accept/${work_id}`)
             .then(response => {
@@ -81,7 +87,7 @@ const DeatailEachUser = ({ route }) => {
                         </View>
                     </TouchableOpacity>
                 )}
-                
+                <Text style = {{justifyContent: 'center' , textAlign: 'center', marginBottom: 30,  fontSize: 16}}> {Workwith}</Text>
                 <View style={{justifyContent: 'center' , alignItems:'center'}}>
                     <Image 
                     source={{uri: image}} 
