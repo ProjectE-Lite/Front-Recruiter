@@ -139,7 +139,7 @@ const ChoseEmploy = ({route}) => {
     <>
        <View style={{alignSelf: 'flex-end'}}>
         <TouchableOpacity   onPress={() => {}}>
-          <View >
+          <View>
           <Text style={{fontSize:18,color:'red'}}>ลบงาน</Text>
           </View>
         </TouchableOpacity>

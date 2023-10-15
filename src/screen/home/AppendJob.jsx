@@ -60,6 +60,27 @@ const AppendJob = ({ navigation }) => {
   };
 
   const handleTypeWork = (value) => {
+    if (value === 'พนักงานเสิร์ฟ'){
+      value = 'type1'
+    }
+    if (value === 'พนักงานทำความสะอาด'){
+      value = 'type2'
+    }
+    if (value === 'ผู้ช่วยเชฟ'){
+      value = 'type3'
+    }
+    if (value === 'พนักงานต้อนรับ'){
+      value = 'type4'
+    }
+    if (value === 'พนักงานล้างจาน'){
+      value = 'type5'
+    }
+    if (value === 'พนักงานส่งอาหาร'){
+      value = 'type6'
+    }
+    if (value === 'พนักงานครัวร้อน'){
+      value = 'type7'
+    }
     setData({
       ...Data,
       "type_of_work": value
@@ -73,6 +94,7 @@ const AppendJob = ({ navigation }) => {
       end_registeration : date.slice(0,10),
     });
   };
+
 
   return (
     <View style={{ backgroundColor: 'white', flex: 1, paddingBottom: 90}}>

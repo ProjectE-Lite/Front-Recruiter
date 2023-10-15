@@ -61,6 +61,11 @@ const Home = () => {
       sections={flatListData}
       style={{marginBottom: 40}}
       keyExtractor={(item, index) => item+index}
+      ListEmptyComponent={
+        <View style={{alignItems: 'center'}}>
+          <Text>Add Work</Text>
+        </View>
+      }
       renderItem={({item}) => (
         <TouchableOpacity
           onPress={() => navigation.navigate('เลือกพนักงาน', {item})} style={{ alignItems: 'center', flexDirection: 'row', margin: 5, marginHorizontal: 10}} >
@@ -69,7 +74,30 @@ const Home = () => {
             style={{ width: 60, height: 80 }}
             resizeMode='contain'
             />
-          <Text style={{ margin: 10, flexGrow: 2 }}>ตำแหน่ง: {item.type_of_work}{'\n'}เวลาทำงาน: {item.start_time} - {item.end_time}{'\n'}จำนวนรับสมัคร: {item.total_worker}</Text>
+          <Text style={{ margin: 10, flexGrow: 2 }}>
+            ตำแหน่ง : {(() => {
+              switch(item.type_of_work) {
+                case 'type1':
+                  return 'พนักงานเสิร์ฟ';
+                case 'type2':
+                  return 'พนักงานทำความสะอาด';
+                case 'type3':
+                  return 'ผู้ช่วยเชฟ';
+                case 'type4':
+                  return 'พนักงานต้อนรับ';
+                case 'type5':
+                  return 'พนักงานล้างจาน';
+                case 'type6':
+                  return 'พนักงานส่งอาหาร';
+                case 'type7':
+                  return 'พนักงานครัวร้อน';
+                default:
+                  return item.type_of_work;
+              }
+            })()}{'\n'}
+          เวลาทำงาน: {item.start_time} - {item.end_time}{'\n'}
+          จำนวนรับสมัคร: {item.total_worker}
+        </Text>
           <View style={{backgroundColor: 'green', width: 45, borderRadius: 10, padding:1, alignItems: 'center'}}>
             <Text style={{color: 'white'}}>รับ</Text>
             <Text style={{color: 'white'}}>{item.list_of_worker.length}</Text>

@@ -29,6 +29,11 @@ const Employ = ({ navigation, userData, work_ID }) => {
                 <FlatList
                     keyExtractor={(item) => item._id.toString()}
                     data={userData}
+                    ListEmptyComponent={
+                        <View style={{alignItems: 'center'}}>
+                            <Text>ไม่มีข้อมูล</Text>
+                        </View>
+                    }
                     renderItem={({ item }) => (
                         <View style={style.list}>
                             <View style={style.profile}>
