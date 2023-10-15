@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import{
     SafeAreaView,
     View,
@@ -10,16 +10,17 @@ import{
 }from "react-native";
 import axios from 'axios'
 import { YOURAPI } from '../../constants/editendpoint';
-const _point = 1;
 const Pay =({route , navigation})=>{
-    const work_id = route.params.work_data._id
-    const user_id = route.params.item._id
+    const rates = parseInt(route.params.defaultRating)
+    const text = route.params.comment
+    const work_data = route.params.work_data
+    const userData = route.params.userData
+    const Data = {score: rates, text : text}
     function renderpay(){
-
       const handlePatchData = () => {
-        axios.patch(`http://${YOURAPI}/users/${user_id}/payment/${work_id}`)
+        axios.patch(`http://${YOURAPI}/users/${userData._id}/payment/${work_data._id}`, Data)
         .then(response => {
-            navigation.goBack()
+            navigation.navigate('Employ')
             console.log('PATCH request สำเร็จ', response.data);
           })
           .catch(error => {
@@ -30,38 +31,30 @@ const Pay =({route , navigation})=>{
     return(
             <View style={{alignItems: 'center', marginTop: 20}}>
             <View style={{justifyContent: 'center' , alignItems:'center'}}>
-            <Image source={{uri: route.params.item.image}}
+            <Image source={{uri: userData.image}}
                   style={{height:145, width: 145}}
                   resizeMode='contain'></Image>
             </View>
             <View style={{alignItems:'center'}}>
-          <Text style={{fontSize: 20, color:'#000000', fontWeight:'500'}}>{route.params.item.nick_name}</Text>
-          <View style={{ alignItems:'center',flexDirection: 'row',}}>
-            <Image source={route.params.item.point >= 1 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20,marginLeft:5}}></Image>
-            <Image source={route.params.item.point >= 2 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20,marginLeft:5}}></Image>
-            <Image source={route.params.item.point >= 3 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20,marginLeft:5}}></Image>
-            <Image source={route.params.item.point >= 4 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20,marginLeft:5}}></Image>
-            <Image source={route.params.item.point >= 5 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20,marginLeft:5}}></Image>
-            <Text style={{marginLeft:20, fontSize: 20, color:'#000000', fontWeight:'400'}}>คะแนน {route.params.item.point}</Text>
-          </View>
-        </View>
+               <Text style={{fontSize: 20, color:'#000000', fontWeight:'500'}}>{userData.first_name} {userData.last_name}</Text>
+            </View>
         <View style={{flexDirection:'row', marginTop: 7, marginHorizontal:25,alignSelf: 'flex-start'}}>
           <Text style={{color: '#1121B1', fontSize: 17}}>อายุ :  </Text>
-          <Text style={{color:'#000000', fontSize: 17}}>{route.params.item.age}</Text>
+          <Text style={{color:'#000000', fontSize: 17}}>{userData.age}</Text>
         </View>
         <View style={{flexDirection:'row', marginTop: 7, marginHorizontal:25,alignSelf: 'flex-start'}}>
           <Text style={{color: '#1121B1', fontSize: 17}}>วันเกิด :  </Text>
-          <Text style={{color:'#000000', fontSize: 17}}>{route.params.item.birth_date}</Text>
+          <Text style={{color:'#000000', fontSize: 17}}>{userData.birth_date}</Text>
         </View>
         <View style={{flexDirection:'row', marginTop: 7, marginHorizontal:25,alignSelf: 'flex-start'}}>
           <Text style={{color: '#1121B1', fontSize: 17}}>เบอร์โทรศัพท์ :  </Text>
-          <Text style={{color:'#000000', fontSize: 17}}>{route.params.item.tel}</Text>
+          <Text style={{color:'#000000', fontSize: 17}}>{userData.tel}</Text>
         </View>
         <View style={{alignItems:'center',marginTop:30}}>
-            <Text style={{color:'#000000',fontSize:36}}>{route.params.work_data.name}</Text>
+            <Text style={{color:'#000000',fontSize:36}}>{work_data.name}</Text>
         </View>
         <View style={{alignItems:'center',marginTop:10}}>
-            <Text style={{color:'#000000',fontSize:36}}>{route.params.work_data.start_time} - {route.params.work_data.end_time}</Text>
+            <Text style={{color:'#000000',fontSize:36}}>{work_data.start_time} - {work_data.end_time}</Text>
         </View>
           <TouchableOpacity onPress={handlePatchData}>  
                 <View style={{marginLeft:9,alignItems:'center',justifyContent:'center',width:350,height:100,borderRadius:10,backgroundColor:'#071952',marginTop:20}}>
@@ -70,7 +63,6 @@ const Pay =({route , navigation})=>{
           </TouchableOpacity>
         
         </View>
-
     )
     }
     return(

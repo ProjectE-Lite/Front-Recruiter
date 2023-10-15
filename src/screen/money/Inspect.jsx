@@ -15,13 +15,7 @@ import { YOURAPI } from '../../constants/editendpoint';
 const Inspect =({ navigation , route})=>{
   const userData = route.params.item
   const work_ID = route.params.work_ID
-
-  console.log(userData)
-  console.log(work_ID)
-
-const Inspect =({route , navigation})=>{
-  console.log(route.params)
-  const Item = route.params
+  const work_data = route.params.work_data
   const [defaultRating,setdefaultRating] = useState(0)
   const [maxRating,setmaxRating]=useState([1,2,3,4,5])
   const [comment, setComment] = useState("")
@@ -93,13 +87,14 @@ const Inspect =({route , navigation})=>{
               textAlignVertical="top" 
               placeholder='กรอกคอมเม้นต์ที่นี่'
               onChangeText={new_comment => setComment(new_comment)}
+
               />
           </View>
           <View
            style={{
             flexDirection:'row',
         }}>
-          <TouchableOpacity onPress={() => {navigation.navigate('pay', { defaultRating: defaultRating , comment: comment})}}>  
+          <TouchableOpacity onPress={() => {navigation.navigate('pay', { defaultRating: defaultRating , comment: comment, userData: userData, work_data: work_data})}}>  
                 <View style={{marginLeft:0,alignItems:'center',justifyContent:'center',width:180,height:55,borderRadius:10,backgroundColor:'#1ED91A',marginTop:10}}>
             <Text style={{color:'#000000', fontSize: 20}}>มาทำงานตามเวลา</Text>
           </View>
