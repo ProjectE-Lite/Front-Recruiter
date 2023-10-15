@@ -19,6 +19,8 @@ const DeatailEachUser = ({ route }) => {
     const [open, setOpen] = useState(false);
     const [doblabel, setDoblabel] = useState('คลิกเพื่อเลือก');
     const [c_Time,setC_Time] = useState("")
+    const recruiter_id = '6517fa561434530638bc81de'
+    const [Workwith, setWorkwith] = useState("")
 
     useEffect(() => {
         axios.get(`http://${YOURAPI}/users/${user_id}/review_points/${point}`)
@@ -68,6 +70,13 @@ const DeatailEachUser = ({ route }) => {
             console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
             });
         };
+    
+        useEffect(() => {
+            axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/have_worked_with/${user_id}`)
+            .then(ress => {
+                setWorkwith(ress.data)
+        })
+        }, [])
     return (
         <SafeAreaView style={{flex:1, backgroundColor: 'white'}}>
         <Modal
@@ -163,7 +172,8 @@ const DeatailEachUser = ({ route }) => {
                         </View>
                     </TouchableOpacity>
                 )}
-                
+                <Text style={{fontSize: 16, marginLeft: 20}}>เคยทำงานกับที่นี่มาก่อนไหม : </Text>
+                <Text style = {{justifyContent: 'center' , marginBottom: 30,  fontSize: 16, marginLeft: 20}}>{Workwith}</Text>
                 <View style={{justifyContent: 'center' , alignItems:'center'}}>
                     <Image 
                     source={{uri: image}} 
@@ -341,7 +351,6 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 15,
         textAlign: 'center',
-        marginLeft: 70
     },
     centeredView: {
         flex: 1,

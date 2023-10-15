@@ -56,7 +56,7 @@ const  renderItem=({ item }) => {
       </View>
     </View>
     )
-}
+  }
   else
   return(
     <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#D7E5CA', alignItems:'center', borderRadius: 20, justifyContent: 'center', padding: 5, marginHorizontal: 10}}>
