@@ -37,7 +37,11 @@ const Numbank = ({navigation}) => {
             </View>
             <View style={style.view2}>
                 <Text style={style.text}>จำนวนเงิน</Text>
-                <TextInput style={style.input2} placeholder='ใส่จำนวนเงิน' onChangeText={handlecreditChange}></TextInput>
+                <TextInput style={style.input2} 
+                placeholder='ใส่จำนวนเงิน' 
+                onChangeText={handlecreditChange}
+                keyboardType='number-pad'
+                ></TextInput>
             </View>
             <View style={style.view2}>
                 <View style={style.button}>

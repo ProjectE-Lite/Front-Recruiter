@@ -9,52 +9,57 @@ import{
     TextInput,
 
 }from "react-native";
+import axios from 'axios';
+import { YOURAPI } from '../../constants/editendpoint';
 
-const ListData = ({
-    nickname: 'มอส',
-    point: '1.0',
-    age: '21',
-    date: '19 ตุลาคม 2545',
-    tel: '0123456789',
-})
-const _point = 1;
+const Inspect =({ navigation , route})=>{
+  const userData = route.params.item
+  const work_ID = route.params.work_ID
+
+  console.log(userData)
+  console.log(work_ID)
 
 const Inspect =({route , navigation})=>{
   console.log(route.params)
   const Item = route.params
   const [defaultRating,setdefaultRating] = useState(0)
   const [maxRating,setmaxRating]=useState([1,2,3,4,5])
+  const [comment, setComment] = useState("")
+
+  console.log(defaultRating)
+
+  const work_absent = (usr) => {
+    axios.patch(`http://${YOURAPI}/users/${usr}/absent/${work_ID}`)
+    .then(response => {
+        console.log('PATCH done', response.data);
+      })
+    .catch(error => {
+      console.error('PATCH error', error);
+    });
+  };  
  
   function renderre(){
         return(
           <View style={{alignItems: 'center'}}>
             <View style={{alignItems:'center'}}>
-            <Image source={require('../../assets/image/ProfileIcon.png')}
+            <Image source={{uri : userData.image}}
                   style={{height:145, width: 145}}
                   resizeMode='contain'></Image>
             </View>
             <View style={{alignItems:'center'}}>
-          <Text style={{fontSize: 20, color:'#000000', fontWeight:'500'}}>{ListData.nickname}</Text>
-          <View style={{ alignItems:'center',flexDirection: 'row',}}>
-            <Image source={_point >= 1 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20,marginLeft:5}}></Image>
-            <Image source={_point >= 2 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20,marginLeft:5}}></Image>
-            <Image source={_point >= 3 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20,marginLeft:5}}></Image>
-            <Image source={_point >= 4 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20,marginLeft:5}}></Image>
-            <Image source={_point >= 5 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:20, width:20,marginLeft:5}}></Image>
-            <Text style={{marginLeft:20, fontSize: 20, color:'#000000', fontWeight:'400'}}>คะแนน {_point}</Text>
-          </View>
+          <Text style={{fontSize: 20, color:'#000000', fontWeight:'500'}}>{userData.nick_name}</Text>
         </View>
         <View style={{flexDirection:'row', marginTop: 7, marginHorizontal:25, alignSelf: 'flex-start'}}>
           <Text style={{color: '#176B87', fontSize: 17}}>อายุ :  </Text>
-          <Text style={{color:'#000000', fontSize: 17}}>{ListData.age}</Text>
+          <Text style={{color:'#000000', fontSize: 17}}>{userData.age}</Text>
         </View>
         <View style={{flexDirection:'row', marginTop: 7, marginHorizontal:25, alignSelf: 'flex-start'}}>
           <Text style={{color: '#176B87', fontSize: 17}}>วันเกิด :  </Text>
-          <Text style={{color:'#000000', fontSize: 17}}>{ListData.date}</Text>
+          <Text style={{color:'#000000', fontSize: 17}}>{userData.birth_date}</Text>
         </View>
         <View style={{flexDirection:'row', marginTop: 7, marginHorizontal:25, alignSelf: 'flex-start'}}>
           <Text style={{color: '#176B87', fontSize: 17}}>เบอร์โทรศัพท์ :  </Text>
-          <Text style={{color:'#000000', fontSize: 17}}>{ListData.tel}</Text>
+          <Text style={{color:'#000000', fontSize: 17}}>{userData.tel}</Text>
         </View>
         <View style={{marginTop:10,flexDirection: 'row'}}>
           {
@@ -82,18 +87,24 @@ const Inspect =({route , navigation})=>{
             <Text style={{color:'#FFFFFF', fontSize: 20}}>ให้คะแนน</Text>
           </View>
           <View style = {{alignItems: 'center'}}>
-            <TextInput style={{borderWidth:1, width: 360,height:145, marginTop: 10, padding: 5}} multiline={true} textAlignVertical="top" />
+            <TextInput 
+              style={{borderWidth:1, width: 360,height:145, marginTop: 10, padding: 5}}
+              multiline={true}
+              textAlignVertical="top" 
+              placeholder='กรอกคอมเม้นต์ที่นี่'
+              onChangeText={new_comment => setComment(new_comment)}
+              />
           </View>
           <View
            style={{
             flexDirection:'row',
         }}>
-          <TouchableOpacity onPress={() => {navigation.navigate('pay', Item)}}>  
+          <TouchableOpacity onPress={() => {navigation.navigate('pay', { defaultRating: defaultRating , comment: comment})}}>  
                 <View style={{marginLeft:0,alignItems:'center',justifyContent:'center',width:180,height:55,borderRadius:10,backgroundColor:'#1ED91A',marginTop:10}}>
             <Text style={{color:'#000000', fontSize: 20}}>มาทำงานตามเวลา</Text>
           </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {navigation.goBack()}} >  
+          <TouchableOpacity onPress={() => {navigation.goBack(work_absent (userData._id))}} >  
                 <View style={{marginLeft:10,alignItems:'center',justifyContent:'center',width:170,height:55,borderRadius:10,backgroundColor:'#D00404',marginTop:10}}>
             <Text style={{color:'#000000', fontSize: 20}}>ไม่มาทำงาน</Text>
           </View>

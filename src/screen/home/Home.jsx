@@ -75,8 +75,8 @@ const Home = () => {
             <Text style={{color: 'white'}}>{item.list_of_worker.length}</Text>
           </View>
           <View style={{backgroundColor: '#FFA722', width: 52, marginLeft: 10, marginRight: 5, borderRadius: 10, padding: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text>ยังไม่รับ</Text>
-            <Text style={{ marginRight: 10}}>{item.list_of_candidate.length}</Text>
+            <Text>ผู้สมัคร</Text>
+            <Text style={{}}>{item.list_of_candidate.length}</Text>
           </View>
         </TouchableOpacity>
       )}

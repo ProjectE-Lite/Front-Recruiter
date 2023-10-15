@@ -32,7 +32,10 @@ const Employ = ({ navigation, userData, work_ID }) => {
                     renderItem={({ item }) => (
                         <View style={style.list}>
                             <View style={style.profile}>
-                                <Image source={{uri : item.image}} resizeMode='contain' style={{ width: 80, height: 80,}}/>
+                                <View style={{height: 75, width: 75, borderRadius: 40, overflow: 'hidden'}}>
+                                    <Image source={{uri : item.image}} style={{ width: null, height: null, flex: 1}}/>
+                                </View>
+                                <Text>{item.first_name} {item.last_name}</Text>
                                 <TouchableOpacity style={style.button1} onPress={() => {navigation.navigate('InfoEm', { userData: userData, item })}}>
                                     <Text style={style.text_button1}>ข้อมูล</Text>
                                 </TouchableOpacity>
@@ -42,7 +45,7 @@ const Employ = ({ navigation, userData, work_ID }) => {
                             </View>
                             <View style={style.check}>
                                 <Image source={require('../../assets/image/search-alt.png')} resizeMode='contain' style={{ width: 65, height: 65, marginTop: 7}}/>
-                                    <TouchableOpacity style={style.button2} onPress={() => {navigation.navigate('ตรวจสอบ', { userData: userData, item , work_data})}}>
+                                    <TouchableOpacity style={style.button2} onPress={() => {navigation.navigate('ตรวจสอบ', { userData: userData, item , work_ID: work_ID} )}}>
                                         <Text style={style.text_button2}>ตรวจงาน</Text>
                                     </TouchableOpacity>
                             </View>

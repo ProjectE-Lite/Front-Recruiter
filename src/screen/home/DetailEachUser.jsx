@@ -1,19 +1,27 @@
-import {  View, Text, SafeAreaView, Image, TouchableOpacity, StyleSheet, FlatList} from 'react-native'
+import {  View, Text, SafeAreaView, Image, TouchableOpacity, StyleSheet, FlatList, Modal} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { YOURAPI } from '../../constants/editendpoint';
+import DatePicker from 'react-native-date-picker';
+import DropdownTime from '../../components/DropdownTime';
 
 const DeatailEachUser = ({ route }) => {
     const ShowBut = route.params.showBut
     const {image, first_name, last_name, nick_name, gender, age,birth_date, tel} = route.params.item
-    const work_id = route.params.myId
+    const work_id = route.params.work_ID
     const [point , setPoint] = useState('5')
     const user_id = route.params.item._id
     const navigation = useNavigation()
     const [Review , setReview] = useState([])
-    const [Workwith , setWorkwith] = useState('')
+    const [modalVisible, setModalVisible] = useState(false);
+    const [date, setDate] = useState(new Date());
+    const [open, setOpen] = useState(false);
+    const [doblabel, setDoblabel] = useState('คลิกเพื่อเลือก');
+    const [c_Time,setC_Time] = useState("")
     const recruiter_id = '6517fa561434530638bc81de'
+    const [Workwith, setWorkwith] = useState("")
+
     useEffect(() => {
         axios.get(`http://${YOURAPI}/users/${user_id}/review_points/${point}`)
         .then(res => {
@@ -29,36 +37,114 @@ const DeatailEachUser = ({ route }) => {
                 console.error('Error fetching user data:', error);
               });
         })
+        .catch(error => {
+            if (error.response && error.response.status === 400) {
+                setReview([]); 
+            } else {
+                console.error('Error making GET request:', error);
+            }
+        });
     }, [point])
-        axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/have_worked_with/${user_id}`)
-        .then(ress => {
-            setWorkwith(ress.data)
-            console.log(ress.data)
-        })
-        
-        
-        const handlePatchData = () => {
-            axios.patch(`http://${YOURAPI}/users/${user_id}/accept/${work_id}`)
-            .then(response => {
-                navigation.goBack()
-                console.log('PATCH request สำเร็จ', response.data);
-              })
-              .catch(error => {
-                console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
-              });
-          };
 
+    const handlePatchData = () => {
+        axios.patch(`http://${YOURAPI}/users/${user_id}/accept/${work_id}`)
+        .then(response => {
+            navigation.goBack()
+            console.log('PATCH request สำเร็จ', response.data);
+            })
+            .catch(error => {
+            console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
+            });
+        };
+    const handleDropdownChange = (value) => {
+        setC_Time(value);
+        };
+
+
+    const handlePatchAppoint = () => {
+        axios.patch(`http://${YOURAPI}/users/${user_id}/appoint/${work_id}/${doblabel}/${c_Time}`)
+        .then(response => {
+            setModalVisible(!modalVisible)
+            console.log('PATCH request สำเร็จ', response.data);
+            })
+        .catch(error => {
+            console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
+            });
+        };
+    
+        useEffect(() => {
+            axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/have_worked_with/${user_id}`)
+            .then(ress => {
+                setWorkwith(ress.data)
+        })
+        }, [])
     return (
         <SafeAreaView style={{flex:1, backgroundColor: 'white'}}>
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>เวลานัดหมายของ : </Text>
+            <View style={{alignSelf: 'baseline', flexDirection: 'row', alignItems: 'center'}}>
+              <Image source={require('../../assets/image/Calender.png')} style={styles.boxIcon}/>
+              <Text style={{fontSize: 15}}>เลือกวัน : </Text>
+              <TouchableOpacity onPress={() => setOpen(true)}>
+                <Text style={{ fontSize: 15 }}>{doblabel}</Text>
+              </TouchableOpacity>
+            </View>
+            <DatePicker
+                modal
+                open={open}
+                date={date}
+                mode='date'
+                maximumDate={new Date('2023-12-31')}
+                minimumDate={new Date('1873-12-31')}
+                onConfirm={(date) => {
+                setOpen(false);
+                setDate(date);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                setDoblabel(`${year}-${month}-${day}`)
+                }}
+                onCancel={() => {
+                setOpen(false);
+                }}
+            />
+          <View style={{alignSelf: 'baseline', alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+            <Image source={require('../../assets/image/ClockIcon.png')} style={styles.boxIcon} />
+            <DropdownTime
+            onValueChange={handleDropdownChange}
+            value = {{c_Time}}
+            ></DropdownTime>
+          </View>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {handlePatchAppoint()}}>
+              <Text style={styles.textStyle}>ยืนยัน</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
         <FlatList
             data={Review}
             style={{marginBottom: 45}}
             showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                    <Text>ดาวนี้ {point} ไม่มีรีวิว</Text>
+                </View>
+            }
             ListHeaderComponent={
             <>
                 {ShowBut === "1" ? (
                     <View style={{flexDirection:'row-reverse', justifyContent: 'center' , margin:15}}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => {setModalVisible(true)}}>
                             <View style={styles.rectangle3}>
                                 <Text style={{color: '#FFFFFF' , fontSize: 20}}>นัดหมาย</Text>
                             </View>
@@ -68,7 +154,7 @@ const DeatailEachUser = ({ route }) => {
                                 <Text style={{color: '#FFFFFF' , fontSize: 20}}>ไม่รับ</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => handlePatchData()}>
                             <View style={styles.rectangle2}>
                                 <Text style={{color: '#FFFFFF' , fontSize: 20}}>รับ</Text>
                             </View>
@@ -87,7 +173,8 @@ const DeatailEachUser = ({ route }) => {
                         </View>
                     </TouchableOpacity>
                 )}
-                <Text style = {{justifyContent: 'center' , textAlign: 'center', marginBottom: 30,  fontSize: 16}}> {Workwith}</Text>
+                <Text style={{fontSize: 16, marginLeft: 20}}>เคยทำงานกับที่นี่มาก่อนไหม : </Text>
+                <Text style = {{justifyContent: 'center' , marginBottom: 30,  fontSize: 16, marginLeft: 20}}>{Workwith}</Text>
                 <View style={{justifyContent: 'center' , alignItems:'center'}}>
                     <Image 
                     source={{uri: image}} 
@@ -257,7 +344,7 @@ const styles = StyleSheet.create({
         height: 25, 
         backgroundColor: '#e0e0e0',
         marginTop: 10,
-        marginleft: 50,
+        marginLeft: 50,
         alignSelf: 'flex-start',
         borderRadius: 10,
       },
@@ -265,9 +352,58 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 15,
         textAlign: 'center',
-        marginleft: 70
-
-    }
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+        backgroundColor: 'rgba(255, 255, 255, 0.5)'
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 30,
+        width: 300,
+        height: 225,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+      button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+      },
+      buttonOpen: {
+        backgroundColor: '#F194FF',
+      },
+      buttonClose: {
+        backgroundColor: '#2196F3',
+      },
+      textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+      },
+      boxIcon: {
+        width: 40,
+        height: 40,
+        marginRight: 12,
+        marginBottom: 3,
+        resizeMode: 'contain',
+      },
   });
 
 export default DeatailEachUser
