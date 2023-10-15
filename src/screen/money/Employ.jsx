@@ -6,12 +6,12 @@ import { YOURAPI } from '../../constants/editendpoint';
 
 const Employ = ({ navigation, userData, work_ID }) => {
     const [work_data, setWork_data] = useState([]);
-
     useEffect(() => {
         axios.get(`http://${YOURAPI}/works/${work_ID}`)
         .then(res => {
             const myData = res.data;
             setWork_data(myData)
+            console.log(myData)
         })
         .catch(error => {
             console.error('Error fetching notifications:', error);

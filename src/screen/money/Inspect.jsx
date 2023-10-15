@@ -19,6 +19,9 @@ const Inspect =({ navigation , route})=>{
   console.log(userData)
   console.log(work_ID)
 
+const Inspect =({route , navigation})=>{
+  console.log(route.params)
+  const Item = route.params
   const [defaultRating,setdefaultRating] = useState(0)
   const [maxRating,setmaxRating]=useState([1,2,3,4,5])
   const [comment, setComment] = useState("")
