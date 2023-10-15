@@ -51,6 +51,17 @@ const ChoseEmploy = ({route}) => {
     )
   }, [state])
 
+  const delete_job = () =>{
+    // axios.delete(`http://${YOURAPI}/works/${work_ID}`)
+    // .then( response =>{
+    navigation.navigate('pageHome')
+  //   console.log('DELETE request successful');
+  // })
+  // .catch(error => {
+  //   console.error('Error making DELETE request:', error);
+  // });
+  
+  };
   const handleImage2Press = () => {
     alert('ไม่รับ');
   };
@@ -126,6 +137,13 @@ const ChoseEmploy = ({route}) => {
 
   return (
     <>
+       <View style={{marginLeft:350}}>
+        <TouchableOpacity   onPress={delete_job}>
+          <View >
+          <Text style={{fontSize:18,color:'red'}}>ลบงาน</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     {key == "still_choosing" ? (
       <View style={styles.container}>
         <Text style={{ fontSize: 18 }}>{name} - <Text style={{ color: 'red' }}>{type_of_work}</Text></Text>
@@ -135,6 +153,7 @@ const ChoseEmploy = ({route}) => {
               <Text>ผู้สมัคร</Text>
             </View>
           </TouchableOpacity>
+
           <TouchableOpacity onPress={() => {setState(1)}}>
             <View style={{backgroundColor: 'green', height: 40, width: 175, borderRadius: 10, marginTop: 5, alignItems: 'center', justifyContent: 'center'}}>
               <Text>รับเข้าทำงาน</Text>
@@ -156,8 +175,10 @@ const ChoseEmploy = ({route}) => {
                 <Text>ไม่มีผู้สมัคร</Text>
               </View>
             )}
+            
             keyExtractor={(item) => item._id}
             />
+            
          </>
         ) : (
           <>
@@ -178,11 +199,13 @@ const ChoseEmploy = ({route}) => {
             />
           </>
         )}
+        
     </View>
       ) 
     : (
       <Employ navigation={navigation} userData={userData} work_ID= {work_ID}></Employ>
       )}
+      
     </>
   )
 }
