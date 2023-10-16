@@ -137,7 +137,7 @@ const DeatailEachUser = ({ route }) => {
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                    <Text>ยังไม่มีรีวิวสำหรับ {point} ดาว</Text>
+                    <Text>ยังไม่มีรีวิว</Text>
                 </View>
             }
             ListHeaderComponent={
