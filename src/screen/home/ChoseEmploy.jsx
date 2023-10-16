@@ -51,16 +51,16 @@ const ChoseEmploy = ({route}) => {
     )
   }, [state])
 
-  // const () => {} = () =>{
-  //   axios.delete(`http://${YOURAPI}/works/${work_ID}`)
-  //   .then( response =>{
-  //   navigation.navigate('pageHome')
-  //   console.log('DELETE request successful');
-  // })
-  // .catch(error => {
-  //   console.error('Error making DELETE request:', error);
-  // });
-  // };
+  const handlePress = () =>{
+    axios.delete(`http://${YOURAPI}/works/${work_ID}`)
+    .then( response =>{
+    navigation.navigate('pageHome')
+    console.log('DELETE request successful');
+  })
+  .catch(error => {
+    console.error('Error making DELETE request:', error);
+  });
+  };
 
   const handleImage2Press = () => {
     alert('ไม่รับ');
@@ -136,17 +136,31 @@ const ChoseEmploy = ({route}) => {
   )
 
   return (
-    <>
-       <View style={{alignSelf: 'flex-end'}}>
-        <TouchableOpacity   onPress={() => {}}>
-          <View>
-          <Text style={{fontSize:18,color:'red'}}>ลบงาน</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+    <View style={{flex: 1, backgroundColor: 'white', justifyContent: 'center'}}>
     {key == "still_choosing" ? (
       <View style={styles.container}>
-        <Text style={{ fontSize: 18 }}>{name} - <Text style={{ color: 'red' }}>{type_of_work}</Text></Text>
+        <Text style={{ fontSize: 18 }}>{name} - <Text style={{color: 'red'}}>
+                      {(() => {
+                          switch(type_of_work) {
+                            case 'type1':
+                              return 'พนักงานเสิร์ฟ';
+                            case 'type2':
+                              return 'พนักงานทำความสะอาด';
+                            case 'type3':
+                              return 'ผู้ช่วยเชฟ';
+                            case 'type4':
+                              return 'พนักงานต้อนรับ';
+                            case 'type5':
+                              return 'พนักงานล้างจาน';
+                            case 'type6':
+                              return 'พนักงานส่งอาหาร';
+                            case 'type7':
+                              return 'พนักงานครัวร้อน';
+                            default:
+                              return type_of_work;
+                          }
+                        })()}
+                      </Text></Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => {setState(0)}}>
             <View style={{marginHorizontal: 5, backgroundColor: '#F99417', height: 40, width: 175, borderRadius: 10, marginTop: 5, alignItems: 'center', justifyContent: 'center'}}>
@@ -175,10 +189,19 @@ const ChoseEmploy = ({route}) => {
                 <Text>ไม่มีผู้สมัคร</Text>
               </View>
             )}
-            
+            ListFooterComponent={
+              <>
+                <View style={{alignSelf: 'center', width: '100%'}}>
+                  <TouchableOpacity   onPress={() => {handlePress()}}>
+                    <View style={{marginRight: 0, marginTop: 10, backgroundColor: 'red' , borderRadius: 10}}>
+                      <Text style={{fontSize:18,color:'white', margin: 5, width: '100%', textAlign: 'center'}}>ลบงาน</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </>
+            }
             keyExtractor={(item) => item._id}
             />
-            
          </>
         ) : (
           <>
@@ -201,12 +224,13 @@ const ChoseEmploy = ({route}) => {
         )}
         
     </View>
+    
       ) 
     : (
       <Employ navigation={navigation} userData={userData} work_ID= {work_ID}></Employ>
       )}
       
-    </>
+    </View>
   )
 }
 

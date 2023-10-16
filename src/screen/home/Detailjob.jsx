@@ -48,7 +48,27 @@ export default function Detailjob({route}) {
         <View style={styles.textContainer}>
           <Text style = {{fontSize : 18}}>{recdata.name}</Text>
           <Text>{Data.start_time} - {Data.end_time}</Text>
-          <Text style ={{color: 'red' }}>{Data.type_of_work}</Text>
+          <Text style={{ color: 'red'}}>{(() => {
+              switch(Data.type_of_work) {
+                case 'type1':
+                  return 'พนักงานเสิร์ฟ';
+                case 'type2':
+                  return 'พนักงานทำความสะอาด';
+                case 'type3':
+                  return 'ผู้ช่วยเชฟ';
+                case 'type4':
+                  return 'พนักงานต้อนรับ';
+                case 'type5':
+                  return 'พนักงานล้างจาน';
+                case 'type6':
+                  return 'พนักงานส่งอาหาร';
+                case 'type7':
+                  return 'พนักงานครัวร้อน';
+                default:
+                  return Data.type_of_work;
+              }
+            })()}
+            </Text>
           <Text>{Data.hourly_income} เครดิต/ชั่วโมง</Text>
         </View>
       </View>
@@ -77,7 +97,7 @@ export default function Detailjob({route}) {
         ></TextInput>
       </View>
       <View style={{ marginTop : 5 , width : 100 , alignSelf : 'center' }}>
-        <Button title="ยืนยัน" onPress={handlePostData} />
+        <Button title="ยืนยัน" onPress={() => {handlePostData()}} />
       </View>
     </ScrollView>
   );
