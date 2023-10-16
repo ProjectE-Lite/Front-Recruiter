@@ -98,19 +98,19 @@ const Home = () => {
           เวลาทำงาน: {item.start_time} - {item.end_time}{'\n'}
           จำนวนรับสมัคร: {item.total_worker}
         </Text>
-          <View style={{backgroundColor: 'green', width: 45, borderRadius: 10, padding:1, alignItems: 'center'}}>
+          <View style={{backgroundColor: '#194569', width: 52, borderRadius: 10, padding:1, alignItems: 'center'}}>
             <Text style={{color: 'white'}}>รับ</Text>
             <Text style={{color: 'white'}}>{item.list_of_worker.length}</Text>
           </View>
-          <View style={{backgroundColor: '#FFA722', width: 52, marginLeft: 10, marginRight: 5, borderRadius: 10, padding: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text>ผู้สมัคร</Text>
-            <Text style={{}}>{item.list_of_candidate.length}</Text>
+          <View style={{backgroundColor: '#A3b5c0', width: 52, marginLeft: 10, marginRight: 5, borderRadius: 10, padding: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style = {{color: 'black'}}>ผู้สมัคร</Text>
+            <Text style={{color: 'black'}}>{item.list_of_candidate.length}</Text>
           </View>
         </TouchableOpacity>
       )}
       renderSectionHeader={({section: {date}}) => (
-        <View style={{backgroundColor: '#EAD7BB', borderRadius: 4}}>
-          <Text style={{marginLeft: 20, marginTop: 10, fontSize: 17, color: '#65451F', fontWeight: '700', marginRight: 10}}>{date}</Text>
+        <View style={{backgroundColor: '#DBECF4', borderRadius: 4}}>
+          <Text style={{marginLeft: 20, margin: 5, fontSize: 17, color: 'black', fontWeight: '700', marginRight: 10}}>{date}</Text>
         </View>
       )}>
       </SectionList>
