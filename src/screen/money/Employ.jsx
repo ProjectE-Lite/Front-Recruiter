@@ -1,29 +1,53 @@
-import { useNavigation } from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import { View, Text, SafeAreaView, StyleSheet, Button, TextInput, Image, TouchableOpacity, FlatList } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, SafeAreaView, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import axios from 'axios';
 import { YOURAPI } from '../../constants/editendpoint';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Employ = ({ navigation, userData, work_ID }) => {
     const [work_data, setWork_data] = useState([]);
-    useEffect(() => {
+
+    useFocusEffect(
+      React.useCallback(() => {
         axios.get(`http://${YOURAPI}/works/${work_ID}`)
-        .then(res => {
+          .then(res => {
             const myData = res.data;
-            setWork_data(myData)
-            console.log(myData)
-        })
-        .catch(error => {
+            setWork_data(myData);
+            console.log(myData);
+          })
+          .catch(error => {
             console.error('Error fetching notifications:', error);
-        });
-    }, []);
+          });
+      }, [])
+    );
 
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <SafeAreaView style={style.body}>
                 <View style={style.view1}>
                     <Text style={style.text1_1}>{work_data.name} - </Text>
-                    <Text style={style.text1_2}>{work_data.type_of_work}</Text>
+                    <Text style={{color: 'red', fontSize: 19}}>
+                      {(() => {
+                          switch(work_data.type_of_work) {
+                            case 'type1':
+                              return 'พนักงานเสิร์ฟ';
+                            case 'type2':
+                              return 'พนักงานทำความสะอาด';
+                            case 'type3':
+                              return 'ผู้ช่วยเชฟ';
+                            case 'type4':
+                              return 'พนักงานต้อนรับ';
+                            case 'type5':
+                              return 'พนักงานล้างจาน';
+                            case 'type6':
+                              return 'พนักงานส่งอาหาร';
+                            case 'type7':
+                              return 'พนักงานครัวร้อน';
+                            default:
+                              return work_data.type_of_work;
+                          }
+                        })()}
+                      </Text>
                 </View>
 
                 <FlatList

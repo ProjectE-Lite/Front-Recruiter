@@ -75,7 +75,7 @@ const Home = () => {
             resizeMode='contain'
             />
           <Text style={{ margin: 10, flexGrow: 2 }}>
-            ตำแหน่ง : {(() => {
+            งาน :{(() => {
               switch(item.type_of_work) {
                 case 'type1':
                   return 'พนักงานเสิร์ฟ';
