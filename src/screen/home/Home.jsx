@@ -75,7 +75,7 @@ const Home = () => {
             resizeMode='contain'
             />
           <Text style={{ margin: 10, flexGrow: 2 }}>
-            งาน :{(() => {
+            งาน : {(() => {
               switch(item.type_of_work) {
                 case 'type1':
                   return 'พนักงานเสิร์ฟ';
@@ -95,8 +95,8 @@ const Home = () => {
                   return item.type_of_work;
               }
             })()}{'\n'}
-          เวลาทำงาน: {item.start_time} - {item.end_time}{'\n'}
-          จำนวนรับสมัคร: {item.total_worker}
+          เวลาทำงาน : {item.start_time} - {item.end_time}{'\n'}
+          จำนวนรับสมัคร : {item.total_worker}
         </Text>
           <View style={{backgroundColor: '#194569', width: 52, borderRadius: 10, padding:1, alignItems: 'center'}}>
             <Text style={{color: 'white'}}>รับ</Text>
