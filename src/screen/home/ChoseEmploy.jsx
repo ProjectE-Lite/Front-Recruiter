@@ -7,6 +7,7 @@ import { YOURAPI } from '../../constants/editendpoint'
 
 const ChoseEmploy = ({route}) => {
   const work_ID = route.params.item._id
+  const endTime = (route.params.item.end_registeration);
   const {name, type_of_work} = route.params.item
   const navigation = useNavigation()
   const [userData, setUserData] = useState([]);
@@ -16,40 +17,54 @@ const ChoseEmploy = ({route}) => {
   const [usrStatus, setUsrStatus] = useState([])
   const MAX_NAME_LENGTH = 15
   useEffect(() => {
-    axios(`http://${YOURAPI}/works/${work_ID}/status`)
-    .then(res => {
-      const dictStatus = res.data
-      setKey(Object.keys(dictStatus)[0])
-      const allUserIDs = Object.values(dictStatus).flat()
-      Promise.all(allUserIDs.map(userID =>
-        axios.get(`http://${YOURAPI}/users/${userID}`)
-      ))
-      .then(userResponses => {
+    const fetchData = async () => {
+      try {
+        const res = await axios(`http://${YOURAPI}/works/${work_ID}/status`);
+        const dictStatus = res.data;
+        setKey(Object.keys(dictStatus)[0]);
+        const allUserIDs = Object.values(dictStatus).flat();
+        const userResponses = await Promise.all(
+          allUserIDs.map(userID => axios.get(`http://${YOURAPI}/users/${userID}`))
+        );
         const userData = userResponses.map(response => response.data);
-        setUserData(userData)
-      })
-      .catch(error => {
+        setUserData(userData);
+      } catch (error) {
         console.error('Error fetching user data:', error);
-      });
-    })
-  }, [state])
+      }
+    };
+    fetchData(); 
+    const interval = setInterval(() => {
+      fetchData();
+    }, 3000);
+    return () => clearInterval(interval); 
+  }, [state]);
+  
 
   useEffect(() => {
-    axios.get(`http://${YOURAPI}/works/${work_ID}`)
-    .then(res => {
-      const listusrId = res.data.list_of_worker
-      setUsrStatus(res.data.user_status)
-      Promise.all(listusrId.map(usrID => 
-        axios.get(`http://${YOURAPI}/users/${usrID}`)
-        )
-      )
-      .then(usrRes =>{
-        const usr = usrRes.map(res => res.data)
-        setList_Worker(usr)
-      })
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://${YOURAPI}/works/${work_ID}`);
+        const listusrId = res.data.list_of_worker;
+        setUsrStatus(res.data.user_status);
+  
+        const usrRes = await Promise.all(
+          listusrId.map(usrID =>
+            axios.get(`http://${YOURAPI}/users/${usrID}`)
+          )
+        );
+        const usr = usrRes.map(res => res.data);
+        setList_Worker(usr);
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
-    )
-  }, [state])
+    };
+    fetchData(); 
+    const interval = setInterval(() => {
+      fetchData(); 
+    }, 3000);
+    return () => clearInterval(interval); 
+  }, [state]);
+  
 
   const handlePress = () =>{
     axios.delete(`http://${YOURAPI}/works/${work_ID}`)
@@ -79,7 +94,7 @@ const ChoseEmploy = ({route}) => {
   const renderItem = ({ item, index }) => (
     <>
       <TouchableOpacity onPress={() => {
-        navigation.navigate('รายละเอียดพนักงาน', {item, showBut: "1", work_ID: work_ID})
+        navigation.navigate('รายละเอียดพนักงาน', {item, showBut: "1", work_ID: work_ID, endTime})
         }}>
           <View style={styles.box}>
           <Image
@@ -118,7 +133,7 @@ const ChoseEmploy = ({route}) => {
   );
 
   const RenderUsrWork = ({item, index}) => (
-    <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน', {item, showBut: "0"})}}>
+    <TouchableOpacity onPress={() => {navigation.navigate('รายละเอียดพนักงาน', {item, showBut: "0", endTime})}}>
         <View style={styles.box}>
           <Image
               source={{uri : item.image}}

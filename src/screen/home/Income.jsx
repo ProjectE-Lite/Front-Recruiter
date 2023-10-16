@@ -1,4 +1,4 @@
-import React,{useState, useEffect}  from 'react';
+import React,{useState}  from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity} from 'react-native';
 import { FlatList} from 'react-native';
 import axios from "axios";
@@ -12,23 +12,27 @@ const Income = ({ navigation }) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}`)
-        .then(response => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/money_exchange`);
           const recdata = response.data;
-          Promise.all(recdata.list_of_money_exchange.map(exchange_id =>
+          const exchangeResponses = await Promise.all(recdata.map(exchange_id =>
             axios.get(`http://${YOURAPI}/money_exchange/${exchange_id}`)
-          ))
-            .then(res => {
-              const notiData = res.map(res => res.data)
-              setnotiData(notiData)
-            })
-        })
-        .catch(error => {
+          ));
+          const notiData = exchangeResponses.map(res => res.data);
+          setnotiData(notiData);
+        } catch (error) {
           console.error('Error making GET request:', error);
-        });
+        }
+      };
+      fetchData(); 
+      const interval = setInterval(() => {
+        fetchData(); 
+      }, 3000);
+      return () => clearInterval(interval); 
     }, [])
-  )
-
+  );
+  
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
@@ -39,9 +43,14 @@ const Income = ({ navigation }) => {
           console.error('Error fetching user data:', error);
         }
       };
-      fetchData();
-    }, [])
+      fetchData(); 
+      const interval = setInterval(() => {
+        fetchData(); 
+      }, 5000);
+      return () => clearInterval(interval); 
+    }, [recruiter_id]) 
   );
+  
 
 const  renderItem=({ item }) => {
   if (item.from === "Bank"){
@@ -62,7 +71,7 @@ const  renderItem=({ item }) => {
     <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#D7E5CA', alignItems:'center', borderRadius: 20, justifyContent: 'center', padding: 5, marginHorizontal: 10}}>
     <View style={{flexGrow: 2, padding: 10}}>
         <Text>{item.date.slice(0,10)}</Text>
-        <Text>{item.date.slice(11,-10)}</Text>
+        <Text>{item.date.slice(11,19)}</Text>
     </View>
     <View style={{marginRight: 20}}>
         <Text style={{color: 'red'}}>-{item.credit?.toLocaleString() || ""}</Text>

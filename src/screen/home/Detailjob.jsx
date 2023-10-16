@@ -37,6 +37,7 @@ export default function Detailjob({route}) {
         console.error('Error:', error);
       });
   };
+  console.log(Data);
 
   return (
     <ScrollView style={{flex: 1, marginHorizontal: 15, marginBottom: 100}} showsVerticalScrollIndicator={false}>

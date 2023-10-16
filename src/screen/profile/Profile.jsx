@@ -30,7 +30,7 @@ export default function Profile({navigation}) {
           </View>
           <View style={{flexDirection:'row', marginTop: 25, marginHorizontal:25}}>
             <Text style={{color: '#176B87', fontSize: 18}}>ยอดเงินคงเหลือ :  </Text>
-            <Text style={{color:'#000000', fontSize: 17}}>{ListData.credit}</Text>
+            <Text style={{color:'#000000', fontSize: 17}}>{ListData.credit?.toLocaleString() || ""}</Text>
           </View>
         </ScrollView>
       </SafeAreaView>

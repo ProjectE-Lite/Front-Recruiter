@@ -9,6 +9,9 @@ import DropdownTime from '../../components/DropdownTime';
 const DeatailEachUser = ({ route }) => {
     const ShowBut = route.params.showBut
     const {image, first_name, last_name, nick_name, gender, age,birth_date, tel} = route.params.item
+    const Endtime = route.params.endTime
+    const Yesterday = new Date(Endtime);
+    Yesterday.setDate(Yesterday.getDate() - 1);
     const work_id = route.params.work_ID
     const [point , setPoint] = useState('5')
     const user_id = route.params.item._id
@@ -102,8 +105,8 @@ const DeatailEachUser = ({ route }) => {
                 open={open}
                 date={date}
                 mode='date'
-                maximumDate={new Date('2023-12-31')}
-                minimumDate={new Date('1873-12-31')}
+                maximumDate={new Date(Yesterday)}
+                minimumDate={new Date()}
                 onConfirm={(date) => {
                 setOpen(false);
                 setDate(date);
@@ -123,11 +126,18 @@ const DeatailEachUser = ({ route }) => {
             value = {{c_Time}}
             ></DropdownTime>
           </View>
+          <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
               style={[styles.button, styles.buttonClose]}
               onPress={() => {handlePatchAppoint()}}>
               <Text style={styles.textStyle}>ยืนยัน</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress ={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle}>ปิด</Text>
+            </TouchableOpacity>
+          </View>
           </View>
         </View>
       </Modal>
@@ -387,6 +397,7 @@ const styles = StyleSheet.create({
       },
       buttonClose: {
         backgroundColor: '#2196F3',
+        marginRight: 10
       },
       textStyle: {
         color: 'white',

@@ -6,20 +6,28 @@ import { YOURAPI } from '../../constants/editendpoint';
 
 export default function Notification() {
   const recruiter_id = '6517fa561434530638bc81de'
-  const [dataDeatail, setDataDeatail] = useState([])
+  const [dataDeatail, setDataDetail] = useState([])
   useEffect(() => {
-    axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/noti`)
-    .then(res => {
-      const myData = res.data
-      Promise.all(myData.map(notiId =>
-        axios.get(`http://${YOURAPI}/recruiters/noti/${notiId}`)
-      ))
-      .then(res => {
-        const notiData = res.map(res => res.data)
-        setDataDeatail(notiData)
-      })
-    })
-  }, [])
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/noti`);
+        const myData = response.data;
+        const notiResponses = await Promise.all(myData.map(notiId =>
+          axios.get(`http://${YOURAPI}/recruiters/noti/${notiId}`)
+        ));
+        const notiData = notiResponses.map(res => res.data);
+        setDataDetail(notiData);
+      } catch (error) {
+        console.error('Error fetching notification data:', error);
+      }
+    };
+    fetchData(); 
+    const interval = setInterval(() => {
+      fetchData(); 
+    }, 3000);
+    return () => clearInterval(interval); 
+  }, [recruiter_id]); 
+  
   return (
     <SafeAreaView style={{backgroundColor: 'white', flex:1}}>
       <FlatList

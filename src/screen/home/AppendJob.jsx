@@ -18,6 +18,8 @@ const AppendJob = ({ navigation }) => {
   const [timesc, setTimesc] = useState(new Date());
   const [opensctime, setOpensctime] = useState(false);
 
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
   const [Data, setData] = useState({
     type_of_work: 'ประเภทงาน',
     number_requirement: 0,
@@ -111,8 +113,8 @@ const AppendJob = ({ navigation }) => {
           open={open}
           date={date}
           mode='date'
-          maximumDate={new Date('2023-12-31')}
-          minimumDate={new Date('1873-12-31')}
+          maximumDate={new Date('2024-12-31')}
+          minimumDate={tomorrow}
           onConfirm={(date) => {
             setOpen(false);
             setDate(date);
@@ -188,7 +190,7 @@ const AppendJob = ({ navigation }) => {
               value={Data.gender_requirement}></DropDownsex>
           </View>
           <View style={{width: '50%'}}>
-            <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>Age</Text>
+            <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>Age อายุขั้นต่ำ</Text>
             <TextInput 
             placeholder='อายุ' 
             style={styles.dropdown} 
@@ -215,13 +217,13 @@ const AppendJob = ({ navigation }) => {
           <Image source={require('../../assets/image/FooterIcon/Dollar.png')} style={styles.boxIcon}></Image>
           <Text style={{fontWeight: '600', fontSize: 19, marginRight: 15}}>เครดิต/ชั่วโมง : </Text>
           <TextInput 
-          placeholder='ตัวเลข' 
+          placeholder='บาท' 
           style={styles.dropdown} 
           keyboardType='number-pad'
           onChangeText={text => handleInputChange('hourly_income', text)}
           ></TextInput>
         </View>
-        <View style={{alignItems:'center', marginTop: 40}}>
+        <View style={{alignItems:'center', marginTop: 5}}>
           <TouchableOpacity onPress={() => {navigation.navigate('เพิ่มรายละเอียด', Data)}}>
             <View style={styles.dropdown2}>
               <Text style={{color: 'white'}}>Next</Text>
