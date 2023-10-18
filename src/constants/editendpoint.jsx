@@ -1,1 +1,1 @@
-export const YOURAPI = "localhost:8000"
+export const YOURAPI = "10.0.2.2:8000"

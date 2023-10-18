@@ -164,6 +164,9 @@ const AppendJob = ({ navigation }) => {
             setTime(date);
             const mydate1 = date.toLocaleTimeString('en-GB',{ hour12: false, hour: '2-digit', minute: '2-digit' })
             setSttime(mydate1);
+            if ((mydate1 > sctime) || (sctime >= '23:30')|| (mydate1 == sctime)){
+              alert('กรุณาเลือกเวลาใหม่');
+            }
             handleInputChange('start_time', mydate1)
           }}
           onCancel={() => {
@@ -190,6 +193,9 @@ const AppendJob = ({ navigation }) => {
             setTimesc(date);
             const mydate2 = date.toLocaleTimeString('en-GB', {hour12: false, hour: '2-digit', minute: '2-digit' })
             setSctime(mydate2);
+            if ((sttime > mydate2) || (mydate2 >= '23:30')|| (sttime == mydate2)){
+              alert('กรุณาเลือกเวลาใหม่');
+            }
             handleInputChange('end_time', mydate2)
           }}
           onCancel={() => {
