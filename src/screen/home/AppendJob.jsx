@@ -150,7 +150,7 @@ const AppendJob = ({ navigation }) => {
             setTime(date);
             const mydate1 = date.toLocaleTimeString('en-GB',{ hour12: false, hour: '2-digit', minute: '2-digit' })
             setSttime(mydate1);
-            if ((mydate1 > sctime) || (sctime >= '23:30')|| (mydate1 == sctime)){
+            if  ((mydate1>sctime)||(mydate1 == sctime)){
               alert('กรุณาเลือกเวลาใหม่');
             }
             handleInputChange('start_time', mydate1)
