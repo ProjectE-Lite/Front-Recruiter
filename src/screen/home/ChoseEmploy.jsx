@@ -77,11 +77,20 @@ const ChoseEmploy = ({route}) => {
   });
   };
 
-  const handleImage2Press = () => {
+  const handleImage2Press = (usr) => {
+    console.log(usr)
+    axios.patch(`http://${YOURAPI}/users/${usr}/reject/${work_ID}`)
+    .then(response => {
     alert('ไม่รับ');
+        console.log('PATCH request สำเร็จ', response.data);
+      })
+    .catch(error => {
+      console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
+    });
   };
 
   const handleImage3Press = (usr) => {
+    console.log(usr)
     axios.patch(`http://${YOURAPI}/users/${usr}/accept/${work_ID}`)
     .then(response => {
       alert('รับ');
@@ -115,7 +124,7 @@ const ChoseEmploy = ({route}) => {
             </>
           )}
           </View>
-          <TouchableOpacity onPress={handleImage2Press}>
+          <TouchableOpacity onPress={() => handleImage2Press (item._id)}>
               <Image
               source={require('../../assets/image/Redx.png')}
               style={styles.imageButton}
@@ -178,21 +187,21 @@ const ChoseEmploy = ({route}) => {
                       </Text></Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => {setState(0)}}>
-            <View style={{marginHorizontal: 5, backgroundColor: '#F99417', height: 40, width: 175, borderRadius: 10, marginTop: 5, alignItems: 'center', justifyContent: 'center'}}>
-              <Text>ผู้สมัคร</Text>
+            <View style={{marginHorizontal: 5, backgroundColor: '#071952', height: 40, width: 175, borderRadius: 10, marginTop: 5, alignItems: 'center', justifyContent: 'center'}}>
+              <Text style = {{color: 'white'}}>ผู้สมัคร</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => {setState(1)}}>
-            <View style={{backgroundColor: 'green', height: 40, width: 175, borderRadius: 10, marginTop: 5, alignItems: 'center', justifyContent: 'center'}}>
+            <View style={{backgroundColor: 'lightgray', height: 40, width: 175, borderRadius: 10, marginTop: 5, alignItems: 'center', justifyContent: 'center'}}>
               <Text>รับเข้าทำงาน</Text>
             </View>
           </TouchableOpacity>
         </View>
         {state == 0 ? (
           <>
-            <View style={{backgroundColor: '#F99417', justifyContent: 'center', alignItems: 'center', borderRadius: 20, height: 40, marginTop: 10}}>
-              <Text style={{color: 'white'}}>ผู้สมัคร</Text>
+            <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', borderRadius: 20, height: 40, marginTop: 10}}>
+              <Text style = {{fontSize:20  }}>ผู้สมัครทั้งหมด</Text>
             </View>
             <FlatList
             data={userData}
@@ -220,8 +229,8 @@ const ChoseEmploy = ({route}) => {
          </>
         ) : (
           <>
-            <View style={{backgroundColor: 'green', justifyContent: 'center', alignItems: 'center', borderRadius: 20, height: 40, marginTop: 10}}>
-              <Text style={{color: 'white'}}>รับเข้าทำงาน</Text>
+            <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', borderRadius: 20, height: 40, marginTop: 10}}>
+              <Text style = {{fontSize: 20}}>พนักงานทั้งหมด</Text>
             </View>
             <FlatList
             data={List_Worker}

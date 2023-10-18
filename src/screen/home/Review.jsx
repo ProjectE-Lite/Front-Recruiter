@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     colorBox2: {
       width: 94, // กว้าง 100 พิกเซล
       height: 44, // สูง 100 พิกเซล
-      backgroundColor: '#1121b1', // สีพื้นหลังเป็นสีน้ำเงิน
+      backgroundColor: '#071952', // สีพื้นหลังเป็นสีน้ำเงิน
       marginTop: 30,
       justifyContent:'center',
       alignSelf : 'center',

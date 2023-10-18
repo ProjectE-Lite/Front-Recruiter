@@ -28,7 +28,7 @@ const Income = ({ navigation }) => {
       fetchData(); 
       const interval = setInterval(() => {
         fetchData(); 
-      }, 3000);
+      }, 2000);
       return () => clearInterval(interval); 
     }, [])
   );
@@ -46,7 +46,7 @@ const Income = ({ navigation }) => {
       fetchData(); 
       const interval = setInterval(() => {
         fetchData(); 
-      }, 5000);
+      }, 2000);
       return () => clearInterval(interval); 
     }, [recruiter_id]) 
   );
@@ -55,10 +55,10 @@ const Income = ({ navigation }) => {
 const  renderItem=({ item }) => {
   if (item.from === "Bank"){
     return(
-    <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#D7E5CA', alignItems:'center', borderRadius: 20, justifyContent: 'center', padding: 5, marginHorizontal: 10}}>
+    <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#cadded', alignItems:'center', borderRadius: 20, justifyContent: 'center', padding: 5, marginHorizontal: 10}}>
       <View style={{flexGrow: 2, padding: 10}}>
           <Text>{item.date.slice(0,10)}</Text>
-          <Text>{item.date.slice(11,-10)}</Text>
+          <Text>{item.date.slice(11,16)}</Text>
       </View>
       <View style={{marginRight: 20}}>
           <Text style={{}}>+{item.credit?.toLocaleString() || ""}</Text>
@@ -68,10 +68,10 @@ const  renderItem=({ item }) => {
   }
   else
   return(
-    <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#D7E5CA', alignItems:'center', borderRadius: 20, justifyContent: 'center', padding: 5, marginHorizontal: 10}}>
+    <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#cadded', alignItems:'center', borderRadius: 20, justifyContent: 'center', padding: 5, marginHorizontal: 10}}>
     <View style={{flexGrow: 2, padding: 10}}>
         <Text>{item.date.slice(0,10)}</Text>
-        <Text>{item.date.slice(11,19)}</Text>
+        <Text>{item.date.slice(11,16)}</Text>
     </View>
     <View style={{marginRight: 20}}>
         <Text style={{color: 'red'}}>-{item.credit?.toLocaleString() || ""}</Text>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     borderRadius: 100, 
     backgroundColor: '#fafafa', 
     borderWidth: 4,
-    borderColor: '#618264',
+    borderColor: '#194569',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   butt: {
     width: 90, 
     height: 45, 
-    backgroundColor: '#79AC78',
+    backgroundColor: 'lightgrey',
     alignSelf: 'flex-start',
     margin:10,
     borderRadius: 10,
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textbutton: {
-    color: 'white',
+    color: 'black',
     fontSize: 18,
     textAlign: 'center',
   }

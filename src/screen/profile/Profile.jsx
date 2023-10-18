@@ -1,12 +1,13 @@
 import { View, Text, SafeAreaView, Image, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { YOURAPI } from '../../constants/editendpoint'
 
 export default function Profile({navigation}) {
   const [ListData, setListData] = useState([])
   const recruiter_id = '6517fa561434530638bc81de'
   useEffect( () => {
-    axios.get(`http://localhost:8000/recruiters/${recruiter_id}`)
+    axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}`)
     .then(res => {
       setListData(res.data)
     })
@@ -24,11 +25,11 @@ export default function Profile({navigation}) {
           <View style={{alignItems:'center'}}>
             <Text style={{fontSize: 30, color:'#000000', fontWeight:'500'}}>{ListData.name}</Text>
           </View>
-          <View style={{flexDirection:'row', marginTop: 25, marginHorizontal:25}}>
+          <View style={{flexDirection:'row', marginTop: 50, marginHorizontal:15}}>
             <Text style={{color: '#176B87', fontSize: 18}}>ที่อยู่ :  </Text>
             <Text style={{color:'#000000', fontSize: 17}}>{ListData.address}</Text>
           </View>
-          <View style={{flexDirection:'row', marginTop: 25, marginHorizontal:25}}>
+          <View style={{flexDirection:'row', marginTop: 25, marginHorizontal:15}}>
             <Text style={{color: '#176B87', fontSize: 18}}>ยอดเงินคงเหลือ :  </Text>
             <Text style={{color:'#000000', fontSize: 17}}>{ListData.credit?.toLocaleString() || ""}</Text>
           </View>

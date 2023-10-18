@@ -1,15 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const LoginScreen = ({navigation}) => {
     return (
-        <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
-            <View style={{backgroundColor:'white', margin:10, borderRadius:30, }}>
+        <SafeAreaView style={{backgroundColor: 'white', height: '100%'}}>
+            <View style={{backgroundColor:'white', margin:10 }}>
                 <View style={{paddingHorizontal:25}}>
-                    <View style={{alignItems: 'center', margin:20}}>
-                        <Text style={{fontSize:90, color: '#000000'}}>E lite</Text>
-                        <Text>ReCruiTer</Text>
+                    <View style={{alignItems: 'center',justifyContent: 'center', margin:20, marginTop: 120}}>
+                    <Image source={require('../../assets/image/393431247_658755773066449_8379897959208508685_n.png')} style={{width: 250, height: 250}} />
                     </View>
                     <TextInput 
                     placeholder="Email" 

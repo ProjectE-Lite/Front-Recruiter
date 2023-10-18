@@ -24,6 +24,7 @@ const DeatailEachUser = ({ route }) => {
     const [c_Time,setC_Time] = useState("")
     const recruiter_id = '6517fa561434530638bc81de'
     const [Workwith, setWorkwith] = useState("")
+    const address = route.params.item.address
 
     useEffect(() => {
         axios.get(`http://${YOURAPI}/users/${user_id}/review_points/${point}`)
@@ -59,6 +60,16 @@ const DeatailEachUser = ({ route }) => {
             console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
             });
         };
+    const hadlePatchData1 = () => {
+        axios.patch(`http://${YOURAPI}/users/${user_id}/reject/${work_id}`)
+        .then(response => {
+            navigation.goBack()
+            console.log('PATCH request สำเร็จ', response.data);
+            })
+            .catch(error => {
+            console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
+            });
+    }
     const handleDropdownChange = (value) => {
         setC_Time(value);
         };
@@ -127,15 +138,15 @@ const DeatailEachUser = ({ route }) => {
             ></DropdownTime>
           </View>
           <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress ={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle}>ยกเลิก</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.buttonClose]}
               onPress={() => {handlePatchAppoint()}}>
               <Text style={styles.textStyle}>ยืนยัน</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonClose]}
-              onPress ={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>ปิด</Text>
             </TouchableOpacity>
           </View>
           </View>
@@ -159,7 +170,7 @@ const DeatailEachUser = ({ route }) => {
                                 <Text style={{color: '#FFFFFF' , fontSize: 20}}>นัดหมาย</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => {hadlePatchData1()}}>
                             <View style={styles.rectangle1}>
                                 <Text style={{color: '#FFFFFF' , fontSize: 20}}>ไม่รับ</Text>
                             </View>
@@ -213,16 +224,14 @@ const DeatailEachUser = ({ route }) => {
                     <Text style={{color: '#1121b1', fontSize: 20}}>เบอร์โทรศัพท์ :  </Text>
                     <Text style={{color:'#000000', fontSize: 20}}>{tel}</Text>
                 </View>
-                <View style={{marginTop: 20, marginHorizontal:25}}>
-                    <Text style={{color: '#1121b1', fontSize: 20}}>ที่อยู่ปัจจุบัน</Text>
-                    <View style={{borderWidth: 20, alignItems: 'center', margin: 15, borderColor: '#FFFFFF'}}>
-                        <Image source={require('../../assets/image/Maps.png')} style={{width: '100%', height:250, margin: 15}}></Image>
-                    </View>
+                <View style={{flexDirection:'row',marginTop: 20, marginHorizontal:25}}>
+                    <Text style={{color: '#1121b1', fontSize: 20}}>ที่อยู่ปัจจุบัน :  </Text>
+                    <Text style={{color:'#000000', fontSize: 20}}>{address}</Text>
                 </View>
-                <View style = {{margin: 10, marginHorizontal:25}}>
+                <View style = {{marginTop: 20, marginHorizontal:25}}>
                     <Text style = {{fontSize: 20, color : '#000000'}}>ประวัติการทำงาน</Text>
                 </View>
-                <View style={{flexDirection:'row', alignItems: 'center' , margin:15 , }}>
+                <View style={{flexDirection:'row', alignItems: 'center',justifyContent: 'center',marginBottom:10}}>
                 <TouchableOpacity onPress={() => {setPoint('1')}}>
                         <View style={styles.rectangle5}>
                             <Text style={{color: 'black' , fontSize: 20}}>1 <Image 
@@ -321,7 +330,7 @@ const styles = StyleSheet.create({
         width: 84,
         height: 44,
         borderRadius: 20 ,
-        backgroundColor: '#FFA722',
+        backgroundColor: '#6d87db',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -330,7 +339,7 @@ const styles = StyleSheet.create({
         width: 84,
         height: 44,
         borderRadius: 20 ,
-        backgroundColor: '#5B0888',
+        backgroundColor: 'black',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -340,6 +349,7 @@ const styles = StyleSheet.create({
         height: 44,
         borderRadius: 20 ,
         backgroundColor: '#F8F8FF',
+        marginTop: 10,
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,

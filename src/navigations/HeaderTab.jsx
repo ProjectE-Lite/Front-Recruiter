@@ -33,8 +33,8 @@ const Headertab = () =>{
               style={{ marginRight: 15 }}
             >
               <Image
-                source={require('../assets/image/appendIcon.png')}
-                style={{ width: 30, height: 30 , opacity: 0.67}}
+                source={require('../assets/image/appendplus.png')}
+                style={{ width: 35, height: 35 , opacity: 0.67}}
                 resizeMode='contain'
               />
             </TouchableOpacity>
