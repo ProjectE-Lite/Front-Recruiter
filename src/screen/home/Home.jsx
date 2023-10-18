@@ -12,34 +12,30 @@ const Home = () => {
   const [workData, setWorkData] = useState([]);
 
   useFocusEffect(
-    React.useCallback(() =>{
+    React.useCallback(() => {
       const fetchData = async () => {
-        axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/works`)
-          .then((res) => {
-            const dateDict = res.data; 
-            const allUserIDs = Object.values(dateDict).flat()
-            Promise.all(allUserIDs.map(userID =>
+        try {
+          const res = await axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/works`);
+          const dateDict = res.data; 
+          const allUserIDs = Object.values(dateDict).flat();
+          const userResponses = await Promise.all(
+            allUserIDs.map(userID =>
               axios.get(`http://${YOURAPI}/works/${userID}`)
-            ))
-            .then(userResponses => {
-              const workData = userResponses.map(response => response.data);
-              setWorkData(workData)
-            })
-            .catch(error => {
-              console.error('Error fetching user data:', error);
-            });
-          })
-          .catch(e => {
-            console.error('Error', e);
-          });
+            )
+          );
+          const workData = userResponses.map(response => response.data);
+          setWorkData(workData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
         }
-        fetchData()
-        const interval = setInterval(() => {
-          fetchData(); 
-        }, 3000);
-        return () => clearInterval(interval); 
-      }, [recruiter_id])
-  )
+      };
+      fetchData();
+      const interval = setInterval(() => {
+        fetchData(); 
+      }, 11000);
+      return () => clearInterval(interval);
+    }, [recruiter_id])
+  );
 
 
   const groupedData = {};

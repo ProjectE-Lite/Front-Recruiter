@@ -3,30 +3,35 @@ import React, { useEffect, useState } from 'react'
 import {FlatList} from 'react-native';
 import axios from 'axios';
 import { YOURAPI } from '../../constants/editendpoint';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Notification() {
   const recruiter_id = '6517fa561434530638bc81de'
   const [dataDeatail, setDataDetail] = useState([])
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/noti`);
-        const myData = response.data;
-        const notiResponses = await Promise.all(myData.map(notiId =>
-          axios.get(`http://${YOURAPI}/recruiters/noti/${notiId}`)
-        ));
-        const notiData = notiResponses.map(res => res.data);
-        setDataDetail(notiData);
-      } catch (error) {
-        console.error('Error fetching notification data:', error);
-      }
-    };
-    fetchData(); 
-    const interval = setInterval(() => {
-      fetchData(); 
-    }, 3000);
-    return () => clearInterval(interval); 
-  }, [recruiter_id]); 
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/noti`);
+          const myData = response.data;
+          const notiResponses = await Promise.all(myData.map(notiId =>
+            axios.get(`http://${YOURAPI}/recruiters/noti/${notiId}`)
+          ));
+          const notiData = notiResponses.map(res => res.data);
+          setDataDetail(notiData);
+        } catch (error) {
+          console.error('Error fetching notification data:', error);
+        }
+      };
+      fetchData();
+      const interval = setInterval(() => {
+        fetchData();
+      }, 3000);
+      return () => clearInterval(interval);
+    }, [recruiter_id])
+  );
+
   
   return (
     <SafeAreaView style={{backgroundColor: 'white', flex:1}}>

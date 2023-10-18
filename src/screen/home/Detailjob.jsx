@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, Button, StyleSheet, ScrollView, TextInput ,TouchableOpacity} from 'react-native';
 import { YOURAPI } from '../../constants/editendpoint';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 export default function Detailjob({route}) {
   const navigation = useNavigation()
@@ -11,12 +11,20 @@ export default function Detailjob({route}) {
   const recruiter_id = "6517fa561434530638bc81de"
   const [recdata, setRecdata] = useState([])
 
-  useEffect(() => {
-    axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}`)
-    .then(res =>{
-      setRecdata(res.data)
-    })
-  }, [])
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const res = await axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}`);
+          setRecdata(res.data);
+        } catch (error) {
+          console.error('Error fetching recruiter data:', error);
+        }
+      };
+      fetchData();
+    }, [recruiter_id])
+  );
+
   const updateDescription = (field, value) => {
     setData(prevState => ({
       ...prevState,
@@ -49,7 +57,6 @@ export default function Detailjob({route}) {
        alert('ยังกรอกข้อมูลไม่ครบ');
       }
     };
-  console.log(Data.work_description.qualification);
 
   return (
     <ScrollView style={{flex: 1, marginHorizontal: 15, marginBottom: 100}} showsVerticalScrollIndicator={false}>

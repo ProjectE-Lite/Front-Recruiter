@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image} from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import Employ from '../money/Employ'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { YOURAPI } from '../../constants/editendpoint'
 
 const ChoseEmploy = ({route}) => {
@@ -16,66 +16,58 @@ const ChoseEmploy = ({route}) => {
   const [state, setState] = useState(0)
   const [usrStatus, setUsrStatus] = useState([])
   const MAX_NAME_LENGTH = 15
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios(`http://${YOURAPI}/works/${work_ID}/status`);
-        const dictStatus = res.data;
-        setKey(Object.keys(dictStatus)[0]);
-        const allUserIDs = Object.values(dictStatus).flat();
-        const userResponses = await Promise.all(
-          allUserIDs.map(userID => axios.get(`http://${YOURAPI}/users/${userID}`))
-        );
-        const userData = userResponses.map(response => response.data);
-        setUserData(userData);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-    fetchData(); 
-    const interval = setInterval(() => {
+  
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const res = await axios.get(`http://${YOURAPI}/works/${work_ID}/status`);
+          const dictStatus = res.data;
+          setKey(Object.keys(dictStatus)[0]);
+          const allUserIDs = Object.values(dictStatus).flat();
+          const userResponses = await Promise.all(
+            allUserIDs.map(userID => axios.get(`http://${YOURAPI}/users/${userID}`))
+          );
+          const userData = userResponses.map(response => response.data);
+          setUserData(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
       fetchData();
-    }, 3000);
-    return () => clearInterval(interval); 
-  }, [state]);
+      const interval = setInterval(() => {
+        fetchData();
+      }, 3000);
+      return () => clearInterval(interval);
+    }, [work_ID])
+  );
   
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`http://${YOURAPI}/works/${work_ID}`);
-        const listusrId = res.data.list_of_worker;
-        setUsrStatus(res.data.user_status);
-  
-        const usrRes = await Promise.all(
-          listusrId.map(usrID =>
-            axios.get(`http://${YOURAPI}/users/${usrID}`)
-          )
-        );
-        const usr = usrRes.map(res => res.data);
-        setList_Worker(usr);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData(); 
-    const interval = setInterval(() => {
-      fetchData(); 
-    }, 3000);
-    return () => clearInterval(interval); 
-  }, [state]);
-  
-
-  const handlePress = () =>{
-    axios.delete(`http://${YOURAPI}/works/${work_ID}`)
-    .then( response =>{
-    navigation.navigate('pageHome')
-    console.log('DELETE request successful');
-  })
-  .catch(error => {
-    console.error('Error making DELETE request:', error);
-  });
-  };
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const res = await axios.get(`http://${YOURAPI}/works/${work_ID}`);
+          const listusrId = res.data.list_of_worker;
+          setUsrStatus(res.data.user_status);
+          const usrRes = await Promise.all(
+            listusrId.map(usrID =>
+              axios.get(`http://${YOURAPI}/users/${usrID}`)
+            )
+          );
+          const usr = usrRes.map(res => res.data);
+          setList_Worker(usr);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      fetchData();
+      const interval = setInterval(() => {
+        fetchData(); 
+      }, 3000);
+      return () => clearInterval(interval);
+    }, [work_ID])
+  );
 
   const handleImage2Press = (usr) => {
     console.log(usr)
@@ -213,17 +205,6 @@ const ChoseEmploy = ({route}) => {
                 <Text>ไม่มีผู้สมัคร</Text>
               </View>
             )}
-            ListFooterComponent={
-              <>
-                <View style={{alignSelf: 'center', width: '100%'}}>
-                  <TouchableOpacity   onPress={() => {handlePress()}}>
-                    <View style={{marginRight: 0, marginTop: 10, backgroundColor: 'red' , borderRadius: 10}}>
-                      <Text style={{fontSize:18,color:'white', margin: 5, width: '100%', textAlign: 'center'}}>ลบงาน</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </>
-            }
             keyExtractor={(item) => item._id}
             />
          </>
