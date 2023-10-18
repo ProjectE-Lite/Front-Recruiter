@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, Button, StyleSheet, ScrollView, TextInput } from 'react-native';
+import { View, Text, Image, Button, StyleSheet, ScrollView, TextInput ,TouchableOpacity} from 'react-native';
 import { YOURAPI } from '../../constants/editendpoint';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -37,7 +37,19 @@ export default function Detailjob({route}) {
         console.error('Error:', error);
       });
   };
-  console.log(Data);
+
+  const isDataValid = (data) => {
+    return data.work_description.detail !== "detail" &&  data.work_description.detail !== ""
+    && data.work_description.qualification !== "qulifi" && data.work_description.qualification !== ""}
+  
+    const handleNexttButtonPress = () => {
+      if (isDataValid(Data)) {
+        handlePostData();
+      } else {
+       alert('ยังกรอกข้อมูลไม่ครบ');
+      }
+    };
+  console.log(Data.work_description.qualification);
 
   return (
     <ScrollView style={{flex: 1, marginHorizontal: 15, marginBottom: 100}} showsVerticalScrollIndicator={false}>
@@ -97,8 +109,27 @@ export default function Detailjob({route}) {
         onChangeText={text => updateDescription('qualification', text)}
         ></TextInput>
       </View>
-      <View style={{ marginTop : 5 , width : 100 , alignSelf : 'center' }}>
-        <Button title="ยืนยัน" onPress={() => {handlePostData()}} />
+      <View style={{alignItems:'center'}}>
+      <TouchableOpacity onPress={handleNexttButtonPress}>
+      <View style={{margin: 10,alignItems: 'center', justifyContent: 'center',
+      height: 40,
+      width: 75,
+      backgroundColor: '#26577C',
+      borderRadius: 12,
+      padding: 12,
+      shadowColor: '#071952',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.2,
+      shadowRadius: 1.41,
+      elevation: 2,}}>
+          <Text style = {{textAlign: 'center', color: 'white', justifyContent: 'center'}}>
+            ยืนยัน
+          </Text>
+      </View>
+      </TouchableOpacity>
       </View>
     </ScrollView>
   );
