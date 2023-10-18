@@ -38,7 +38,21 @@ const AppendJob = ({ navigation }) => {
     end_time: 'เวลาเลิกงาน',
     user_status: {}
   });
-  const handleInputChange = (name, value) => {
+
+    const isDataValid = (data) => {
+    return data.type_of_work !== 'ประเภทงาน' &&  data.start_time !== 'เวลาเริ่มทำงาน'
+    && data.work_date !== 'วันที่ทำงาน' && data.end_time !== 'เวลาเลิกงาน' && data.gender_requirement !== "เพศ"
+    && data.minimum_age !== 0 && data.hourly_income !== 0 && data.number_requirement !== 0}
+    
+    const handleNexttButtonPress = () => {
+      if (isDataValid(Data)) {
+        navigation.navigate('เพิ่มรายละเอียด', Data);
+      } else {
+       alert('ยังกรอกข้อมูลไม่ครบ');
+      }
+    };
+
+    const handleInputChange = (name, value) => {
     if (name === 'minimum_age'){
       value = parseInt(value);
     }
@@ -224,13 +238,12 @@ const AppendJob = ({ navigation }) => {
           ></TextInput>
         </View>
         <View style={{alignItems:'center', marginTop: 5}}>
-          <TouchableOpacity onPress={() => {navigation.navigate('เพิ่มรายละเอียด', Data)}}>
+          <TouchableOpacity onPress={handleNexttButtonPress}>
             <View style={styles.dropdown2}>
               <Text style={{color: 'white'}}>Next</Text>
             </View>
           </TouchableOpacity>
         </View>
-
       </ScrollView>
     </View>
   );
