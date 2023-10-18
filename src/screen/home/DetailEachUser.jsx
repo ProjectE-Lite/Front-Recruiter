@@ -60,6 +60,16 @@ const DeatailEachUser = ({ route }) => {
             console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
             });
         };
+    const hadlePatchData1 = () => {
+        axios.patch(`http://${YOURAPI}/users/${user_id}/reject/${work_id}`)
+        .then(response => {
+            navigation.goBack()
+            console.log('PATCH request สำเร็จ', response.data);
+            })
+            .catch(error => {
+            console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
+            });
+    }
     const handleDropdownChange = (value) => {
         setC_Time(value);
         };
@@ -160,7 +170,7 @@ const DeatailEachUser = ({ route }) => {
                                 <Text style={{color: '#FFFFFF' , fontSize: 20}}>นัดหมาย</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => {hadlePatchData1()}}>
                             <View style={styles.rectangle1}>
                                 <Text style={{color: '#FFFFFF' , fontSize: 20}}>ไม่รับ</Text>
                             </View>

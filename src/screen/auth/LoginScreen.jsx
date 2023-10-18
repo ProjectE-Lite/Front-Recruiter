@@ -7,8 +7,8 @@ const LoginScreen = ({navigation}) => {
         <SafeAreaView style={{backgroundColor: 'white', height: '100%'}}>
             <View style={{backgroundColor:'white', margin:10 }}>
                 <View style={{paddingHorizontal:25}}>
-                    <View style={{alignItems: 'center',justifyContent: 'center', margin:20, marginTop: 150}}>
-                    <Image source={require('../../assets/image/393431247_658755773066449_8379897959208508685_n.png')} style={{width: 200, height: 200}} />
+                    <View style={{alignItems: 'center',justifyContent: 'center', margin:20, marginTop: 120}}>
+                    <Image source={require('../../assets/image/393431247_658755773066449_8379897959208508685_n.png')} style={{width: 250, height: 250}} />
                     </View>
                     <TextInput 
                     placeholder="Email" 

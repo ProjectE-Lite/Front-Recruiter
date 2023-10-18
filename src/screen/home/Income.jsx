@@ -28,7 +28,7 @@ const Income = ({ navigation }) => {
       fetchData(); 
       const interval = setInterval(() => {
         fetchData(); 
-      }, 3000);
+      }, 2000);
       return () => clearInterval(interval); 
     }, [])
   );
@@ -46,7 +46,7 @@ const Income = ({ navigation }) => {
       fetchData(); 
       const interval = setInterval(() => {
         fetchData(); 
-      }, 5000);
+      }, 2000);
       return () => clearInterval(interval); 
     }, [recruiter_id]) 
   );
@@ -58,7 +58,7 @@ const  renderItem=({ item }) => {
     <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#cadded', alignItems:'center', borderRadius: 20, justifyContent: 'center', padding: 5, marginHorizontal: 10}}>
       <View style={{flexGrow: 2, padding: 10}}>
           <Text>{item.date.slice(0,10)}</Text>
-          <Text>{item.date.slice(11,-10)}</Text>
+          <Text>{item.date.slice(11,16)}</Text>
       </View>
       <View style={{marginRight: 20}}>
           <Text style={{}}>+{item.credit?.toLocaleString() || ""}</Text>
@@ -71,7 +71,7 @@ const  renderItem=({ item }) => {
     <View style={{flexDirection: 'row',marginBottom:10, backgroundColor: '#cadded', alignItems:'center', borderRadius: 20, justifyContent: 'center', padding: 5, marginHorizontal: 10}}>
     <View style={{flexGrow: 2, padding: 10}}>
         <Text>{item.date.slice(0,10)}</Text>
-        <Text>{item.date.slice(11,19)}</Text>
+        <Text>{item.date.slice(11,16)}</Text>
     </View>
     <View style={{marginRight: 20}}>
         <Text style={{color: 'red'}}>-{item.credit?.toLocaleString() || ""}</Text>

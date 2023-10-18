@@ -34,7 +34,11 @@ const Home = () => {
           });
         }
         fetchData()
-    }, [])
+        const interval = setInterval(() => {
+          fetchData(); 
+        }, 3000);
+        return () => clearInterval(interval); 
+      }, [recruiter_id])
   )
 
 

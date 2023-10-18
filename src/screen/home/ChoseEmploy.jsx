@@ -77,11 +77,20 @@ const ChoseEmploy = ({route}) => {
   });
   };
 
-  const handleImage2Press = () => {
+  const handleImage2Press = (usr) => {
+    console.log(usr)
+    axios.patch(`http://${YOURAPI}/users/${usr}/reject/${work_ID}`)
+    .then(response => {
     alert('ไม่รับ');
+        console.log('PATCH request สำเร็จ', response.data);
+      })
+    .catch(error => {
+      console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
+    });
   };
 
   const handleImage3Press = (usr) => {
+    console.log(usr)
     axios.patch(`http://${YOURAPI}/users/${usr}/accept/${work_ID}`)
     .then(response => {
       alert('รับ');
@@ -115,7 +124,7 @@ const ChoseEmploy = ({route}) => {
             </>
           )}
           </View>
-          <TouchableOpacity onPress={handleImage2Press}>
+          <TouchableOpacity onPress={() => handleImage2Press (item._id)}>
               <Image
               source={require('../../assets/image/Redx.png')}
               style={styles.imageButton}
