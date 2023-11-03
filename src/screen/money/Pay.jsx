@@ -20,7 +20,8 @@ const Pay =({route , navigation})=>{
       const handlePatchData = () => {
         axios.patch(`http://${YOURAPI}/users/${userData._id}/payment/${work_data._id}`, Data)
         .then(response => {
-            navigation.navigate('Employ')
+          navigation.goBack(); 
+          navigation.goBack(); 
             console.log('PATCH request สำเร็จ', response.data);
           })
           .catch(error => {

@@ -6,28 +6,33 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const Employ = ({ navigation, userData, work_ID }) => {
     const [work_data, setWork_data] = useState([]);
-
+    const [userStatus, setUserStatus] = useState([]);
     useFocusEffect(
-      React.useCallback(() => {
-        axios.get(`http://${YOURAPI}/works/${work_ID}`)
-          .then(res => {
-            const myData = res.data;
-            setWork_data(myData);
-            console.log(myData);
-          })
-          .catch(error => {
-            console.error('Error fetching notifications:', error);
-          });
-      }, [])
-    );
+        React.useCallback(() => {
+          const fetchData = async () => {
+            try {
+              const response = await axios.get(`http://${YOURAPI}/works/${work_ID}`);
+              const myData = response.data;
+              setWork_data(myData);
+              setUserStatus(myData.user_status);
+            } catch (error) {
+              console.error('Error fetching notifications:', error);
+            }
+          };
+          fetchData();
+        }, [work_ID])
+      );
+      
+
+    
 
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <SafeAreaView style={style.body}>
                 <View style={style.view1}>
-                    <Text style={style.text1_1}>{work_data.name} - </Text>
-                    <Text style={{color: 'red', fontSize: 19}}>
-                      {(() => {
+                    <Text style={{fontSize: 19, color: 'blue'}}>วันเริ่มทำงาน : {work_data.work_date}</Text>
+                    <Text style={{color: 'red', fontSize: 19, marginTop: 5}}>
+                      ตำแหน่ง : {(() => {
                           switch(work_data.type_of_work) {
                             case 'type1':
                               return 'พนักงานเสิร์ฟ';
@@ -53,32 +58,61 @@ const Employ = ({ navigation, userData, work_ID }) => {
                 <FlatList
                     keyExtractor={(item) => item._id.toString()}
                     data={userData}
+                    style={{marginBottom: 40}}
                     ListEmptyComponent={
                         <View style={{alignItems: 'center'}}>
                             <Text>ไม่มีข้อมูล</Text>
                         </View>
                     }
                     renderItem={({ item }) => (
-                        <View style={style.list}>
-                            <View style={style.profile}>
-                                <View style={{height: 75, width: 75, borderRadius: 40, overflow: 'hidden'}}>
-                                    <Image source={{uri : item.image}} style={{ width: null, height: null, flex: 1}}/>
+                        <>
+                            <Text style={{marginLeft: 20}}>{`SetStatus : ${(() => {
+                                switch(userStatus[item._id].user_status){
+                                    case 'working':
+                                        return 'ยังไม่จ่ายเงิน';
+                                    case 'paid':
+                                        return 'จ่ายเงินแล้ว';
+                                    case 'absent':
+                                        return 'ไม่มาทำงาน';
+                                    default:
+                                        return 'Db บัค';
+                                }
+                            })()}`}</Text>
+                            {userStatus[item._id].user_status === 'paid' || userStatus[item._id].user_status === 'absent'? (
+                                <View style={style.list}>
+                                    <View style={style.profile}>
+                                        <View style={{height: 75, width: 75, borderRadius: 40, overflow: 'hidden'}}>
+                                            <Image source={{uri : item.image}} style={{ width: null, height: null, flex: 1}}/>
+                                        </View>
+                                        <Text>{item.first_name} {item.last_name}</Text>
+                                        <TouchableOpacity style={style.button1} onPress={() => {navigation.navigate('InfoEm', { userData: userData, item , })}}>
+                                            <Text style={style.text_button1}>ข้อมูล</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
-                                <Text>{item.first_name} {item.last_name}</Text>
-                                <TouchableOpacity style={style.button1} onPress={() => {navigation.navigate('InfoEm', { userData: userData, item , })}}>
-                                    <Text style={style.text_button1}>ข้อมูล</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={style.line}>
-
-                            </View>
-                            <View style={style.check}>
-                                <Image source={require('../../assets/image/search-alt.png')} resizeMode='contain' style={{ width: 65, height: 65, marginTop: 7}}/>
-                                    <TouchableOpacity style={style.button2} onPress={() => {navigation.navigate('ตรวจสอบ', { userData: userData, item , work_ID: work_ID, work_data: work_data} )}}>
-                                        <Text style={style.text_button2}>ตรวจงาน</Text>
+                            ): (
+                            <View style={style.list}>
+                                <View style={style.profile}>
+                                    <View style={{height: 75, width: 75, borderRadius: 40, overflow: 'hidden'}}>
+                                        <Image source={{uri : item.image}} style={{ width: null, height: null, flex: 1}}/>
+                                    </View>
+                                    <Text>{item.first_name} {item.last_name}</Text>
+                                    <TouchableOpacity style={style.button1} onPress={() => {navigation.navigate('InfoEm', { userData: userData, item , })}}>
+                                        <Text style={style.text_button1}>ข้อมูล</Text>
                                     </TouchableOpacity>
+                                </View>
+                                <View style={style.line}>
+
+                                </View>
+                                <View style={style.check}>
+                                    <Image source={require('../../assets/image/search-alt.png')} resizeMode='contain' style={{ width: 65, height: 65, marginTop: 7}}/>
+                                        <TouchableOpacity style={style.button2} onPress={() => {navigation.navigate('ตรวจสอบ', { userData: userData, item , work_ID: work_ID, work_data: work_data} )}}>
+                                            <Text style={style.text_button2}>ตรวจงาน</Text>
+                                        </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
+                            )}
+                        </>
                     )}
                 />
             </SafeAreaView>
@@ -100,7 +134,6 @@ const style = StyleSheet.create({
     view1: {
         marginTop: 5,
         padding: 15,
-        flexDirection: 'row',
     },
     list: {
         flexDirection: 'row',

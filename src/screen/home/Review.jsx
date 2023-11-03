@@ -4,12 +4,9 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
 const Review = ({route}) => {
-  console.log(route.params.item)
   const _point = route.params.item.score;
   const {recruiter_image} = route.params.item
-  console.log(_point)
   const comment = route.params.item.text
-  console.log(comment)
   const navigation = useNavigation()
   const name = route.params.item.recruiter_name
 

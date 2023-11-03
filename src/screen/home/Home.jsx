@@ -62,7 +62,7 @@ const Home = () => {
       style={{marginBottom: 40}}
       keyExtractor={(item, index) => item+index}
       ListEmptyComponent={
-        <View style={{alignItems: 'center'}}>
+        <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <Text>Add Work</Text>
         </View>
       }

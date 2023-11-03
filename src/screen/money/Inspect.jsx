@@ -20,8 +20,6 @@ const Inspect =({ navigation , route})=>{
   const [maxRating,setmaxRating]=useState([1,2,3,4,5])
   const [comment, setComment] = useState("")
 
-  console.log(defaultRating)
-
   const work_absent = (usr) => {
     axios.patch(`http://${YOURAPI}/users/${usr}/absent/${work_ID}`)
     .then(response => {

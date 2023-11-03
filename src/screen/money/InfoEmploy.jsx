@@ -60,9 +60,6 @@ const InfoEmploy = ({ navigation , route }) => {
         },
     ]);
 
-    console.log(route.params.item)
-    console.log(work_history)
-
     return (
         <SafeAreaView style={{flex:1, backgroundColor: 'white'}}>
         

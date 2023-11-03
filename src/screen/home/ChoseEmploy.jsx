@@ -8,7 +8,7 @@ import { YOURAPI } from '../../constants/editendpoint'
 const ChoseEmploy = ({route}) => {
   const work_ID = route.params.item._id
   const endTime = (route.params.item.end_registeration);
-  const {name, type_of_work} = route.params.item
+  const {name, type_of_work, work_date} = route.params.item
   const navigation = useNavigation()
   const [userData, setUserData] = useState([]);
   const [List_Worker, setList_Worker] = useState([])
@@ -70,7 +70,6 @@ const ChoseEmploy = ({route}) => {
   );
 
   const handleImage2Press = (usr) => {
-    console.log(usr)
     axios.patch(`http://${YOURAPI}/users/${usr}/reject/${work_ID}`)
     .then(response => {
     alert('ไม่รับ');
@@ -82,7 +81,6 @@ const ChoseEmploy = ({route}) => {
   };
 
   const handleImage3Press = (usr) => {
-    console.log(usr)
     axios.patch(`http://${YOURAPI}/users/${usr}/accept/${work_ID}`)
     .then(response => {
       alert('รับ');
@@ -155,28 +153,29 @@ const ChoseEmploy = ({route}) => {
     <View style={{flex: 1, backgroundColor: 'white', justifyContent: 'center'}}>
     {key == "still_choosing" ? (
       <View style={styles.container}>
-        <Text style={{ fontSize: 18 }}>{name} - <Text style={{color: 'red'}}>
-                      {(() => {
-                          switch(type_of_work) {
-                            case 'type1':
-                              return 'พนักงานเสิร์ฟ';
-                            case 'type2':
-                              return 'พนักงานทำความสะอาด';
-                            case 'type3':
-                              return 'ผู้ช่วยเชฟ';
-                            case 'type4':
-                              return 'พนักงานต้อนรับ';
-                            case 'type5':
-                              return 'พนักงานล้างจาน';
-                            case 'type6':
-                              return 'พนักงานส่งอาหาร';
-                            case 'type7':
-                              return 'พนักงานครัวร้อน';
-                            default:
-                              return type_of_work;
-                          }
-                        })()}
-                      </Text></Text>
+        <Text style={{fontSize: 18, color: 'blue'}}>วันทำงาน : {work_date}</Text>
+        <Text style={{fontSize: 18}}>ตำแหน่ง : 
+          {(() => {
+              switch(type_of_work) {
+                case 'type1':
+                  return 'พนักงานเสิร์ฟ';
+                case 'type2':
+                  return 'พนักงานทำความสะอาด';
+                case 'type3':
+                  return 'ผู้ช่วยเชฟ';
+                case 'type4':
+                  return 'พนักงานต้อนรับ';
+                case 'type5':
+                  return 'พนักงานล้างจาน';
+                case 'type6':
+                  return 'พนักงานส่งอาหาร';
+                case 'type7':
+                  return 'พนักงานครัวร้อน';
+                default:
+                  return type_of_work;
+              }
+            })()}
+          </Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => {setState(0)}}>
             <View style={{marginHorizontal: 5, backgroundColor: '#071952', height: 40, width: 175, borderRadius: 10, marginTop: 5, alignItems: 'center', justifyContent: 'center'}}>
