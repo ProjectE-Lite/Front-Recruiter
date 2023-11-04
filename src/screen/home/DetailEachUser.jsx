@@ -1,12 +1,14 @@
 import {  View, Text, SafeAreaView, Image, TouchableOpacity, StyleSheet, FlatList, Modal} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { YOURAPI } from '../../constants/editendpoint';
 import DatePicker from 'react-native-date-picker';
 import DropdownTime from '../../components/DropdownTime';
+import { Authcontext } from '../../context/Authcontext';
 
 const DeatailEachUser = ({ route }) => {
+    const {userInfo} = useContext(Authcontext)
     const ShowBut = route.params.showBut
     const {image, first_name, last_name, nick_name, gender, age,birth_date, tel} = route.params.item
     const Endtime = route.params.endTime
@@ -22,7 +24,6 @@ const DeatailEachUser = ({ route }) => {
     const [open, setOpen] = useState(false);
     const [doblabel, setDoblabel] = useState('คลิกเพื่อเลือก');
     const [c_Time,setC_Time] = useState("")
-    const recruiter_id = '6517fa561434530638bc81de'
     const [Workwith, setWorkwith] = useState("")
     const address = route.params.item.address
 
@@ -87,7 +88,7 @@ const DeatailEachUser = ({ route }) => {
         };
     
         useEffect(() => {
-            axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/have_worked_with/${user_id}`)
+            axios.get(`http://${YOURAPI}/recruiters/${userInfo.recruiter_id}/have_worked_with/${user_id}`)
             .then(ress => {
                 setWorkwith(ress.data)
         })

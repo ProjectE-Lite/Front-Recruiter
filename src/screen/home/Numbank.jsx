@@ -1,22 +1,22 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect, useContext} from 'react';
 import { View, Text, SafeAreaView, StyleSheet, Button, TextInput, Image, TouchableOpacity } from 'react-native';
 import axios from "axios";
 import { YOURAPI } from '../../constants/editendpoint';
+import { Authcontext } from '../../context/Authcontext';
 
 
 
 
 const Numbank = ({navigation}) => {
     const [credit,setcredit] = useState(0);
-
-    const recruiter_id = '6517fa561434530638bc81de';
+    const {userInfo} = useContext(Authcontext)
     const handlecreditChange = (value) => {
         value=parseInt(value);
         setcredit(value);
     };
 
     const acceptCredit = () =>{
-    axios.patch(`http://${YOURAPI}/recruiters/${recruiter_id}/topup/${credit}`, credit)
+    axios.patch(`http://${YOURAPI}/recruiters/${userInfo.recruiter_id}/topup/${credit}`, credit)
     .then(response => {
         console.log('credit sent successfully:', response.data);
         navigation.navigate('money');

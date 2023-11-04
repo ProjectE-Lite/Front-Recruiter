@@ -1,21 +1,24 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import { View, Image, Text, SafeAreaView, TouchableOpacity} from 'react-native';
 import {SectionList} from 'react-native';
 import axios from 'axios';
 import { YOURAPI } from '../../constants/editendpoint';
+import { Authcontext } from '../../context/Authcontext';
 
 
 const Home = () => {
-  const recruiter_id = '6517fa561434530638bc81de'
+  const {userInfo} = useContext(Authcontext)
   const navigation = useNavigation();
   const [workData, setWorkData] = useState([]);
-
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
         try {
-          const res = await axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/works`);
+          if (!userInfo || !userInfo.recruiter_id) {
+            return;
+          }
+          const res = await axios.get(`http://${YOURAPI}/recruiters/${userInfo.recruiter_id}/works`);
           const dateDict = res.data; 
           const allUserIDs = Object.values(dateDict).flat();
           const userResponses = await Promise.all(
@@ -34,9 +37,9 @@ const Home = () => {
         fetchData(); 
       }, 11000);
       return () => clearInterval(interval);
-    }, [recruiter_id])
+    }, [userInfo]) 
   );
-
+  
 
   const groupedData = {};
 

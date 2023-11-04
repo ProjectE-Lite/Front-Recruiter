@@ -1,11 +1,13 @@
 import { View, Text, SafeAreaView, Image, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { YOURAPI } from '../../constants/editendpoint'
+import { Authcontext } from '../../context/Authcontext'
 
 export default function Profile({navigation}) {
   const [ListData, setListData] = useState([])
-  const recruiter_id = '6517fa561434530638bc81de'
+  const {userInfo} = useContext(Authcontext)
+  const recruiter_id = userInfo.recruiter_id
   useEffect( () => {
     axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}`)
     .then(res => {

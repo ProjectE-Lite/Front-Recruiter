@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View, SafeAreaView} from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {FlatList} from 'react-native';
 import axios from 'axios';
 import { YOURAPI } from '../../constants/editendpoint';
 import { useFocusEffect } from '@react-navigation/native';
+import { Authcontext } from '../../context/Authcontext';
 
 export default function Notification() {
-  const recruiter_id = '6517fa561434530638bc81de'
+  const {userInfo} = useContext(Authcontext)
+  const recruiter_id = userInfo.recruiter_id
   const [dataDeatail, setDataDetail] = useState([])
 
   useFocusEffect(
@@ -21,7 +23,9 @@ export default function Notification() {
           const notiData = notiResponses.map(res => res.data);
           setDataDetail(notiData);
         } catch (error) {
-          console.error('Error fetching notification data:', error);
+          if (error.response && error.response.status === 400) {
+            setDataDetail([]);
+          }
         }
       };
       fetchData();
@@ -40,6 +44,11 @@ export default function Notification() {
         contentContainerStyle={{ paddingBottom: 60 }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item,index) => index.toString()}
+        ListEmptyComponent={() => (
+          <View style={{ alignItems: 'center', marginTop: 20 }}>
+            <Text>No Notification</Text>
+          </View>
+        )}
         renderItem={({ item }) => (
           <View style={{flexDirection: 'column', margin:10, borderBottomWidth:1}}>
             <Text style={{margin:5, color:'red'}}>{item.name}  ({item.date.slice(0,16)})</Text>

@@ -1,28 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Image, Button, StyleSheet, ScrollView, TextInput ,TouchableOpacity} from 'react-native';
 import { YOURAPI } from '../../constants/editendpoint';
 import axios from 'axios';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { Authcontext } from '../../context/Authcontext';
 
 export default function Detailjob({route}) {
   const navigation = useNavigation()
   const initialFormData= route.params
   const [Data, setData] = useState(initialFormData)
-  const recruiter_id = "6517fa561434530638bc81de"
+  const {userInfo} = useContext(Authcontext)
   const [recdata, setRecdata] = useState([])
 
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
         try {
-          const res = await axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}`);
+          const res = await axios.get(`http://${YOURAPI}/recruiters/${userInfo.recruiter_id}`);
           setRecdata(res.data);
         } catch (error) {
           console.error('Error fetching recruiter data:', error);
         }
       };
       fetchData();
-    }, [recruiter_id])
+    }, [userInfo.recruiter_id])
   );
 
   const updateDescription = (field, value) => {
@@ -36,7 +37,7 @@ export default function Detailjob({route}) {
   };
 
   const handlePostData = () => {
-    axios.post(`http://${YOURAPI}/recruiters/${recruiter_id}/works`, Data)
+    axios.post(`http://${YOURAPI}/recruiters/${userInfo.recruiter_id}/works`, Data)
       .then(response => {
         console.log('Success:', response.data);
         navigation.navigate('pageHome')

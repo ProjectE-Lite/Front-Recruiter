@@ -1,12 +1,13 @@
-import React,{useState}  from 'react';
+import React,{useContext, useState}  from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity} from 'react-native';
 import { FlatList} from 'react-native';
 import axios from "axios";
 import { YOURAPI } from '../../constants/editendpoint';
 import { useFocusEffect } from '@react-navigation/native';
+import { Authcontext } from '../../context/Authcontext';
 
 const Income = ({ navigation }) => {
-  const recruiter_id = '6517fa561434530638bc81de';
+  const {userInfo} = useContext(Authcontext)
   const [notiDatamoney,setnotiData] = useState([]);
   const [data, setData] = useState([]);
 
@@ -14,7 +15,7 @@ const Income = ({ navigation }) => {
     React.useCallback(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}/money_exchange`);
+          const response = await axios.get(`http://${YOURAPI}/recruiters/${userInfo.recruiter_id}/money_exchange`);
           const recdata = response.data;
           const exchangeResponses = await Promise.all(recdata.map(exchange_id =>
             axios.get(`http://${YOURAPI}/money_exchange/${exchange_id}`)
@@ -37,7 +38,7 @@ const Income = ({ navigation }) => {
     React.useCallback(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get(`http://${YOURAPI}/recruiters/${recruiter_id}`);
+          const response = await axios.get(`http://${YOURAPI}/recruiters/${userInfo.recruiter_id}`);
           setData(response.data);
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -48,7 +49,7 @@ const Income = ({ navigation }) => {
         fetchData(); 
       }, 2000);
       return () => clearInterval(interval); 
-    }, [recruiter_id]) 
+    }, [userInfo.recruiter_id]) 
   );
   
 
