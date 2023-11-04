@@ -30,8 +30,8 @@ const Employ = ({ navigation, userData, work_ID }) => {
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <SafeAreaView style={style.body}>
                 <View style={style.view1}>
-                    <Text style={{fontSize: 19, color: 'blue'}}>วันเริ่มทำงาน : {work_data.work_date}</Text>
-                    <Text style={{color: 'red', fontSize: 19, marginTop: 5}}>
+                    <Text style={{fontSize: 19, color: '#071952'}}>วันเริ่มทำงาน : {work_data.work_date}</Text>
+                    <Text style={{color: '#071952', fontSize: 19, marginTop: 5}}>
                       ตำแหน่ง : {(() => {
                           switch(work_data.type_of_work) {
                             case 'type1':
@@ -66,7 +66,7 @@ const Employ = ({ navigation, userData, work_ID }) => {
                     }
                     renderItem={({ item }) => (
                         <>
-                            <Text style={{marginLeft: 20}}>{`SetStatus : ${(() => {
+                            <Text style={{marginLeft: 20, color:'red'}}>{`Status : ${(() => {
                                 switch(userStatus[item._id].user_status){
                                     case 'working':
                                         return 'ยังไม่จ่ายเงิน';
@@ -79,12 +79,12 @@ const Employ = ({ navigation, userData, work_ID }) => {
                                 }
                             })()}`}</Text>
                             {userStatus[item._id].user_status === 'paid' || userStatus[item._id].user_status === 'absent'? (
-                                <View style={style.list}>
+                                <View style={style.list2}>
                                     <View style={style.profile}>
-                                        <View style={{height: 75, width: 75, borderRadius: 40, overflow: 'hidden'}}>
-                                            <Image source={{uri : item.image}} style={{ width: null, height: null, flex: 1}}/>
+                                        <View style={{height: 75, width: 75, borderRadius: 40, overflow: 'hidden' ,justifyContent: 'center'}}>
+                                            <Image source={{uri : item.image}} style={{ width: null, height: null, flex: 1, resizeMode: 'cover',aspectRatio: 1}}/>
                                         </View>
-                                        <Text>{item.first_name} {item.last_name}</Text>
+                                        <Text style = {{}}>{item.first_name} {item.last_name}</Text>
                                         <TouchableOpacity style={style.button1} onPress={() => {navigation.navigate('InfoEm', { userData: userData, item , })}}>
                                             <Text style={style.text_button1}>ข้อมูล</Text>
                                         </TouchableOpacity>
@@ -92,7 +92,7 @@ const Employ = ({ navigation, userData, work_ID }) => {
                                 </View>
                             ): (
                             <View style={style.list}>
-                                <View style={style.profile}>
+                                <View style={style.profile1}>
                                     <View style={{height: 75, width: 75, borderRadius: 40, overflow: 'hidden'}}>
                                         <Image source={{uri : item.image}} style={{ width: null, height: null, flex: 1}}/>
                                     </View>
@@ -143,10 +143,30 @@ const style = StyleSheet.create({
         margin: 15,
         borderRadius: 10,
     },
+    list2: {
+        flexDirection: 'row',
+        backgroundColor: '#d9d9d9',
+        alignItems: 'center',
+        height: 140,
+        margin: 15,
+        borderRadius: 10,
+        width: 170
+    },
     profile: {
+        padding: 15,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop:10
+    
+    },
+    profile1: {
         padding: 15,
         width: '50%',
         alignItems: 'center',
+        justifyContent: 'center',
+        marginTop:10
+    
     },
     button1: {
         backgroundColor: '#071952',
