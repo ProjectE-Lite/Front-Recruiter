@@ -1,5 +1,5 @@
 import React, {useState,useEffect, useContext} from 'react';
-import { View, Text, SafeAreaView, StyleSheet, Button, TextInput, Image, TouchableOpacity } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, Button, TextInput, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
 import axios from "axios";
 import { YOURAPI } from '../../constants/editendpoint';
 import { Authcontext } from '../../context/Authcontext';
@@ -28,7 +28,8 @@ const Numbank = ({navigation}) => {
     };
 
     return (
-        <SafeAreaView style={style.body}>
+    <KeyboardAvoidingView style={{flex: 1}} enabled={true} behavior={'padding'}>
+        <ScrollView style={style.body}>
             <View style={style.view2}>
                 <Text style={style.text}>เลขที่บัญชี</Text>
                 <View style = {style.input1}>
@@ -57,7 +58,8 @@ const Numbank = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </SafeAreaView>
+        </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
