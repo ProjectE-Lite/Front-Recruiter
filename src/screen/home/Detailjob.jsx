@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Image, Button, StyleSheet, ScrollView, TextInput ,TouchableOpacity} from 'react-native';
+import { View, Text, Image, Button, StyleSheet, ScrollView, TextInput ,TouchableOpacity, Modal} from 'react-native';
 import { YOURAPI } from '../../constants/editendpoint';
 import axios from 'axios';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -11,6 +11,7 @@ export default function Detailjob({route}) {
   const [Data, setData] = useState(initialFormData)
   const {userInfo} = useContext(Authcontext)
   const [recdata, setRecdata] = useState([])
+  const [modalVisible, setModalVisible] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -44,6 +45,7 @@ export default function Detailjob({route}) {
       })
       .catch(error => {
         console.error('Error:', error);
+        alert('จำนวนเงินของท่านไม่เพียงพอ')
       });
   };
 
@@ -61,6 +63,38 @@ export default function Detailjob({route}) {
 
   return (
     <ScrollView style={{flex: 1, marginHorizontal: 15, marginBottom: 100}} showsVerticalScrollIndicator={false}>
+      <View style={styles.centeredView}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>ยืนยันการสร้างงานหรือไม่?</Text>
+            <View style={{flexDirection: 'row'}}>
+            <View style={{margin: 15}}>
+          <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress ={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle}>ยกเลิก</Text>
+            </TouchableOpacity>
+            </View>
+            <View style={{margin: 15}}>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {handleNexttButtonPress()}}>
+              <Text style={styles.textStyle}>ยืนยัน</Text>
+            </TouchableOpacity>
+            </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </View>
       <View style={{flexDirection : 'row' ,marginHorizontal: 10, marginBottom: 20, marginTop: 20}}>
         <Image
           source={{uri : recdata.image}}
@@ -118,7 +152,7 @@ export default function Detailjob({route}) {
         ></TextInput>
       </View>
       <View style={{alignItems:'center'}}>
-      <TouchableOpacity onPress={handleNexttButtonPress}>
+      <TouchableOpacity onPress ={() => setModalVisible(true)}>
       <View style={{margin: 10,alignItems: 'center', justifyContent: 'center',
       height: 40,
       width: 75,
@@ -154,7 +188,6 @@ const styles = StyleSheet.create({
   textContainer: {
     backgroundColor: 'lightgrey',
     padding: 10,
-    borderRadius: 10,
     marginBottom: 20,
   },
   textContainer2: {
@@ -177,5 +210,47 @@ const styles = StyleSheet.create({
   },
   bottomText: {
     fontSize: 16,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)'
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
