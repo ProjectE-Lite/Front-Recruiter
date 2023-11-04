@@ -16,6 +16,7 @@ const Numbank = ({navigation}) => {
     };
 
     const acceptCredit = () =>{
+    if (credit != 0){
     axios.patch(`http://${YOURAPI}/recruiters/${userInfo.recruiter_id}/topup/${credit}`, credit)
     .then(response => {
         console.log('credit sent successfully:', response.data);
@@ -25,6 +26,10 @@ const Numbank = ({navigation}) => {
     .catch(error => {
         console.error('Error sending data:', error);
     });
+}
+else
+    alert('ยังไม่ใส่จำนวนเงิน');
+
     };
 
     return (
