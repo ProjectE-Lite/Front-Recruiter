@@ -67,18 +67,23 @@ const Employ = ({ navigation, userData, work_ID }) => {
                     renderItem={({ item }) => (
                         <>
                             <Text style={{marginLeft: 20, color:'red'}}>{`Status : ${(() => {
-                                switch(userStatus[item._id].user_status){
-                                    case 'working':
-                                        return 'ยังไม่จ่ายเงิน';
-                                    case 'paid':
-                                        return 'จ่ายเงินแล้ว';
-                                    case 'absent':
-                                        return 'ไม่มาทำงาน';
-                                    default:
-                                        return 'Db บัค';
+                                const userStatusItem = userStatus[item._id];
+                                if (userStatusItem && userStatusItem.user_status) {
+                                    switch(userStatusItem.user_status){
+                                        case 'working':
+                                            return 'ยังไม่จ่ายเงิน';
+                                        case 'paid':
+                                            return 'จ่ายเงินแล้ว';
+                                        case 'absent':
+                                            return 'ไม่มาทำงาน';
+                                        default:
+                                            return 'Db บัค';
+                                    }
+                                } else {
+                                    return 'User status is undefined';
                                 }
                             })()}`}</Text>
-                            {userStatus[item._id].user_status === 'paid' || userStatus[item._id].user_status === 'absent'? (
+                            {userStatus[item._id] && userStatus[item._id].user_status && (userStatus[item._id].user_status === 'paid' || userStatus[item._id].user_status === 'absent') ? (
                                 <View style={style.list2}>
                                     <View style={style.profile}>
                                         <View style={{height: 75, width: 75, borderRadius: 40, overflow: 'hidden' ,justifyContent: 'center'}}>

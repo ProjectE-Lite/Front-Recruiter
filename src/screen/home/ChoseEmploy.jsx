@@ -8,7 +8,7 @@ import { YOURAPI } from '../../constants/editendpoint'
 const ChoseEmploy = ({route}) => {
   const work_ID = route.params.item._id
   const endTime = (route.params.item.end_registeration);
-  const {name, type_of_work, work_date} = route.params.item
+  const {type_of_work, work_date} = route.params.item
   const navigation = useNavigation()
   const [userData, setUserData] = useState([]);
   const [List_Worker, setList_Worker] = useState([])
