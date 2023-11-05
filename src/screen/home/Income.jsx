@@ -90,11 +90,18 @@ const  renderItem=({ item }) => {
           </View>
         </View>
       </View>
+      <View  style={{  flexDirection: 'row' }}>
       <TouchableOpacity onPress={() => {navigation.navigate('topup')}} style={{marginHorizontal:13}}>
         <View style = {styles.butt}>
           <Text style = {styles.textbutton}>Top up</Text>
         </View>
       </TouchableOpacity>
+      <TouchableOpacity onPress={() => {navigation.navigate('รายรับรายจ่าย')}} style={{marginHorizontal:13}}>
+        <View style = {styles.buttt}>
+          <Text style = {styles.textbutton}>สรุปรายรับ-รายจ่าย</Text>
+        </View>
+      </TouchableOpacity>
+      </View>
       <Text style={{marginTop:10, marginLeft:10, marginBottom:10, color:'black',fontSize: 20}}>รายการล่าสุด</Text>
       <FlatList
         data={notiDatamoney}
@@ -143,6 +150,16 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 18,
     textAlign: 'center',
+  },
+  buttt: {
+    width: 170, 
+    height: 45, 
+    backgroundColor: 'lightgrey',
+    alignSelf: 'flex-start',
+    margin:10,
+    marginLeft:70,
+    borderRadius: 10,
+    justifyContent: 'center',
   }
 });
 export default Income;
