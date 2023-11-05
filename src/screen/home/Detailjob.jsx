@@ -43,7 +43,8 @@ export default function Detailjob({route}) {
         navigation.navigate('pageHome')
       })
       .catch(error => {
-        console.error('Error:', error);
+        alert("จำนวนเงินไม่เพียงพอ กรุณาเติมเงิน")
+        navigation.navigate('pageHome')
       });
   };
 
@@ -154,6 +155,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   textContainer: {
+    flex: 1,
     backgroundColor: 'lightgrey',
     padding: 10,
     borderRadius: 10,

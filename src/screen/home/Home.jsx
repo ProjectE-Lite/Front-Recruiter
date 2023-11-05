@@ -29,7 +29,6 @@ const Home = () => {
           const workData = userResponses.map(response => response.data);
           setWorkData(workData);
         } catch (error) {
-          console.error('Error fetching user data:', error);
         }
       };
       fetchData();

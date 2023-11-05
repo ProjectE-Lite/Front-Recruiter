@@ -39,7 +39,7 @@ const AppendJob = ({ navigation }) => {
     user_status: {}
   });
 
-    const isDataValid = (data) => {
+    const isDataValid = (data, checkDate) => {
     return data.type_of_work !== 'ประเภทงาน' &&  data.start_time !== 'เวลาเริ่มทำงาน'
     && data.work_date !== 'วันที่ทำงาน' && data.end_time !== 'เวลาเลิกงาน' && data.gender_requirement !== "เพศ"
     && data.minimum_age !== 0 && data.hourly_income !== 0 && data.number_requirement !== 0}
