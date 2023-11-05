@@ -35,8 +35,7 @@ const Inspect =({ navigation , route})=>{
           <View style={{alignItems: 'center'}}>
             <View style={{alignItems:'center'}}>
             <Image source={{uri : userData.image}}
-                  style={{height:145, width: 145}}
-                  resizeMode='contain'></Image>
+                  style={{height:145, width: 145, borderRadius: 80, marginTop: 20, marginBottom: 10}}></Image>
             </View>
             <View style={{alignItems:'center'}}>
           <Text style={{fontSize: 20, color:'#000000', fontWeight:'500'}}>{userData.nick_name}</Text>
@@ -80,12 +79,11 @@ const Inspect =({ navigation , route})=>{
           </View>
           <View style = {{alignItems: 'center'}}>
             <TextInput 
-              style={{borderWidth:1, width: 360,height:145, marginTop: 10, padding: 5}}
+              style={{borderWidth:1, width: 360,height:145, marginTop: 10, padding: 5, borderRadius: 10}}
               multiline={true}
               textAlignVertical="top" 
               placeholder='กรอกคอมเม้นต์ที่นี่'
               onChangeText={new_comment => setComment(new_comment)}
-
               />
           </View>
           <View

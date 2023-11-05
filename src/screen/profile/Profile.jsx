@@ -21,8 +21,7 @@ export default function Profile({navigation}) {
         <ScrollView>
           <View style={{alignItems:'center', marginTop: 20}}>
             <Image source={{uri: ListData.image}}
-                  style={{height:175, width: 175}}
-                  resizeMode='contain'></Image>
+                  style={{height:175, width: 175, borderRadius: 80}}></Image>
           </View>
           <View style={{alignItems:'center'}}>
             <Text style={{fontSize: 30, color:'#000000', fontWeight:'500'}}>{ListData.name}</Text>

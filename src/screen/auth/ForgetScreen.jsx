@@ -1,38 +1,53 @@
-import React from "react";
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import {StyleSheet, Text, TextInput, TouchableOpacity, View, Image, KeyboardAvoidingView, ScrollView, Alert } from "react-native";
+import axios from "axios";
+import { YOURAPI } from "../../constants/editendpoint";
 
-const ForgetScreen = ({navigation}) => {
+const Forget_screen = ({navigation}) => {
+    const [name, setName] = useState(null)
+    const [state1, setState1] = useState(1)
+    const [user_color, setUsercolor] = useState("black")
+
+    const forgot_user = (user_name) => {
+        axios.patch(`http://${YOURAPI}/users/forgot/${user_name}`)
+        .then(response => {
+            console.log('PATCH done', response.data);
+            navigation.goBack()
+          })
+        .catch(error => {
+          setUsercolor('red')
+          setState1(0)
+        });
+      };
+
     return (
-        <SafeAreaView style={{flex:1 ,marginHorizontal:15}}>
-            <View style={{alignItems:"center", marginTop:20, marginBottom: 20}}>
-                <Text style={{fontSize:20}}>ตั้งรหัสผ่านใหม่</Text>
+    <KeyboardAvoidingView style={{flex: 1}}enabled={true} behavior={'padding'}>
+        <ScrollView showsVerticalScrollIndicator = {false} style={{flex:1 ,marginHorizontal:15, marginVertical: 40}}>
+            <View style={{alignItems:'center', margin: 10, marginLeft: 60}}>
+                <Image source={require('../../assets/image/Forgotpass.png')} style={{width: 180,height: 180, resizeMode: 'stretch'}}></Image>
             </View>
-            <View style={{justifyContent: 'center',marginVertical: 20}}>
-                <Text style={{fontSize:24}}>รหัสผ่านใหม่</Text>
-                <TextInput placeholder='new password' autoCorrect= {false} style={{height: 50,
-        margin: 10,
-        borderWidth: 1,
-        padding: 10,
-        borderRadius:15,
-        borderColor: '#000000',
-        borderWidth: 3,}}></TextInput>
+            <View style={{alignItems:"left", marginTop:0, marginBottom: 20}}>
+                <Text style={{fontSize:40}}>Forgot password?</Text>
             </View>
-            <View style={{justifyContent: 'center'}}>
-                <Text style={{fontSize:24}}>ยืนยันรหัสผ่าน</Text>
-                <TextInput placeholder='confirm new password' autoCorrect= {false} style={{height: 50,
-        margin: 10,
-        borderWidth: 1,
-        padding: 10,
-        borderRadius:15,
-        borderColor: '#000000',
-        borderWidth: 3,}}></TextInput>
+            <View style={{justifyContent: 'center',marginVertical: 15}}>
+                <Text style={{fontSize:24, marginBottom:20, color: "grey"}}>ใส่ชื่อผู้ใช้เพื่อรับอีเมลแจ้งเตือนแสดงรหัสผ่านของท่าน</Text>
+                <Text style={{fontSize:24, marginBottom:5, color: user_color}}>ชื่อผู้ใช้</Text>
+                <TextInput placeholder='username' autoCorrect= {false} style={{fontSize:22, borderWidth:1, height:60, borderRadius:15, padding:10, borderColor: user_color}} onChangeText={text => setName(text)}></TextInput>
             </View>
-            <TouchableOpacity onPress={() => {navigation.navigate('Login')}}>
+            {state1 === 0 ? (
+                <View style={{alignItems: 'left'}}>
+                    <Text style = {{color: 'red', fontSize: 20}}>ชื่อผู้ใช้ไม่ถูกต้อง</Text>
+                </View>) : (
+                    <>
+                    </>
+                )}
+            <TouchableOpacity onPress={() => {forgot_user(name)}}>
                 <View style={styles.loginbut}>
                     <Text style={{fontSize:24, color:'#ffffff'}}>ยืนยัน</Text>
                 </View>
             </TouchableOpacity>
-        </SafeAreaView>
+        </ScrollView>
+    </KeyboardAvoidingView>
 
     )
 }
@@ -42,13 +57,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#000000',
         height: 55,
         borderWidth: 1,
-        borderRadius:30,
+        borderRadius:15,
+        marginTop: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        alignSelf: 'center',
-        width: 100,
-        marginTop: 50
+        width:'100%',
     },
 });
 
-export default ForgetScreen;
+export default Forget_screen;

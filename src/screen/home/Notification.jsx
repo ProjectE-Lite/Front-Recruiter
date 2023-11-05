@@ -51,7 +51,7 @@ export default function Notification() {
         )}
         renderItem={({ item }) => (
           <View style={{flexDirection: 'column', margin:10, borderBottomWidth:1}}>
-            <Text style={{margin:5, color:'red'}}>{item.name}  ({item.date.slice(0,16)})</Text>
+            <Text style={{margin:5, color:'red'}}>วันเริ่มทำงาน ({item.date.slice(0,16)})</Text>
             <Text style={{marginLeft: 20, marginBottom:8}}>{item.text}</Text>
           </View>
         )}

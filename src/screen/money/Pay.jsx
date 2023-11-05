@@ -33,8 +33,7 @@ const Pay =({route , navigation})=>{
             <View style={{alignItems: 'center', marginTop: 20}}>
             <View style={{justifyContent: 'center' , alignItems:'center'}}>
             <Image source={{uri: userData.image}}
-                  style={{height:145, width: 145}}
-                  resizeMode='contain'></Image>
+                  style={{height:145, width: 145, borderRadius: 80, marginBottom: 20}}></Image>
             </View>
             <View style={{alignItems:'center'}}>
                <Text style={{fontSize: 20, color:'#000000', fontWeight:'500'}}>{userData.first_name} {userData.last_name}</Text>
@@ -51,13 +50,13 @@ const Pay =({route , navigation})=>{
           <Text style={{color: '#1121B1', fontSize: 17}}>เบอร์โทรศัพท์ :  </Text>
           <Text style={{color:'#000000', fontSize: 17}}>{userData.tel}</Text>
         </View>
-        <View style={{alignItems:'center',marginTop:30}}>
+        <View style={{alignItems:'center',marginTop:30,}}>
             <Text style={{color:'#000000',fontSize:36}}>{work_data.name}</Text>
         </View>
         <View style={{alignItems:'center',marginTop:10}}>
             <Text style={{color:'#000000',fontSize:36}}>{work_data.start_time} - {work_data.end_time}</Text>
         </View>
-          <TouchableOpacity onPress={handlePatchData}>  
+          <TouchableOpacity onPress={() => {handlePatchData()}}>  
                 <View style={{marginLeft:9,alignItems:'center',justifyContent:'center',width:350,height:100,borderRadius:10,backgroundColor:'#071952',marginTop:20}}>
             <Text style={{color:'#FFFFFF', fontSize: 24}}>จ่ายเงิน</Text>
           </View>

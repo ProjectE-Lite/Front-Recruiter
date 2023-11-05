@@ -76,7 +76,6 @@ const ChoseEmploy = ({route}) => {
         console.log('PATCH request สำเร็จ', response.data);
       })
     .catch(error => {
-      console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
     });
   };
 

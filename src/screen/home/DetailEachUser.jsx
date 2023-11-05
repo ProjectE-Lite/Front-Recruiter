@@ -10,12 +10,12 @@ import { Authcontext } from '../../context/Authcontext';
 const DeatailEachUser = ({ route }) => {
     const {userInfo} = useContext(Authcontext)
     const ShowBut = route.params.showBut
-    const {image, first_name, last_name, nick_name, gender, age,birth_date, tel} = route.params.item
+    const {image, first_name, last_name, nick_name, gender, age,birth_date, tel, point} = route.params.item
     const Endtime = route.params.endTime
     const Yesterday = new Date(Endtime);
     Yesterday.setDate(Yesterday.getDate() - 1);
     const work_id = route.params.work_ID
-    const [point , setPoint] = useState('5')
+    const [givepoint , setPoint] = useState('5')
     const user_id = route.params.item._id
     const navigation = useNavigation()
     const [Review , setReview] = useState([])
@@ -28,7 +28,7 @@ const DeatailEachUser = ({ route }) => {
     const address = route.params.item.address
 
     useEffect(() => {
-        axios.get(`http://${YOURAPI}/users/${user_id}/review_points/${point}`)
+        axios.get(`http://${YOURAPI}/users/${user_id}/review_points/${givepoint}`)
         .then(res => {
             const allReviewID = res.data
             Promise.all(allReviewID.map(review_id=>
@@ -49,7 +49,7 @@ const DeatailEachUser = ({ route }) => {
                 console.error('Error making GET request:', error);
             }
         });
-    }, [point])
+    }, [givepoint])
 
     const handlePatchData = () => {
         axios.patch(`http://${YOURAPI}/users/${user_id}/accept/${work_id}`)
@@ -58,7 +58,6 @@ const DeatailEachUser = ({ route }) => {
             console.log('PATCH request สำเร็จ', response.data);
             })
             .catch(error => {
-            console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
             });
         };
     const hadlePatchData1 = () => {
@@ -68,7 +67,6 @@ const DeatailEachUser = ({ route }) => {
             console.log('PATCH request สำเร็จ', response.data);
             })
             .catch(error => {
-            console.error('เกิดข้อผิดพลาดในการทำ PATCH request', error);
             });
     }
     const handleDropdownChange = (value) => {
@@ -195,8 +193,8 @@ const DeatailEachUser = ({ route }) => {
                         </View>
                     </TouchableOpacity>
                 )}
-                <Text style={{fontSize: 16, marginLeft: 20}}>เคยทำงานกับที่นี่มาก่อนไหม : </Text>
-                <Text style = {{justifyContent: 'center' , marginBottom: 30,  fontSize: 16, marginLeft: 20}}>{Workwith}</Text>
+                <Text style={{fontSize: 16, marginHorizontal: 20}}>เคยทำงานกับที่นี่มาก่อนไหม : </Text>
+                <Text style = {{justifyContent: 'center' , marginBottom: 30,  fontSize: 16, marginHorizontal: 20}}>{Workwith}</Text>
                 <View style={{justifyContent: 'center' , alignItems:'center'}}>
                     <Image 
                     source={{uri: image}} 
@@ -204,6 +202,16 @@ const DeatailEachUser = ({ route }) => {
                 </View>
                 <View style = {{margin: 10, alignItems: 'center'}}>
                     <Text style = {{fontSize: 20, color : '#000000'}}>{first_name} {last_name}</Text>
+                </View>
+                <View style={{alignItems:'center'}}>
+                    <View style={{ alignItems:'center',flexDirection: 'row', marginTop: 10}}>
+                        <Image source={point >= 1 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:40, width:40}}></Image>
+                        <Image source={point >= 2 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:40, width:40}}></Image>
+                        <Image source={point >= 3 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:40, width:40}}></Image>
+                        <Image source={point >= 4 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:40, width:40}}></Image>
+                        <Image source={point >= 5 ? require('../../assets/image/StarOutline.png') : require('../../assets/image/Star.png')} style={{height:40, width:40}}></Image>
+                        <Text style={{marginLeft:20, fontSize: 20, color:'#000000', fontWeight:'400'}}>คะแนนเฉลี่ย {(point !== undefined ? (point.toFixed(2)) : (""))}</Text>
+                    </View>
                 </View>
                 <View style={{flexDirection:'row', marginTop: 20, marginHorizontal:25}}>
                     <Text style={{color: '#1121b1', fontSize: 20}}>ชื่อเล่น :  </Text>
